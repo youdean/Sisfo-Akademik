@@ -18,6 +18,7 @@ class DashboardController extends Controller
             'totalSiswa' => Siswa::count(),
             'totalGuru' => Guru::count(),
             'totalMapel' => MataPelajaran::count(),
+            'totalKelas' => Siswa::select('kelas')->distinct()->count(),
             'absensiHariIni' => Absensi::where('tanggal', $today)->where('status', 'Hadir')->count(),
         ]);
     }

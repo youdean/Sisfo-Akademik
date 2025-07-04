@@ -37,6 +37,14 @@
             </div>
         </div>
     </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-secondary mb-3">
+            <div class="card-body">
+                <h4 class="card-title">{{ $totalKelas }}</h4>
+                <p class="card-text">Total Kelas</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="list-group">
