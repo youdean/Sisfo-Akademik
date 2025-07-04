@@ -56,6 +56,9 @@
                     <a href="{{ route('mapel.index') }}" class="list-group-item list-group-item-action">
                         <i class="bi bi-book me-2"></i>Manajemen Mapel
                     </a>
+                    <a href="{{ route('kelas.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-building me-2"></i>Manajemen Kelas
+                    </a>
                 @endif
 
                 @if(in_array(Auth::user()->role, ['admin', 'guru']))
