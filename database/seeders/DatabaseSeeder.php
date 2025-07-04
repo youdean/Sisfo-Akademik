@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             AbsensiSeeder::class,
             PengajaranSeeder::class,
             AdminSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }
