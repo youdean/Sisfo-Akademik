@@ -10,6 +10,10 @@
         <a href="{{ route('absensi.create') }}" class="btn btn-primary">+ Tambah Absensi</a>
     </div>
 </div>
+<form method="GET" class="mb-3 d-flex" action="{{ route('absensi.index') }}">
+    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari absensi..." class="form-control me-2">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+</form>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif

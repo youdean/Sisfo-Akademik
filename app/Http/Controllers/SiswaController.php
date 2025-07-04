@@ -9,11 +9,22 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SiswaController extends Controller
 {
-    public function index()
-{
-    $siswa = Siswa::all();
-    return view('siswa.index', compact('siswa'));
-}
+    public function index(Request $request)
+    {
+        $query = Siswa::query();
+
+        $search = $request->input('search');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('kelas', 'like', "%{$search}%");
+            });
+        }
+
+        $siswa = $query->get();
+
+        return view('siswa.index', compact('siswa', 'search'));
+    }
 
 public function create()
 {

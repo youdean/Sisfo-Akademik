@@ -9,11 +9,27 @@ use App\Models\MataPelajaran;
 
 class NilaiController extends Controller
 {
-    public function index()
-{
-    $nilai = Nilai::with(['siswa', 'mapel'])->get();
-    return view('nilai.index', compact('nilai'));
-}
+    public function index(Request $request)
+    {
+        $query = Nilai::with(['siswa', 'mapel']);
+
+        $search = $request->input('search');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nilai', 'like', "%{$search}%")
+                    ->orWhereHas('siswa', function ($s) use ($search) {
+                        $s->where('nama', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('mapel', function ($m) use ($search) {
+                        $m->where('nama', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $nilai = $query->get();
+
+        return view('nilai.index', compact('nilai', 'search'));
+    }
 
 public function create()
 {

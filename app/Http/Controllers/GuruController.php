@@ -7,11 +7,22 @@ use Illuminate\Http\Request;
 
 class GuruController extends Controller
 {
-    public function index()
-{
-    $guru = Guru::all();
-    return view('guru.index', compact('guru'));
-}
+    public function index(Request $request)
+    {
+        $query = Guru::query();
+
+        $search = $request->input('search');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('nip', 'like', "%{$search}%");
+            });
+        }
+
+        $guru = $query->get();
+
+        return view('guru.index', compact('guru', 'search'));
+    }
 
 public function create()
 {
