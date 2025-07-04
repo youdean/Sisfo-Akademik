@@ -56,6 +56,9 @@
                     <a href="{{ route('mapel.index') }}" class="list-group-item list-group-item-action">
                         <i class="bi bi-book me-2"></i>Manajemen Mapel
                     </a>
+                @endif
+
+                @if(in_array(Auth::user()->role, ['admin', 'guru']))
                     <a href="{{ route('nilai.index') }}" class="list-group-item list-group-item-action">
                         <i class="bi bi-card-checklist me-2"></i>Nilai Siswa
                     </a>
