@@ -66,6 +66,18 @@
                         <i class="bi bi-person-check me-2"></i>Absensi Siswa
                     </a>
                 @endif
+
+                @if(Auth::user()->role === 'siswa')
+                    <a href="{{ route('student.profile') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person me-2"></i>Data Diri
+                    </a>
+                    <a href="{{ route('student.absensi') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-check me-2"></i>Absensi Saya
+                    </a>
+                    <a href="{{ route('student.nilai') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-card-checklist me-2"></i>Nilai Saya
+                    </a>
+                @endif
             </div>
         </div>
     </div>
