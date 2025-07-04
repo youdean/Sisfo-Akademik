@@ -14,8 +14,9 @@ class GuruSeeder extends Seeder
         $data = [];
         for ($i = 1; $i <= 20; $i++) {
             $data[] = [
+                // Gunakan nama "Guru" untuk id pertama agar sesuai dengan user default
                 'nip' => str_pad($i, 18, '0', STR_PAD_LEFT),
-                'nama' => $faker->unique()->name,
+                'nama' => $i === 1 ? 'Guru' : $faker->unique()->name,
             ];
         }
         DB::table('guru')->insert($data);
