@@ -20,8 +20,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-// CRUD menu - HANYA untuk user yang sudah login
-Route::middleware(['auth'])->group(function () {
+// CRUD menu - hanya untuk user dengan role admin
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('guru', GuruController::class)->except('show');
     Route::resource('siswa', SiswaController::class)->except('show');
     Route::resource('mapel', MapelController::class)->except('show');

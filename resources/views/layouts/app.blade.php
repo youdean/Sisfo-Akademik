@@ -46,21 +46,23 @@
                 <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
                 </a>
-                <a href="{{ route('guru.index') }}" class="list-group-item list-group-item-action">
-                    <i class="bi bi-person-badge me-2"></i>Manajemen Guru
-                </a>
-                <a href="{{ route('siswa.index') }}" class="list-group-item list-group-item-action">
-                    <i class="bi bi-people me-2"></i>Manajemen Siswa
-                </a>
-                <a href="{{ route('mapel.index') }}" class="list-group-item list-group-item-action">
-                    <i class="bi bi-book me-2"></i>Manajemen Mapel
-                </a>
-                <a href="{{ route('nilai.index') }}" class="list-group-item list-group-item-action">
-                    <i class="bi bi-card-checklist me-2"></i>Nilai Siswa
-                </a>
-                <a href="{{ route('absensi.index') }}" class="list-group-item list-group-item-action">
-                    <i class="bi bi-person-check me-2"></i>Absensi Siswa
-                </a>
+                @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('guru.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-badge me-2"></i>Manajemen Guru
+                    </a>
+                    <a href="{{ route('siswa.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-people me-2"></i>Manajemen Siswa
+                    </a>
+                    <a href="{{ route('mapel.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-book me-2"></i>Manajemen Mapel
+                    </a>
+                    <a href="{{ route('nilai.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-card-checklist me-2"></i>Nilai Siswa
+                    </a>
+                    <a href="{{ route('absensi.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-check me-2"></i>Absensi Siswa
+                    </a>
+                @endif
             </div>
         </div>
     </div>
