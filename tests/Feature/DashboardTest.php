@@ -1,0 +1,26 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\User;
+use App\Models\Siswa;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class DashboardTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_dashboard_displays_statistics(): void
+    {
+        $user = User::factory()->create();
+
+        Siswa::create(['nama' => 'Test1', 'kelas' => '10A', 'tanggal_lahir' => '2000-01-01']);
+        Siswa::create(['nama' => 'Test2', 'kelas' => '10B', 'tanggal_lahir' => '2000-01-02']);
+
+        $response = $this->actingAs($user)->get('/dashboard');
+
+        $response->assertOk();
+        $response->assertSee('Total Kelas');
+    }
+}
