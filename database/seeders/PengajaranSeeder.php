@@ -9,9 +9,14 @@ class PengajaranSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('pengajaran')->insert([
-            ['guru_id' => 1, 'mapel_id' => 1, 'kelas' => '10A'],
-            ['guru_id' => 2, 'mapel_id' => 2, 'kelas' => '10B'],
-        ]);
+        $data = [];
+        for ($i = 1; $i <= 30; $i++) {
+            $data[] = [
+                'guru_id' => ($i % 20) + 1,
+                'mapel_id' => ($i % 10) + 1,
+                'kelas' => '10' . chr(64 + ($i % 3) + 1),
+            ];
+        }
+        DB::table('pengajaran')->insert($data);
     }
 }
