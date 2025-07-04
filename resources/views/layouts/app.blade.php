@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Aplikasi Sekolah')</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
     <!-- Navbar di sini -->
@@ -15,7 +16,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             @endauth
-            <a class="navbar-brand" href="{{ url('/') }}">Sisfo Akademik</a>
+            <a class="navbar-brand" href="{{ route('dashboard') }}">Sisfo Akademik</a>
             <div class="d-flex ms-auto">
                 @auth
                     <span class="navbar-text me-3">
@@ -42,12 +43,24 @@
         </div>
         <div class="offcanvas-body p-0">
             <div class="list-group list-group-flush">
-                <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action">Dashboard</a>
-                <a href="{{ route('guru.index') }}" class="list-group-item list-group-item-action">Manajemen Guru</a>
-                <a href="{{ route('siswa.index') }}" class="list-group-item list-group-item-action">Manajemen Siswa</a>
-                <a href="{{ route('mapel.index') }}" class="list-group-item list-group-item-action">Manajemen Mapel</a>
-                <a href="{{ route('nilai.index') }}" class="list-group-item list-group-item-action">Nilai Siswa</a>
-                <a href="{{ route('absensi.index') }}" class="list-group-item list-group-item-action">Absensi Siswa</a>
+                <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                </a>
+                <a href="{{ route('guru.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-person-badge me-2"></i>Manajemen Guru
+                </a>
+                <a href="{{ route('siswa.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-people me-2"></i>Manajemen Siswa
+                </a>
+                <a href="{{ route('mapel.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-book me-2"></i>Manajemen Mapel
+                </a>
+                <a href="{{ route('nilai.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-card-checklist me-2"></i>Nilai Siswa
+                </a>
+                <a href="{{ route('absensi.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-person-check me-2"></i>Absensi Siswa
+                </a>
             </div>
         </div>
     </div>
