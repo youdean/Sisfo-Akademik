@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Siswa;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 use App\Exports\SiswaExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -28,7 +29,8 @@ class SiswaController extends Controller
 
 public function create()
 {
-    return view('siswa.create');
+    $kelas = Kelas::all();
+    return view('siswa.create', compact('kelas'));
 }
 
 public function store(Request $request)
@@ -44,7 +46,8 @@ public function store(Request $request)
 
 public function edit(Siswa $siswa)
 {
-    return view('siswa.edit', compact('siswa'));
+    $kelas = Kelas::all();
+    return view('siswa.edit', compact('siswa', 'kelas'));
 }
 
 public function update(Request $request, Siswa $siswa)

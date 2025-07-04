@@ -12,7 +12,12 @@
     </div>
     <div class="mb-3">
         <label>Kelas</label>
-        <input type="text" name="kelas" class="form-control" required>
+        <select name="kelas" class="form-control" required>
+            <option value="">-- Pilih Kelas --</option>
+            @foreach ($kelas as $k)
+                <option value="{{ $k->nama }}">{{ $k->nama }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="mb-3">
         <label>Tanggal Lahir</label>
