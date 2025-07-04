@@ -27,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('mapel', MapelController::class)->except('show');
     Route::resource('nilai', NilaiController::class)->except('show');
     Route::resource('absensi', AbsensiController::class)->except('show');
+    Route::get('/absensi/rekap', [AbsensiController::class, 'rekap'])->name('absensi.rekap');
+    Route::get('/absensi/rekap/export', [AbsensiController::class, 'exportRekap'])->name('absensi.rekap.export');
     
     Route::get('/rapor/{siswa}', [RaporController::class, 'cetak'])->name('rapor.cetak');
     Route::get('/siswa-export', [SiswaController::class, 'export'])->name('siswa.export');
