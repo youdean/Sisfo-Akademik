@@ -11,4 +11,12 @@ class Siswa extends Model
 
     protected $table = 'siswa';
     protected $fillable = ['nama', 'kelas', 'tanggal_lahir'];
+
+    /**
+     * Relasi ke tabel absensi.
+     */
+    public function absensi()
+    {
+        return $this->hasMany(Absensi::class);
+    }
 }
