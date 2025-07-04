@@ -8,7 +8,7 @@
 </head>
 <body>
     <!-- Navbar di sini -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
             @auth
             <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
