@@ -5,7 +5,10 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Daftar Absensi</h1>
-    <a href="{{ route('absensi.create') }}" class="btn btn-primary">+ Tambah Absensi</a>
+    <div>
+        <a href="{{ route('absensi.rekap') }}" class="btn btn-secondary me-2">Rekap Bulanan</a>
+        <a href="{{ route('absensi.create') }}" class="btn btn-primary">+ Tambah Absensi</a>
+    </div>
 </div>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
