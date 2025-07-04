@@ -14,7 +14,8 @@ class SiswaSeeder extends Seeder
         $data = [];
         for ($i = 1; $i <= 50; $i++) {
             $data[] = [
-                'nama' => $faker->unique()->name,
+                // Gunakan nama "Siswa" untuk id pertama agar sesuai dengan user default
+                'nama' => $i === 1 ? 'Siswa' : $faker->unique()->name,
                 'kelas' => '10' . chr(64 + ($i % 3) + 1),
                 'tanggal_lahir' => $faker->dateTimeBetween('2008-01-01', '2008-12-31')->format('Y-m-d'),
             ];
