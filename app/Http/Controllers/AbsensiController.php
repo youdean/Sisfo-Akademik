@@ -16,7 +16,7 @@ class AbsensiController extends Controller
 {
     private function kelasGuru(): array
     {
-        $guru = Guru::where('nama', Auth::user()->name)->first();
+        $guru = Guru::where('user_id', Auth::id())->first();
         if (!$guru) {
             return [];
         }

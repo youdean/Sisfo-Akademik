@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use App\Models\User;
 
 class GuruSeeder extends Seeder
 {
@@ -12,11 +13,12 @@ class GuruSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
         $data = [];
+        $guruUser = User::where('email', 'guru@demo.com')->first();
         for ($i = 1; $i <= 20; $i++) {
             $data[] = [
-                // Gunakan nama "Guru" untuk id pertama agar sesuai dengan user default
                 'nip' => str_pad($i, 18, '0', STR_PAD_LEFT),
                 'nama' => $i === 1 ? 'Guru' : $faker->unique()->name,
+                'user_id' => $i === 1 && $guruUser ? $guruUser->id : null,
             ];
         }
         DB::table('guru')->insert($data);

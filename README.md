@@ -19,3 +19,14 @@ cd Sisfo-Akademik
 composer install
 cp .env.example .env
 php artisan key:generate
+php artisan migrate --seed
+php artisan serve
+```
+
+Login demo:
+
+- Admin: `admin@demo.com` / `password`
+- Guru: `guru@demo.com` / `password`
+- Siswa: `siswa@demo.com` / `password`
+
+Setelah login sebagai admin, menu **Manajemen User** dapat digunakan untuk membuat akun baru dan memilih perannya.

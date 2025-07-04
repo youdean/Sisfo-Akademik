@@ -14,7 +14,7 @@ class StudentController extends Controller
      */
     public function profil()
     {
-        $siswa = Siswa::where('nama', Auth::user()->name)->firstOrFail();
+        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         return view('siswa.show', compact('siswa'));
     }
 
@@ -23,7 +23,7 @@ class StudentController extends Controller
      */
     public function absensi()
     {
-        $siswa = Siswa::where('nama', Auth::user()->name)->firstOrFail();
+        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $absensi = $siswa->absensi()->get();
         return view('siswa.absensi', compact('siswa', 'absensi'));
     }
@@ -33,7 +33,7 @@ class StudentController extends Controller
      */
     public function nilai()
     {
-        $siswa = Siswa::where('nama', Auth::user()->name)->firstOrFail();
+        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $nilai = Nilai::with('mapel')->where('siswa_id', $siswa->id)->get();
         return view('siswa.nilai', compact('siswa', 'nilai'));
     }
@@ -43,7 +43,7 @@ class StudentController extends Controller
      */
     public function rapor()
     {
-        $siswa = Siswa::where('nama', Auth::user()->name)->firstOrFail();
+        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $nilai = Nilai::with('mapel')->where('siswa_id', $siswa->id)->get();
 
         $pdf = PDF::loadView('rapor.pdf', [
