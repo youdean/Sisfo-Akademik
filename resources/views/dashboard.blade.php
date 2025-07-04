@@ -47,6 +47,15 @@
     </div>
 </div>
 
+<div class="row mb-4">
+    <div class="col-md-6">
+        <canvas id="absensiChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <canvas id="nilaiChart"></canvas>
+    </div>
+</div>
+
 <div class="list-group">
     <a href="{{ route('guru.index') }}" class="list-group-item list-group-item-action">Manajemen Guru</a>
     <a href="{{ route('siswa.index') }}" class="list-group-item list-group-item-action">Manajemen Siswa</a>
@@ -54,4 +63,47 @@
     <a href="{{ route('nilai.index') }}" class="list-group-item list-group-item-action">Nilai Siswa</a>
     <a href="{{ route('absensi.index') }}" class="list-group-item list-group-item-action">Absensi Siswa</a>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    const absensiLabels = @json($absensiPerHari->pluck('tanggal'));
+    const absensiData = @json($absensiPerHari->pluck('total'));
+    new Chart(document.getElementById('absensiChart'), {
+        type: 'bar',
+        data: {
+            labels: absensiLabels,
+            datasets: [{
+                label: 'Hadir',
+                data: absensiData,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)'
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    const nilaiLabels = @json($topNilai->pluck('siswa.nama'));
+    const nilaiData = @json($topNilai->pluck('rata'));
+    new Chart(document.getElementById('nilaiChart'), {
+        type: 'bar',
+        data: {
+            labels: nilaiLabels,
+            datasets: [{
+                label: 'Rata-rata Nilai',
+                data: nilaiData,
+                backgroundColor: 'rgba(255, 99, 132, 0.5)'
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: {
+                x: { beginAtZero: true }
+            }
+        }
+    });
+</script>
 @endsection
