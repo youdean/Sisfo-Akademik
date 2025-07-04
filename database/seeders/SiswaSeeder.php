@@ -9,9 +9,14 @@ class SiswaSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('siswa')->insert([
-            ['nama' => 'Andi', 'kelas' => '10A', 'tanggal_lahir' => '2008-01-10'],
-            ['nama' => 'Siti', 'kelas' => '10B', 'tanggal_lahir' => '2008-02-15'],
-        ]);
+        $data = [];
+        for ($i = 1; $i <= 50; $i++) {
+            $data[] = [
+                'nama' => 'Siswa ' . $i,
+                'kelas' => '10' . chr(64 + ($i % 3) + 1),
+                'tanggal_lahir' => '2008-' . str_pad(rand(1, 12), 2, '0', STR_PAD_LEFT) . '-' . str_pad(rand(1, 28), 2, '0', STR_PAD_LEFT),
+            ];
+        }
+        DB::table('siswa')->insert($data);
     }
 }

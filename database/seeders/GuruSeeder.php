@@ -9,9 +9,13 @@ class GuruSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('guru')->insert([
-            ['nip' => '198001012005011001', 'nama' => 'Pak Budi'],
-            ['nip' => '197512312001011002', 'nama' => 'Bu Ani'],
-        ]);
+        $data = [];
+        for ($i = 1; $i <= 20; $i++) {
+            $data[] = [
+                'nip' => str_pad($i, 18, '0', STR_PAD_LEFT),
+                'nama' => 'Guru ' . $i,
+            ];
+        }
+        DB::table('guru')->insert($data);
     }
 }

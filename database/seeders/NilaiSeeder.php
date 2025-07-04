@@ -9,10 +9,16 @@ class NilaiSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('nilai')->insert([
-            ['siswa_id' => 1, 'mapel_id' => 1, 'nilai' => 85],
-            ['siswa_id' => 1, 'mapel_id' => 2, 'nilai' => 90],
-            ['siswa_id' => 2, 'mapel_id' => 1, 'nilai' => 88],
-        ]);
+        $data = [];
+        for ($s = 1; $s <= 50; $s++) {
+            for ($m = 1; $m <= 10; $m++) {
+                $data[] = [
+                    'siswa_id' => $s,
+                    'mapel_id' => $m,
+                    'nilai' => rand(60, 100),
+                ];
+            }
+        }
+        DB::table('nilai')->insert($data);
     }
 }
