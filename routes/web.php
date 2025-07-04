@@ -12,6 +12,7 @@ use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\RaporController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\GuruKelasController;
+use App\Http\Controllers\UserController;
 
 // Landing page
 Route::get('/', function () {
@@ -29,6 +30,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('siswa', SiswaController::class)->except('show');
     Route::resource('mapel', MapelController::class)->except('show');
     Route::resource('kelas', KelasController::class)->except('show');
+    Route::resource('users', UserController::class)->except('show');
     Route::get('/siswa-export', [SiswaController::class, 'export'])->name('siswa.export');
 });
 

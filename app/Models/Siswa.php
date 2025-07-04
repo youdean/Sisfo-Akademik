@@ -10,7 +10,12 @@ class Siswa extends Model
     use HasFactory;
 
     protected $table = 'siswa';
-    protected $fillable = ['nama', 'kelas', 'tanggal_lahir'];
+    protected $fillable = ['nama', 'kelas', 'tanggal_lahir', 'user_id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * Relasi ke tabel absensi.
