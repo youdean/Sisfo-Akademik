@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Siswa;
 use App\Models\Guru;
 use App\Models\MataPelajaran;
+use App\Models\Kelas;
 use App\Models\Absensi;
 use App\Models\Nilai;
 use Illuminate\Support\Carbon;
@@ -34,7 +35,7 @@ class DashboardController extends Controller
             'totalSiswa' => Siswa::count(),
             'totalGuru' => Guru::count(),
             'totalMapel' => MataPelajaran::count(),
-            'totalKelas' => Siswa::select('kelas')->distinct()->count(),
+            'totalKelas' => Kelas::count(),
             'absensiHariIni' => Absensi::where('tanggal', $today->toDateString())->where('status', 'Hadir')->count(),
             'absensiPerHari' => $absensiPerHari,
             'topNilai' => $topNilai,

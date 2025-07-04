@@ -7,6 +7,7 @@ Aplikasi Sistem Informasi Akademik berbasis Laravel.
 - Absensi Harian Siswa
 - Input dan Cetak Rapor
 - Manajemen Siswa & Kelas
+- CRUD Master Data Kelas
 - Hak akses berdasarkan role:
   - **Admin** dapat mengelola data guru, siswa, mata pelajaran, nilai dan absensi.
   - **Guru** dapat mengelola nilai dan absensi siswa.
