@@ -9,9 +9,21 @@ class MataPelajaranSeeder extends Seeder
 {
     public function run(): void
     {
+        $mapel = [
+            'Matematika',
+            'Bahasa Indonesia',
+            'Bahasa Inggris',
+            'Kimia',
+            'Fisika',
+            'Biologi',
+            'Ekonomi',
+            'Sejarah',
+            'Geografi',
+            'Seni Budaya',
+        ];
         $data = [];
-        for ($i = 1; $i <= 10; $i++) {
-            $data[] = ['nama' => 'Mapel ' . $i];
+        foreach ($mapel as $nama) {
+            $data[] = ['nama' => $nama];
         }
         DB::table('mata_pelajaran')->insert($data);
     }
