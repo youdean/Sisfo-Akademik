@@ -10,6 +10,7 @@ use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\RaporController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\GuruKelasController;
 
 // Landing page
 Route::get('/', function () {
@@ -36,6 +37,11 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::get('/absensi/rekap', [AbsensiController::class, 'rekap'])->name('absensi.rekap');
     Route::get('/absensi/rekap/export', [AbsensiController::class, 'exportRekap'])->name('absensi.rekap.export');
     Route::get('/rapor/{siswa}', [RaporController::class, 'cetak'])->name('rapor.cetak');
+});
+
+// Halaman guru untuk melihat siswa di kelasnya
+Route::middleware(['auth', 'role:guru'])->group(function () {
+    Route::get('/kelas-saya', [GuruKelasController::class, 'index'])->name('guru.kelas');
 });
 
 // Profile dapat diakses oleh semua user yang login
