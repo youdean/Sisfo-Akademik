@@ -6,12 +6,26 @@ use App\Models\Nilai;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\MataPelajaran;
+use App\Models\Guru;
+use App\Models\Pengajaran;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class NilaiController extends Controller
 {
+    private function kelasGuru(): array
+    {
+        $guru = Guru::where('nama', Auth::user()->name)->first();
+        if (!$guru) {
+            return [];
+        }
+        return Pengajaran::where('guru_id', $guru->id)->pluck('kelas')->toArray();
+    }
     public function index(Request $request)
     {
-        $query = Nilai::with(['siswa', 'mapel']);
+        $query = Nilai::with(['siswa', 'mapel'])->whereHas('siswa', function ($q) {
+            $q->whereIn('kelas', $this->kelasGuru());
+        });
 
         $search = $request->input('search');
         if ($search) {
@@ -33,42 +47,53 @@ class NilaiController extends Controller
 
 public function create()
 {
-    $siswa = Siswa::all();
+    $siswa = Siswa::whereIn('kelas', $this->kelasGuru())->get();
     $mapel = MataPelajaran::all();
     return view('nilai.create', compact('siswa', 'mapel'));
 }
 
 public function store(Request $request)
 {
-    Nilai::create($request->validate([
-        'siswa_id' => 'required|exists:siswa,id',
+    $data = $request->validate([
+        'siswa_id' => ['required', Rule::exists('siswa', 'id')->whereIn('kelas', $this->kelasGuru())],
         'mapel_id' => 'required|exists:mata_pelajaran,id',
         'nilai' => 'required|integer|min:0|max:100'
-    ]));
+    ]);
+    Nilai::create($data);
 
     return redirect()->route('nilai.index')->with('success', 'Nilai berhasil ditambahkan');
 }
 
 public function edit(Nilai $nilai)
 {
-    $siswa = Siswa::all();
+    if (!in_array($nilai->siswa->kelas, $this->kelasGuru())) {
+        abort(403);
+    }
+    $siswa = Siswa::whereIn('kelas', $this->kelasGuru())->get();
     $mapel = MataPelajaran::all();
     return view('nilai.edit', compact('nilai', 'siswa', 'mapel'));
 }
 
 public function update(Request $request, Nilai $nilai)
 {
-    $nilai->update($request->validate([
-        'siswa_id' => 'required|exists:siswa,id',
+    if (!in_array($nilai->siswa->kelas, $this->kelasGuru())) {
+        abort(403);
+    }
+    $data = $request->validate([
+        'siswa_id' => ['required', Rule::exists('siswa', 'id')->whereIn('kelas', $this->kelasGuru())],
         'mapel_id' => 'required|exists:mata_pelajaran,id',
         'nilai' => 'required|integer|min:0|max:100'
-    ]));
+    ]);
+    $nilai->update($data);
 
     return redirect()->route('nilai.index')->with('success', 'Nilai berhasil diupdate');
 }
 
 public function destroy(Nilai $nilai)
 {
+    if (!in_array($nilai->siswa->kelas, $this->kelasGuru())) {
+        abort(403);
+    }
     $nilai->delete();
     return redirect()->route('nilai.index')->with('success', 'Nilai berhasil dihapus');
 }

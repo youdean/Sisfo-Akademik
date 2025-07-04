@@ -5,15 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Absensi;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
+use App\Models\Guru;
+use App\Models\Pengajaran;
 use App\Exports\RekapAbsensiExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AbsensiController extends Controller
 {
+    private function kelasGuru(): array
+    {
+        $guru = Guru::where('nama', Auth::user()->name)->first();
+        if (!$guru) {
+            return [];
+        }
+        return Pengajaran::where('guru_id', $guru->id)->pluck('kelas')->toArray();
+    }
 
     public function index(Request $request)
     {
-        $query = Absensi::with('siswa');
+        $query = Absensi::with('siswa')->whereHas('siswa', function ($q) {
+            $q->whereIn('kelas', $this->kelasGuru());
+        });
 
         $search = $request->input('search');
         if ($search) {
@@ -33,40 +47,51 @@ class AbsensiController extends Controller
 
 public function create()
 {
-    $siswa = Siswa::all();
+    $siswa = Siswa::whereIn('kelas', $this->kelasGuru())->get();
     return view('absensi.create', compact('siswa'));
 }
 
 public function store(Request $request)
 {
-    Absensi::create($request->validate([
-        'siswa_id' => 'required|exists:siswa,id',
+    $data = $request->validate([
+        'siswa_id' => ['required', Rule::exists('siswa', 'id')->whereIn('kelas', $this->kelasGuru())],
         'tanggal' => 'required|date',
         'status' => 'required|in:Hadir,Izin,Sakit,Alpha'
-    ]));
+    ]);
+    Absensi::create($data);
 
     return redirect()->route('absensi.index')->with('success', 'Absensi berhasil ditambahkan');
 }
 
 public function edit(Absensi $absensi)
 {
-    $siswa = Siswa::all();
+    if (!in_array($absensi->siswa->kelas, $this->kelasGuru())) {
+        abort(403);
+    }
+    $siswa = Siswa::whereIn('kelas', $this->kelasGuru())->get();
     return view('absensi.edit', compact('absensi', 'siswa'));
 }
 
 public function update(Request $request, Absensi $absensi)
 {
-    $absensi->update($request->validate([
-        'siswa_id' => 'required|exists:siswa,id',
+    if (!in_array($absensi->siswa->kelas, $this->kelasGuru())) {
+        abort(403);
+    }
+    $data = $request->validate([
+        'siswa_id' => ['required', Rule::exists('siswa', 'id')->whereIn('kelas', $this->kelasGuru())],
         'tanggal' => 'required|date',
         'status' => 'required|in:Hadir,Izin,Sakit,Alpha'
-    ]));
+    ]);
+    $absensi->update($data);
 
     return redirect()->route('absensi.index')->with('success', 'Absensi berhasil diupdate');
 }
 
     public function destroy(Absensi $absensi)
     {
+        if (!in_array($absensi->siswa->kelas, $this->kelasGuru())) {
+            abort(403);
+        }
         $absensi->delete();
         return redirect()->route('absensi.index')->with('success', 'Absensi berhasil dihapus');
     }
@@ -77,7 +102,7 @@ public function update(Request $request, Absensi $absensi)
         $tahun = $request->input('tahun', date('Y'));
         $kelas = $request->input('kelas');
 
-        $siswaQuery = Siswa::query();
+        $siswaQuery = Siswa::whereIn('kelas', $this->kelasGuru());
         if ($kelas) {
             $siswaQuery->where('kelas', $kelas);
         }
@@ -105,7 +130,7 @@ public function update(Request $request, Absensi $absensi)
             },
         ])->get();
 
-        $kelasList = Siswa::select('kelas')->distinct()->pluck('kelas');
+        $kelasList = $this->kelasGuru();
 
         return view('absensi.rekap', [
             'rekap' => $rekap,
@@ -121,6 +146,9 @@ public function update(Request $request, Absensi $absensi)
         $bulan = $request->input('bulan', date('m'));
         $tahun = $request->input('tahun', date('Y'));
         $kelas = $request->input('kelas');
+        if ($kelas && !in_array($kelas, $this->kelasGuru())) {
+            abort(403);
+        }
 
         return Excel::download(new RekapAbsensiExport($bulan, $tahun, $kelas), 'rekap-absensi.xlsx');
     }
