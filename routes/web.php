@@ -9,6 +9,7 @@ use App\Http\Controllers\MapelController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\RaporController;
+use App\Http\Controllers\StudentController;
 
 // Landing page
 Route::get('/', function () {
@@ -42,6 +43,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Routes khusus siswa untuk melihat data sendiri
+Route::middleware(['auth', 'role:siswa'])->group(function () {
+    Route::get('/saya', [StudentController::class, 'profil'])->name('student.profile');
+    Route::get('/saya/absensi', [StudentController::class, 'absensi'])->name('student.absensi');
+    Route::get('/saya/nilai', [StudentController::class, 'nilai'])->name('student.nilai');
+    Route::get('/saya/rapor', [StudentController::class, 'rapor'])->name('student.rapor');
 });
 
 require __DIR__.'/auth.php';
