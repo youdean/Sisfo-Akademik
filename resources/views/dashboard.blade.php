@@ -56,13 +56,6 @@
     </div>
 </div>
 
-<div class="list-group">
-    <a href="{{ route('guru.index') }}" class="list-group-item list-group-item-action">Manajemen Guru</a>
-    <a href="{{ route('siswa.index') }}" class="list-group-item list-group-item-action">Manajemen Siswa</a>
-    <a href="{{ route('mapel.index') }}" class="list-group-item list-group-item-action">Manajemen Mapel</a>
-    <a href="{{ route('nilai.index') }}" class="list-group-item list-group-item-action">Nilai Siswa</a>
-    <a href="{{ route('absensi.index') }}" class="list-group-item list-group-item-action">Absensi Siswa</a>
-</div>
 @endsection
 
 @section('scripts')
