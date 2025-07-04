@@ -11,6 +11,8 @@ use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\RaporController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\GuruKelasController;
+use App\Http\Controllers\KelasController;
+use App\Http\Controllers\TahunAjaranController;
 
 // Landing page
 Route::get('/', function () {
@@ -27,6 +29,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('guru', GuruController::class)->except('show');
     Route::resource('siswa', SiswaController::class)->except('show');
     Route::resource('mapel', MapelController::class)->except('show');
+    Route::resource('kelas', KelasController::class)->except('show');
+    Route::resource('tahunajaran', TahunAjaranController::class)->except('show');
     Route::get('/siswa-export', [SiswaController::class, 'export'])->name('siswa.export');
 });
 
