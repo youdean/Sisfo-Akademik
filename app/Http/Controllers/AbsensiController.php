@@ -11,11 +11,25 @@ use Maatwebsite\Excel\Facades\Excel;
 class AbsensiController extends Controller
 {
 
-public function index()
-{
-    $absensi = Absensi::with('siswa')->get();
-    return view('absensi.index', compact('absensi'));
-}
+    public function index(Request $request)
+    {
+        $query = Absensi::with('siswa');
+
+        $search = $request->input('search');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('status', 'like', "%{$search}%")
+                    ->orWhere('tanggal', 'like', "%{$search}%")
+                    ->orWhereHas('siswa', function ($s) use ($search) {
+                        $s->where('nama', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $absensi = $query->get();
+
+        return view('absensi.index', compact('absensi', 'search'));
+    }
 
 public function create()
 {

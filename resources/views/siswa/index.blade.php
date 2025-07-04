@@ -7,6 +7,10 @@
     <h1>Daftar Siswa</h1>
     <a href="{{ route('siswa.create') }}" class="btn btn-primary">+ Tambah Siswa</a>
 </div>
+<form method="GET" class="mb-3 d-flex" action="{{ route('siswa.index') }}">
+    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari siswa..." class="form-control me-2">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+</form>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif

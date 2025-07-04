@@ -7,6 +7,10 @@
     <h1>Daftar Nilai</h1>
     <a href="{{ route('nilai.create') }}" class="btn btn-primary">+ Tambah Nilai</a>
 </div>
+<form method="GET" class="mb-3 d-flex" action="{{ route('nilai.index') }}">
+    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nilai..." class="form-control me-2">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+</form>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
