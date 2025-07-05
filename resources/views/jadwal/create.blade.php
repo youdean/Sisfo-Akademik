@@ -4,6 +4,9 @@
 
 @section('content')
 <h1>Tambah Jadwal</h1>
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 <form action="{{ route('jadwal.store') }}" method="POST">
     @csrf
     <div class="mb-3">

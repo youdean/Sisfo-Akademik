@@ -4,6 +4,9 @@
 
 @section('content')
 <h1>Edit Jadwal</h1>
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 <form action="{{ route('jadwal.update', $jadwal->id) }}" method="POST">
     @csrf @method('PUT')
     <div class="mb-3">
