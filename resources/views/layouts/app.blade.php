@@ -71,9 +71,6 @@
                     <a href="{{ route('absensi.index') }}" class="list-group-item list-group-item-action">
                         <i class="bi bi-person-check me-2"></i>Absensi Siswa
                     </a>
-                    <a href="{{ route('absensi.harian') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-calendar-check me-2"></i>Input Absensi Harian
-                    </a>
                 @endif
 
                 @if(Auth::user()->role === 'siswa')
