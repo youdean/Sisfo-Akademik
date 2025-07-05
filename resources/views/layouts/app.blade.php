@@ -93,6 +93,9 @@
                         <i class="bi bi-card-checklist me-2"></i>Nilai Saya
                     </a>
                 @endif
+                <button type="button" class="list-group-item list-group-item-action" data-bs-dismiss="offcanvas">
+                    <i class="bi bi-chevron-left me-2"></i>Sembunyikan Menu
+                </button>
             </div>
         </div>
     </div>
