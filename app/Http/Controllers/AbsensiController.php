@@ -152,4 +152,61 @@ public function update(Request $request, Absensi $absensi)
 
         return Excel::download(new RekapAbsensiExport($bulan, $tahun, $kelas), 'rekap-absensi.xlsx');
     }
+
+    public function harian(Request $request)
+    {
+        $kelasList = $this->kelasGuru();
+        $selected = $request->input('kelas', $kelasList[0] ?? null);
+        if ($selected && !in_array($selected, $kelasList)) {
+            abort(403);
+        }
+
+        $tanggal = $request->input('tanggal', date('Y-m-d'));
+
+        $siswa = [];
+        $absen = [];
+        if ($selected) {
+            $siswa = Siswa::where('kelas', $selected)->get();
+            $absen = Absensi::whereIn('siswa_id', $siswa->pluck('id'))
+                        ->where('tanggal', $tanggal)
+                        ->get()
+                        ->pluck('status', 'siswa_id');
+        }
+
+        return view('absensi.harian', [
+            'kelasList' => $kelasList,
+            'selected' => $selected,
+            'tanggal' => $tanggal,
+            'siswa' => $siswa,
+            'absen' => $absen,
+        ]);
+    }
+
+    public function harianStore(Request $request)
+    {
+        $kelas = $request->input('kelas');
+        $tanggal = $request->input('tanggal');
+        if (!$kelas || !in_array($kelas, $this->kelasGuru())) {
+            abort(403);
+        }
+
+        $request->validate([
+            'tanggal' => 'required|date',
+            'status' => 'array',
+        ]);
+
+        $siswaIds = Siswa::where('kelas', $kelas)->pluck('id');
+        $statusData = $request->input('status', []);
+        foreach ($siswaIds as $id) {
+            if (isset($statusData[$id])) {
+                Absensi::updateOrCreate(
+                    ['siswa_id' => $id, 'tanggal' => $tanggal],
+                    ['status' => $statusData[$id]]
+                );
+            }
+        }
+
+        return redirect()->route('absensi.harian', ['kelas' => $kelas, 'tanggal' => $tanggal])
+                         ->with('success', 'Absensi berhasil disimpan');
+    }
 }
