@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Guru;
 use App\Models\Pengajaran;
+use App\Models\Kelas;
 use App\Exports\RekapAbsensiExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,12 @@ class AbsensiController extends Controller
 {
     private function kelasGuru(): array
     {
-        $guru = Guru::where('user_id', Auth::id())->first();
+        $user = Auth::user();
+        if ($user && $user->role === 'admin') {
+            return Kelas::pluck('nama')->toArray();
+        }
+
+        $guru = Guru::where('user_id', $user?->id)->first();
         if (!$guru) {
             return [];
         }
