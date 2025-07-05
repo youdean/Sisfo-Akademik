@@ -11,10 +11,22 @@ use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return view('users.index', compact('users'));
+        $query = User::query();
+
+        $search = $request->input('search');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('role', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->get();
+
+        return view('users.index', compact('users', 'search'));
     }
 
     public function create()
