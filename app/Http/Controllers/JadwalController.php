@@ -45,7 +45,7 @@ class JadwalController extends Controller
             'guru_id'  => 'required|exists:guru,id',
             'hari'     => 'required',
             'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
+            'jam_selesai' => 'required|after:jam_mulai',
         ]);
         $exists = Jadwal::where('guru_id', $data['guru_id'])
             ->where('hari', $data['hari'])
@@ -84,7 +84,7 @@ class JadwalController extends Controller
             'guru_id'  => 'required|exists:guru,id',
             'hari'     => 'required',
             'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
+            'jam_selesai' => 'required|after:jam_mulai',
         ]);
         $exists = Jadwal::where('guru_id', $data['guru_id'])
             ->where('hari', $data['hari'])
