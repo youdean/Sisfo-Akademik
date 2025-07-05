@@ -20,6 +20,7 @@
             <th>ID</th>
             <th>NIP</th>
             <th>Nama</th>
+            <th>Tanggal Lahir</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -29,6 +30,7 @@
             <td>{{ $g->id }}</td>
             <td>{{ $g->nip }}</td>
             <td>{{ $g->nama }}</td>
+            <td>{{ $g->tanggal_lahir }}</td>
             <td>
                 <a href="{{ route('guru.edit', $g->id) }}" class="btn btn-sm btn-warning">Edit</a>
                 <form action="{{ route('guru.destroy', $g->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">

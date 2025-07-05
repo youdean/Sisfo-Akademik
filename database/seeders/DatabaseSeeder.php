@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             MataPelajaranSeeder::class,
             NilaiSeeder::class,
             AbsensiSeeder::class,
+            KelasSeeder::class,
             PengajaranSeeder::class,
         ]);
     }

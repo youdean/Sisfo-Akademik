@@ -14,6 +14,10 @@
         <label>Nama</label>
         <input type="text" name="nama" class="form-control" required>
     </div>
+    <div class="mb-3">
+        <label>Tanggal Lahir</label>
+        <input type="date" name="tanggal_lahir" class="form-control" required>
+    </div>
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('guru.index') }}" class="btn btn-secondary">Batal</a>
 </form>
