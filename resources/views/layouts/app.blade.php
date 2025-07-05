@@ -62,6 +62,9 @@
                     <a href="{{ route('pengajaran.index') }}" class="list-group-item list-group-item-action">
                         <i class="bi bi-journal-text me-2"></i>Pengajaran
                     </a>
+                    <a href="{{ route('jadwal.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran
+                    </a>
                     <a href="{{ route('users.index') }}" class="list-group-item list-group-item-action">
                         <i class="bi bi-people-fill me-2"></i>Manajemen User
                     </a>
