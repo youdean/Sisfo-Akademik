@@ -18,6 +18,10 @@
             <td>: {{ $siswa->nama }}</td>
         </tr>
         <tr>
+            <td>NISN</td>
+            <td>: {{ $siswa->nisn }}</td>
+        </tr>
+        <tr>
             <td>Kelas</td>
             <td>: {{ $siswa->kelas }}</td>
         </tr>

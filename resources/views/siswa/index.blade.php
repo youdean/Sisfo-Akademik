@@ -20,6 +20,7 @@
         <tr>
             <th>ID</th>
             <th>Nama</th>
+            <th>NISN</th>
             <th>Kelas</th>
             <th>Tanggal Lahir</th>
             <th>Aksi</th>
@@ -30,6 +31,7 @@
         <tr>
             <td>{{ $s->id }}</td>
             <td>{{ $s->nama }}</td>
+            <td>{{ $s->nisn }}</td>
             <td>{{ $s->kelas }}</td>
             <td>{{ $s->tanggal_lahir }}</td>
             <td>

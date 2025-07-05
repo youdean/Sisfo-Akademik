@@ -15,8 +15,18 @@ class DashboardTest extends TestCase
     {
         $user = User::factory()->create();
 
-        Siswa::create(['nama' => 'Test1', 'kelas' => '10A', 'tanggal_lahir' => '2000-01-01']);
-        Siswa::create(['nama' => 'Test2', 'kelas' => '10B', 'tanggal_lahir' => '2000-01-02']);
+        Siswa::create([
+            'nama' => 'Test1',
+            'nisn' => '0000000001',
+            'kelas' => '10A',
+            'tanggal_lahir' => '2000-01-01'
+        ]);
+        Siswa::create([
+            'nama' => 'Test2',
+            'nisn' => '0000000002',
+            'kelas' => '10B',
+            'tanggal_lahir' => '2000-01-02'
+        ]);
 
         $response = $this->actingAs($user)->get('/dashboard');
 
