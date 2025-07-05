@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Siswa;
 use App\Models\Nilai;
+use App\Models\Absensi;
 use Illuminate\Support\Facades\Auth;
 use PDF;
 
@@ -26,6 +27,32 @@ class StudentController extends Controller
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $absensi = $siswa->absensi()->get();
         return view('siswa.absensi', compact('siswa', 'absensi'));
+    }
+
+    /**
+     * Form for student to record today's attendance.
+     */
+    public function absenForm()
+    {
+        return view('siswa.absen');
+    }
+
+    /**
+     * Store student's attendance for today.
+     */
+    public function absen(Request $request)
+    {
+        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
+        $data = $request->validate([
+            'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
+        ]);
+
+        Absensi::updateOrCreate(
+            ['siswa_id' => $siswa->id, 'tanggal' => date('Y-m-d')],
+            ['status' => $data['status']]
+        );
+
+        return redirect()->route('student.absensi')->with('success', 'Absensi berhasil dicatat');
     }
 
     /**

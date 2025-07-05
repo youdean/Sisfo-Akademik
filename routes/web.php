@@ -59,6 +59,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/saya', [StudentController::class, 'profil'])->name('student.profile');
     Route::get('/saya/absensi', [StudentController::class, 'absensi'])->name('student.absensi');
+    Route::get('/saya/absen', [StudentController::class, 'absenForm'])->name('student.absen.form');
+    Route::post('/saya/absen', [StudentController::class, 'absen'])->name('student.absen');
     Route::get('/saya/nilai', [StudentController::class, 'nilai'])->name('student.nilai');
     Route::get('/saya/rapor', [StudentController::class, 'rapor'])->name('student.rapor');
 });
