@@ -8,7 +8,7 @@
     <div>
         <a href="{{ route('absensi.rekap') }}" class="btn btn-secondary me-2">Rekap Bulanan</a>
         <a href="{{ route('absensi.harian') }}" class="btn btn-success me-2">Input Harian</a>
-{{--         <a href="{{ route('absensi.create') }}" class="btn btn-primary">+ Tambah Absensi</a> --}}
+        <a href="{{ route('absensi.create') }}" class="btn btn-primary">+ Tambah Absensi</a>
     </div>
 </div>
 <form method="GET" class="mb-3 d-flex" action="{{ route('absensi.index') }}">
