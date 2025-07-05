@@ -33,7 +33,8 @@ public function store(Request $request)
 {
     Guru::create($request->validate([
         'nip' => 'required|unique:guru',
-        'nama' => 'required'
+        'nama' => 'required',
+        'tanggal_lahir' => 'required|date'
     ]));
 
     return redirect()->route('guru.index')->with('success', 'Guru berhasil ditambahkan');
@@ -48,7 +49,8 @@ public function update(Request $request, Guru $guru)
 {
     $guru->update($request->validate([
         'nip' => 'required|unique:guru,nip,' . $guru->id,
-        'nama' => 'required'
+        'nama' => 'required',
+        'tanggal_lahir' => 'required|date'
     ]));
 
     return redirect()->route('guru.index')->with('success', 'Guru berhasil diupdate');
