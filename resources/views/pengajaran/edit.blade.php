@@ -4,15 +4,19 @@
 
 @section('content')
 <h1>Edit Pengajaran</h1>
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 <form action="{{ route('pengajaran.update', $pengajaran->id) }}" method="POST">
     @csrf @method('PUT')
     <div class="mb-3">
         <label>Guru</label>
-        <select name="guru_id" class="form-control" required>
+        <input list="guru_list" name="guru_nama" value="{{ old('guru_nama', $pengajaran->guru->nama) }}" class="form-control" required>
+        <datalist id="guru_list">
             @foreach($guru as $g)
-                <option value="{{ $g->id }}" @selected($pengajaran->guru_id == $g->id)>{{ $g->nama }}</option>
+                <option value="{{ $g->nama }}"></option>
             @endforeach
-        </select>
+        </datalist>
     </div>
     <div class="mb-3">
         <label>Mata Pelajaran</label>
