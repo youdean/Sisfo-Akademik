@@ -49,14 +49,8 @@ class JadwalController extends Controller
         ]);
         $exists = Jadwal::where('guru_id', $data['guru_id'])
             ->where('hari', $data['hari'])
-            ->where(function ($q) use ($data) {
-                $q->whereBetween('jam_mulai', [$data['jam_mulai'], $data['jam_selesai']])
-                    ->orWhereBetween('jam_selesai', [$data['jam_mulai'], $data['jam_selesai']])
-                    ->orWhere(function ($q2) use ($data) {
-                        $q2->where('jam_mulai', '<=', $data['jam_mulai'])
-                            ->where('jam_selesai', '>=', $data['jam_selesai']);
-                    });
-            })
+            ->where('jam_mulai', '<', $data['jam_selesai'])
+            ->where('jam_selesai', '>', $data['jam_mulai'])
             ->exists();
 
         if ($exists) {
@@ -89,14 +83,8 @@ class JadwalController extends Controller
         $exists = Jadwal::where('guru_id', $data['guru_id'])
             ->where('hari', $data['hari'])
             ->where('id', '!=', $jadwal->id)
-            ->where(function ($q) use ($data) {
-                $q->whereBetween('jam_mulai', [$data['jam_mulai'], $data['jam_selesai']])
-                    ->orWhereBetween('jam_selesai', [$data['jam_mulai'], $data['jam_selesai']])
-                    ->orWhere(function ($q2) use ($data) {
-                        $q2->where('jam_mulai', '<=', $data['jam_mulai'])
-                            ->where('jam_selesai', '>=', $data['jam_selesai']);
-                    });
-            })
+            ->where('jam_mulai', '<', $data['jam_selesai'])
+            ->where('jam_selesai', '>', $data['jam_mulai'])
             ->exists();
 
         if ($exists) {
