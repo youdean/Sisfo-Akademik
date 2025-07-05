@@ -7,6 +7,7 @@ use App\Models\Guru;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
@@ -26,25 +27,41 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:6',
+            'name' => 'nullable',
+            'email' => 'nullable|email|unique:users',
+            'password' => 'nullable|confirmed|min:6',
             'role' => 'required|in:admin,guru,siswa',
             'guru_id' => 'nullable|exists:guru,id',
             'siswa_id' => 'nullable|exists:siswa,id',
         ]);
 
+        if ($data['role'] === 'guru') {
+            $guru = Guru::findOrFail($data['guru_id']);
+            $name = $guru->nip.' - '.$guru->nama;
+            $email = $guru->nip.'@muhammadiyah.co.id';
+            $password = Carbon::parse($guru->tanggal_lahir)->format('ymd');
+        } elseif ($data['role'] === 'siswa') {
+            $siswa = Siswa::findOrFail($data['siswa_id']);
+            $name = $siswa->nisn.' - '.$siswa->nama;
+            $email = $siswa->nisn.'@muhammadiyah.co.id';
+            $password = Carbon::parse($siswa->tanggal_lahir)->format('ymd');
+        } else {
+            $name = $data['name'];
+            $email = $data['email'];
+            $password = $data['password'];
+        }
+
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name' => $name,
+            'email' => $email,
+            'password' => Hash::make($password),
             'role' => $data['role'],
         ]);
 
-        if ($data['role'] === 'guru' && $data['guru_id']) {
+        if ($data['role'] === 'guru') {
             Guru::where('id', $data['guru_id'])->update(['user_id' => $user->id]);
         }
-        if ($data['role'] === 'siswa' && $data['siswa_id']) {
+        if ($data['role'] === 'siswa') {
             Siswa::where('id', $data['siswa_id'])->update(['user_id' => $user->id]);
         }
 
