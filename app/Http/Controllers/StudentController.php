@@ -7,6 +7,7 @@ use App\Models\Nilai;
 use App\Models\Absensi;
 use Illuminate\Support\Facades\Auth;
 use PDF;
+use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
