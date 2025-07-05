@@ -9,10 +9,26 @@ use Illuminate\Http\Request;
 
 class PengajaranController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pengajaran = Pengajaran::with(['guru', 'mapel'])->get();
-        return view('pengajaran.index', compact('pengajaran'));
+        $query = Pengajaran::with(['guru', 'mapel']);
+
+        $search = $request->input('search');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kelas', 'like', "%{$search}%")
+                    ->orWhereHas('guru', function ($g) use ($search) {
+                        $g->where('nama', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('mapel', function ($m) use ($search) {
+                        $m->where('nama', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $pengajaran = $query->get();
+
+        return view('pengajaran.index', compact('pengajaran', 'search'));
     }
 
     public function create()
