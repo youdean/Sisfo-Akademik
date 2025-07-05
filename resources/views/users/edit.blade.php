@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const id = type === 'guru' ? opt.dataset.nip : opt.dataset.nisn;
         const tgl = opt.dataset.tanggallahir || '';
         if (id) {
-            emailInput.value = id + '@muhammadiyah.co.id';
+            emailInput.value = id + '@muhammadiyah.ac.id';
             if (tgl) {
                 const parts = tgl.split('-');
                 passInput.value = parts[0].slice(2) + parts[1] + parts[2];

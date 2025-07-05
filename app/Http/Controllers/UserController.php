@@ -38,12 +38,12 @@ class UserController extends Controller
         if ($data['role'] === 'guru') {
             $guru = Guru::findOrFail($data['guru_id']);
             $name = $guru->nip.' - '.$guru->nama;
-            $email = $guru->nip.'@muhammadiyah.co.id';
+            $email = $guru->nip.'@muhammadiyah.ac.id';
             $password = Carbon::parse($guru->tanggal_lahir)->format('ymd');
         } elseif ($data['role'] === 'siswa') {
             $siswa = Siswa::findOrFail($data['siswa_id']);
             $name = $siswa->nisn.' - '.$siswa->nama;
-            $email = $siswa->nisn.'@muhammadiyah.co.id';
+            $email = $siswa->nisn.'@muhammadiyah.ac.id';
             $password = Carbon::parse($siswa->tanggal_lahir)->format('ymd');
         } else {
             $name = $data['name'];
