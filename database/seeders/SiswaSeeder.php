@@ -17,6 +17,7 @@ class SiswaSeeder extends Seeder
         for ($i = 1; $i <= 50; $i++) {
             $data[] = [
                 'nama' => $i === 1 ? 'Siswa' : $faker->unique()->name,
+                'nisn' => $faker->unique()->numerify('############'),
                 'kelas' => '10' . chr(64 + ($i % 3) + 1),
                 'tanggal_lahir' => $faker->dateTimeBetween('2008-01-01', '2008-12-31')->format('Y-m-d'),
                 'user_id' => $i === 1 && $siswaUser ? $siswaUser->id : null,

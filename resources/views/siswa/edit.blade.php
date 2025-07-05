@@ -11,6 +11,10 @@
         <input type="text" name="nama" class="form-control" value="{{ $siswa->nama }}" required>
     </div>
     <div class="mb-3">
+        <label>NISN</label>
+        <input type="text" name="nisn" class="form-control" value="{{ $siswa->nisn }}" required>
+    </div>
+    <div class="mb-3">
         <label>Kelas</label>
         <select name="kelas" class="form-control" required>
             <option value="">-- Pilih Kelas --</option>

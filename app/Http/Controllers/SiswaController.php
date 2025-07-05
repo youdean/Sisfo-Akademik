@@ -18,6 +18,7 @@ class SiswaController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('nisn', 'like', "%{$search}%")
                     ->orWhere('kelas', 'like', "%{$search}%");
             });
         }
@@ -37,6 +38,7 @@ public function store(Request $request)
 {
     Siswa::create($request->validate([
         'nama' => 'required',
+        'nisn' => 'required|unique:siswa,nisn',
         'kelas' => 'required',
         'tanggal_lahir' => 'required|date'
     ]));
@@ -54,6 +56,7 @@ public function update(Request $request, Siswa $siswa)
 {
     $siswa->update($request->validate([
         'nama' => 'required',
+        'nisn' => 'required|unique:siswa,nisn,' . $siswa->id,
         'kelas' => 'required',
         'tanggal_lahir' => 'required|date'
     ]));

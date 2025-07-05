@@ -16,6 +16,7 @@
     <thead>
         <tr>
             <th>Nama</th>
+            <th>NISN</th>
             <th>Tanggal Lahir</th>
             <th>Aksi</th>
         </tr>
@@ -24,6 +25,7 @@
         @foreach($siswa as $s)
         <tr>
             <td>{{ $s->nama }}</td>
+            <td>{{ $s->nisn }}</td>
             <td>{{ $s->tanggal_lahir }}</td>
             <td>
                 <a href="{{ route('rapor.cetak', $s->id) }}" class="btn btn-sm btn-info" target="_blank">Cetak Rapor</a>
