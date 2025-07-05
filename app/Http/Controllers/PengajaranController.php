@@ -7,6 +7,7 @@ use App\Models\Guru;
 use App\Models\MataPelajaran;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PengajaranController extends Controller
 {
@@ -42,11 +43,20 @@ class PengajaranController extends Controller
 
     public function store(Request $request)
     {
-        Pengajaran::create($request->validate([
-            'guru_id' => 'required|exists:guru,id',
-            'mapel_id' => 'required|exists:mata_pelajaran,id',
-            'kelas' => 'required|exists:kelas,nama'
-        ]));
+        $validated = $request->validate([
+            'guru_id' => [
+                'required',
+                'exists:guru,id',
+                Rule::unique('pengajaran')->where('mapel_id', $request->input('mapel_id'))->where('kelas', $request->input('kelas')),
+            ],
+            'mapel_id' => ['required', 'exists:mata_pelajaran,id'],
+            'kelas' => ['required', 'exists:kelas,nama'],
+        ]);
+
+        $validated['guru_id'] = (int) $validated['guru_id'];
+        $validated['mapel_id'] = (int) $validated['mapel_id'];
+
+        Pengajaran::create($validated);
 
         return redirect()->route('pengajaran.index')->with('success', 'Data pengajaran berhasil ditambahkan');
     }
@@ -61,11 +71,20 @@ class PengajaranController extends Controller
 
     public function update(Request $request, Pengajaran $pengajaran)
     {
-        $pengajaran->update($request->validate([
-            'guru_id' => 'required|exists:guru,id',
-            'mapel_id' => 'required|exists:mata_pelajaran,id',
-            'kelas' => 'required|exists:kelas,nama'
-        ]));
+        $validated = $request->validate([
+            'guru_id' => [
+                'required',
+                'exists:guru,id',
+                Rule::unique('pengajaran')->where('mapel_id', $request->input('mapel_id'))->where('kelas', $request->input('kelas'))->ignore($pengajaran->id),
+            ],
+            'mapel_id' => ['required', 'exists:mata_pelajaran,id'],
+            'kelas' => ['required', 'exists:kelas,nama'],
+        ]);
+
+        $validated['guru_id'] = (int) $validated['guru_id'];
+        $validated['mapel_id'] = (int) $validated['mapel_id'];
+
+        $pengajaran->update($validated);
 
         return redirect()->route('pengajaran.index')->with('success', 'Data pengajaran berhasil diupdate');
     }

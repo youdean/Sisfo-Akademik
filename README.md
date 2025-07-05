@@ -11,6 +11,8 @@ Aplikasi Sistem Informasi Akademik berbasis Laravel.
 - Hak akses berdasarkan role:
   - **Admin** dapat mengelola data guru, siswa, mata pelajaran, nilai dan absensi.
   - **Guru** dapat mengelola nilai dan absensi siswa.
+- Sistem memastikan kombinasi guru, mata pelajaran dan kelas pada menu
+  **Pengajaran** tidak bisa diduplikasi.
 
 ## Instalasi Lokal
 ```bash
