@@ -24,7 +24,11 @@
     </div>
     <div class="mb-3">
         <label>Kelas</label>
-        <input type="text" name="kelas" class="form-control" value="{{ $pengajaran->kelas }}" required>
+        <select name="kelas" class="form-control" required>
+            @foreach($kelas as $k)
+                <option value="{{ $k->nama }}" @selected($pengajaran->kelas == $k->nama)>{{ $k->nama }}</option>
+            @endforeach
+        </select>
     </div>
     <button class="btn btn-primary">Update</button>
     <a href="{{ route('pengajaran.index') }}" class="btn btn-secondary">Batal</a>

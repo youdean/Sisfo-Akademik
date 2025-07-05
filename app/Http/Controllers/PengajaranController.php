@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pengajaran;
 use App\Models\Guru;
 use App\Models\MataPelajaran;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 
 class PengajaranController extends Controller
@@ -35,7 +36,8 @@ class PengajaranController extends Controller
     {
         $guru = Guru::all();
         $mapel = MataPelajaran::all();
-        return view('pengajaran.create', compact('guru', 'mapel'));
+        $kelas = Kelas::all();
+        return view('pengajaran.create', compact('guru', 'mapel', 'kelas'));
     }
 
     public function store(Request $request)
@@ -43,7 +45,7 @@ class PengajaranController extends Controller
         Pengajaran::create($request->validate([
             'guru_id' => 'required|exists:guru,id',
             'mapel_id' => 'required|exists:mata_pelajaran,id',
-            'kelas' => 'required|string'
+            'kelas' => 'required|exists:kelas,nama'
         ]));
 
         return redirect()->route('pengajaran.index')->with('success', 'Data pengajaran berhasil ditambahkan');
@@ -53,7 +55,8 @@ class PengajaranController extends Controller
     {
         $guru = Guru::all();
         $mapel = MataPelajaran::all();
-        return view('pengajaran.edit', compact('pengajaran', 'guru', 'mapel'));
+        $kelas = Kelas::all();
+        return view('pengajaran.edit', compact('pengajaran', 'guru', 'mapel', 'kelas'));
     }
 
     public function update(Request $request, Pengajaran $pengajaran)
@@ -61,7 +64,7 @@ class PengajaranController extends Controller
         $pengajaran->update($request->validate([
             'guru_id' => 'required|exists:guru,id',
             'mapel_id' => 'required|exists:mata_pelajaran,id',
-            'kelas' => 'required|string'
+            'kelas' => 'required|exists:kelas,nama'
         ]));
 
         return redirect()->route('pengajaran.index')->with('success', 'Data pengajaran berhasil diupdate');
