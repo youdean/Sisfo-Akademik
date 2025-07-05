@@ -13,6 +13,7 @@ use App\Http\Controllers\RaporController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\GuruKelasController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PengajaranController;
 
 // Landing page
 Route::get('/', function () {
@@ -31,6 +32,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('mapel', MapelController::class)->except('show');
     Route::resource('kelas', KelasController::class)->except('show');
     Route::resource('users', UserController::class)->except('show');
+    Route::resource('pengajaran', PengajaranController::class)->except('show');
     Route::get('/siswa-export', [SiswaController::class, 'export'])->name('siswa.export');
 });
 
