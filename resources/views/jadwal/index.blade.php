@@ -7,6 +7,15 @@
     <h1>Jadwal Pelajaran</h1>
     <a href="{{ route('jadwal.create') }}" class="btn btn-primary">+ Tambah Jadwal</a>
 </div>
+<form method="GET" action="{{ route('jadwal.index') }}" class="mb-3 d-flex">
+    <select name="kelas" class="form-select me-2" onchange="this.form.submit()">
+        <option value="">Semua Kelas</option>
+        @foreach($kelasList as $id => $nama)
+            <option value="{{ $id }}" {{ $id == $selectedKelas ? 'selected' : '' }}>{{ $nama }}</option>
+        @endforeach
+    </select>
+    <noscript><button class="btn btn-primary">Lihat</button></noscript>
+</form>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
