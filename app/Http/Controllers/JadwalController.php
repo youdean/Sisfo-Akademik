@@ -23,10 +23,23 @@ class JadwalController extends Controller
             'kelas' => $kelasNama,
         ]);
     }
-    public function index()
+    public function index(Request $request)
     {
-        $jadwal = Jadwal::with(['kelas', 'mapel', 'guru'])->get()->groupBy('hari');
-        return view('jadwal.index', compact('jadwal'));
+        $kelasId = $request->query('kelas');
+        $kelasList = Kelas::pluck('nama', 'id');
+
+        $query = Jadwal::with(['kelas', 'mapel', 'guru']);
+        if ($kelasId) {
+            $query->where('kelas_id', $kelasId);
+        }
+
+        $jadwal = $query->get()->groupBy('hari');
+
+        return view('jadwal.index', [
+            'jadwal' => $jadwal,
+            'kelasList' => $kelasList,
+            'selectedKelas' => $kelasId,
+        ]);
     }
 
     public function create()
