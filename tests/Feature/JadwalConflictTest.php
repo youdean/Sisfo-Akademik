@@ -51,5 +51,42 @@ class JadwalConflictTest extends TestCase
 
         $this->assertEquals(1, Jadwal::count());
     }
+
+    public function test_teacher_can_have_consecutive_schedule(): void
+    {
+        $user = User::factory()->create(['role' => 'admin']);
+        $guru = Guru::create([
+            'nip' => '222',
+            'nama' => 'Guru B',
+            'tanggal_lahir' => '1985-01-01',
+        ]);
+        $mapel = MataPelajaran::create(['nama' => 'IPA']);
+        $kelasA = Kelas::create(['nama' => 'A']);
+        $kelasB = Kelas::create(['nama' => 'B']);
+
+        $this->actingAs($user)->post('/jadwal', [
+            'kelas_id' => $kelasA->id,
+            'mapel_id' => $mapel->id,
+            'guru_id' => $guru->id,
+            'hari' => 'Senin',
+            'jam_mulai' => '07:00',
+            'jam_selesai' => '08:00',
+        ])->assertRedirect('/jadwal');
+
+        $response = $this->actingAs($user)
+            ->post('/jadwal', [
+                'kelas_id' => $kelasB->id,
+                'mapel_id' => $mapel->id,
+                'guru_id' => $guru->id,
+                'hari' => 'Senin',
+                'jam_mulai' => '08:00',
+                'jam_selesai' => '09:00',
+            ]);
+
+        $response->assertRedirect('/jadwal');
+        $response->assertSessionMissing('error');
+
+        $this->assertEquals(2, Jadwal::count());
+    }
 }
 
