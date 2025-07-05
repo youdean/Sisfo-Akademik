@@ -38,6 +38,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::resource('nilai', NilaiController::class)->except('show');
     Route::resource('absensi', AbsensiController::class)->except('show');
+    Route::get('/absensi/harian', [AbsensiController::class, 'harian'])->name('absensi.harian');
+    Route::post('/absensi/harian', [AbsensiController::class, 'harianStore'])->name('absensi.harian.store');
     Route::get('/absensi/rekap', [AbsensiController::class, 'rekap'])->name('absensi.rekap');
     Route::get('/absensi/rekap/export', [AbsensiController::class, 'exportRekap'])->name('absensi.rekap.export');
     Route::get('/rapor/{siswa}', [RaporController::class, 'cetak'])->name('rapor.cetak');

@@ -6,17 +6,17 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AbsensiRekapTest extends TestCase
+class AbsensiHarianTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_rekap_page_can_be_opened(): void
+    public function test_harian_page_can_be_opened(): void
     {
         $user = User::factory()->create(['role' => 'admin']);
 
-        $response = $this->actingAs($user)->get('/absensi/rekap');
+        $response = $this->actingAs($user)->get('/absensi/harian');
 
         $response->assertOk();
-        $response->assertSee('Rekap Absensi');
+        $response->assertSee('Absensi Harian');
     }
 }
