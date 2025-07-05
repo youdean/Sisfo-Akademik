@@ -8,15 +8,17 @@
     @csrf @method('PUT')
     <div class="mb-3">
         <label>Role</label>
-        <select name="role" class="form-control" id="role-select" required>
+        <select name="role" class="form-control" id="role-select" disabled required>
             <option value="admin" @selected($user->role=='admin')>admin</option>
             <option value="guru" @selected($user->role=='guru')>guru</option>
             <option value="siswa" @selected($user->role=='siswa')>siswa</option>
         </select>
+        <input type="hidden" name="role" value="{{ $user->role }}">
     </div>
     <div class="mb-3" id="field-name">
         <label>Nama</label>
-        <input type="text" name="name" class="form-control" value="{{ $user->name }}">
+        <input type="text" name="name" class="form-control" value="{{ $user->name }}" disabled>
+        <input type="hidden" name="name" value="{{ $user->name }}">
     </div>
     <div class="mb-3" id="field-email">
         <label>Email</label>
