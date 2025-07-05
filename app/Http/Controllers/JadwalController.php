@@ -6,10 +6,23 @@ use App\Models\Jadwal;
 use App\Models\Kelas;
 use App\Models\MataPelajaran;
 use App\Models\Guru;
+use App\Models\Pengajaran;
 use Illuminate\Http\Request;
 
 class JadwalController extends Controller
 {
+    private function syncPengajaran(array $data): void
+    {
+        $kelasNama = Kelas::find($data['kelas_id'])->nama ?? null;
+        if (!$kelasNama) {
+            return;
+        }
+        Pengajaran::firstOrCreate([
+            'guru_id' => $data['guru_id'],
+            'mapel_id' => $data['mapel_id'],
+            'kelas' => $kelasNama,
+        ]);
+    }
     public function index()
     {
         $jadwal = Jadwal::with(['kelas', 'mapel', 'guru'])->get()->groupBy('hari');
@@ -35,6 +48,7 @@ class JadwalController extends Controller
             'jam_selesai' => 'required',
         ]);
         Jadwal::create($data);
+        $this->syncPengajaran($data);
 
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
     }
@@ -58,6 +72,7 @@ class JadwalController extends Controller
             'jam_selesai' => 'required',
         ]);
         $jadwal->update($data);
+        $this->syncPengajaran($data);
 
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diupdate');
     }
