@@ -14,6 +14,12 @@ class KelasCrudTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'admin']);
 
+        $ta = \App\Models\TahunAjaran::create([
+            'nama' => '2024/2025',
+            'start_date' => '2024-07-01',
+            'end_date' => '2025-06-30',
+        ]);
+
         for ($i = 1; $i <= 11; $i++) {
             $wali = \App\Models\Guru::create([
                 'nuptk' => '900'.$i,
@@ -22,7 +28,7 @@ class KelasCrudTest extends TestCase
                 'jenis_kelamin' => 'L',
                 'tanggal_lahir' => '1990-01-01',
             ]);
-            \App\Models\Kelas::create(['nama' => 'K'.$i, 'guru_id' => $wali->id]);
+            \App\Models\Kelas::create(['nama' => 'K'.$i, 'guru_id' => $wali->id, 'tahun_ajaran_id' => $ta->id]);
         }
 
         $response = $this->actingAs($user)->get('/kelas');

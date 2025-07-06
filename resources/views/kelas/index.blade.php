@@ -15,6 +15,7 @@
         <tr>
             <th>ID</th>
             <th>Nama Kelas</th>
+            <th>Tahun Ajaran</th>
             <th>Wali Kelas</th>
             <th>Aksi</th>
         </tr>
@@ -24,6 +25,7 @@
         <tr>
             <td>{{ $k->id }}</td>
             <td>{{ $k->nama }}</td>
+            <td>{{ $k->tahunAjaran->nama ?? '' }}</td>
             <td>{{ $k->waliKelas->nama ?? '' }}</td>
             <td>
                 <a href="{{ route('kelas.edit', $k->id) }}" class="btn btn-sm btn-warning">Edit</a>

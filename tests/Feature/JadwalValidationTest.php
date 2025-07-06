@@ -32,7 +32,12 @@ class JadwalValidationTest extends TestCase
             'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1990-01-01',
         ]);
-        $kelas = Kelas::create(['nama' => '10', 'guru_id' => $wali->id]);
+        $ta = \App\Models\TahunAjaran::create([
+            'nama' => '2024/2025',
+            'start_date' => '2024-07-01',
+            'end_date' => '2025-06-30',
+        ]);
+        $kelas = Kelas::create(['nama' => '10', 'guru_id' => $wali->id, 'tahun_ajaran_id' => $ta->id]);
 
         $response = $this->actingAs($user)
             ->from('/jadwal/create')
