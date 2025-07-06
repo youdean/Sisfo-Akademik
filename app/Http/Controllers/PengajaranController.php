@@ -8,6 +8,7 @@ use App\Models\MataPelajaran;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Database\QueryException;
 
 class PengajaranController extends Controller
 {
@@ -57,11 +58,18 @@ class PengajaranController extends Controller
             return back()->withInput()->with('error', 'Data pengajaran sudah ada');
         }
 
-        Pengajaran::create([
-            'guru_id' => $guru->id,
-            'mapel_id' => (int) $validated['mapel_id'],
-            'kelas' => $validated['kelas'],
-        ]);
+        try {
+            Pengajaran::create([
+                'guru_id' => $guru->id,
+                'mapel_id' => (int) $validated['mapel_id'],
+                'kelas' => $validated['kelas'],
+            ]);
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return back()->withInput()->with('error', 'Data pengajaran sudah ada');
+            }
+            throw $e;
+        }
 
         return redirect()->route('pengajaran.index')->with('success', 'Data pengajaran berhasil ditambahkan');
     }
@@ -91,11 +99,18 @@ class PengajaranController extends Controller
             return back()->withInput()->with('error', 'Data pengajaran sudah ada');
         }
 
-        $pengajaran->update([
-            'guru_id' => $guru->id,
-            'mapel_id' => (int) $validated['mapel_id'],
-            'kelas' => $validated['kelas'],
-        ]);
+        try {
+            $pengajaran->update([
+                'guru_id' => $guru->id,
+                'mapel_id' => (int) $validated['mapel_id'],
+                'kelas' => $validated['kelas'],
+            ]);
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return back()->withInput()->with('error', 'Data pengajaran sudah ada');
+            }
+            throw $e;
+        }
 
         return redirect()->route('pengajaran.index')->with('success', 'Data pengajaran berhasil diupdate');
     }
