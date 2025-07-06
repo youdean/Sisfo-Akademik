@@ -8,9 +8,8 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\TahunAjaranController;
-use App\Http\Controllers\NilaiController;
+use App\Http\Controllers\NilaiAbsensiController;
 use App\Http\Controllers\AbsensiController;
-use App\Http\Controllers\RaporController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\GuruKelasController;
@@ -43,7 +42,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 // Fitur yang dapat diakses oleh admin dan guru
 Route::middleware(['auth', 'role:admin,guru'])->group(function () {
-    Route::resource('nilai', NilaiController::class)->except('show');
+    Route::get('/nilai-absensi', [\App\Http\Controllers\NilaiAbsensiController::class, 'index'])->name('nilai.absensi');
     Route::resource('absensi', AbsensiController::class)->except('show');
     Route::resource('penilaian', PenilaianController::class)->only('index','create','store','destroy');
     Route::get('/absensi/harian', [AbsensiController::class, 'harian'])->name('absensi.harian');
@@ -53,7 +52,6 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::post('/absensi/pelajaran/{jadwal}', [AbsensiController::class, 'pelajaranStore'])->name('absensi.pelajaran.store');
     Route::get('/absensi/rekap', [AbsensiController::class, 'rekap'])->name('absensi.rekap');
     Route::get('/absensi/rekap/export', [AbsensiController::class, 'exportRekap'])->name('absensi.rekap.export');
-    Route::get('/rapor/{siswa}', [RaporController::class, 'cetak'])->name('rapor.cetak');
 });
 
 // Halaman guru untuk melihat siswa di kelasnya
@@ -74,8 +72,7 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/saya/absensi', [StudentController::class, 'absensi'])->name('student.absensi');
     Route::get('/saya/absen', [StudentController::class, 'absenForm'])->name('student.absen.form');
     Route::post('/saya/absen', [StudentController::class, 'absen'])->name('student.absen');
-    Route::get('/saya/nilai', [StudentController::class, 'nilai'])->name('student.nilai');
-    Route::get('/saya/rapor', [StudentController::class, 'rapor'])->name('student.rapor');
+    Route::get('/saya/nilai-absensi', [StudentController::class, 'nilaiAbsensi'])->name('student.nilai.absensi');
 });
 
 require __DIR__.'/auth.php';

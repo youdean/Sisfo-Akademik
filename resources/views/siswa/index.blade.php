@@ -44,7 +44,6 @@
                     @csrf @method('DELETE')
                     <button class="btn btn-sm btn-danger">Hapus</button>
                 </form>
-                <a href="{{ route('rapor.cetak', $s->id) }}" class="btn btn-sm btn-info" target="_blank">Cetak Rapor</a>
             </td>
         </tr>
         @endforeach

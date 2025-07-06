@@ -41,7 +41,7 @@
                             <x-dropdown-link :href="route('users.index')">Manajemen User</x-dropdown-link>
                         @endif
                         @if(in_array(Auth::user()->role, ['admin', 'guru']))
-                            <x-dropdown-link :href="route('nilai.index')">Nilai Siswa</x-dropdown-link>
+                            <x-dropdown-link :href="route('nilai.absensi')">Nilai Absensi</x-dropdown-link>
                             <x-dropdown-link :href="route('penilaian.index')">Penilaian</x-dropdown-link>
                             <x-dropdown-link :href="route('absensi.index')">Absensi Siswa</x-dropdown-link>
                         @endif
@@ -49,7 +49,7 @@
                             <x-dropdown-link :href="route('student.profile')">Data Diri</x-dropdown-link>
                             <x-dropdown-link :href="route('student.absensi')">Absensi Saya</x-dropdown-link>
                             <x-dropdown-link :href="route('student.absen.form')">Ambil Absen</x-dropdown-link>
-                            <x-dropdown-link :href="route('student.nilai')">Nilai Saya</x-dropdown-link>
+                            <x-dropdown-link :href="route('student.nilai.absensi')">Nilai Absensi</x-dropdown-link>
                         @endif
                     </x-slot>
                 </x-dropdown>
