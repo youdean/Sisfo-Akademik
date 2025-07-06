@@ -8,6 +8,8 @@ Aplikasi Sistem Informasi Akademik berbasis Laravel.
 - Input dan Cetak Rapor
 - Manajemen Siswa & Kelas
 - CRUD Master Data Kelas
+- Manajemen Tahun Ajaran
+- Nilai per semester/periode
 - Hak akses berdasarkan role:
   - **Admin** dapat mengelola data guru, siswa, mata pelajaran, nilai dan absensi.
   - **Guru** dapat mengelola nilai dan absensi siswa.
@@ -23,6 +25,12 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
 php artisan serve
+```
+
+Jika ada migrasi baru, jalankan:
+
+```bash
+php artisan migrate
 ```
 
 Login demo:
