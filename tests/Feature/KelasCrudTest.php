@@ -15,7 +15,14 @@ class KelasCrudTest extends TestCase
         $user = User::factory()->create(['role' => 'admin']);
 
         for ($i = 1; $i <= 11; $i++) {
-            \App\Models\Kelas::create(['nama' => 'K'.$i]);
+            $wali = \App\Models\Guru::create([
+                'nuptk' => '900'.$i,
+                'nama' => 'Wali '.$i,
+                'tempat_lahir' => 'Kota',
+                'jenis_kelamin' => 'L',
+                'tanggal_lahir' => '1990-01-01',
+            ]);
+            \App\Models\Kelas::create(['nama' => 'K'.$i, 'guru_id' => $wali->id]);
         }
 
         $response = $this->actingAs($user)->get('/kelas');
