@@ -46,4 +46,5 @@
         @endforeach
     </tbody>
 </table>
+{{ $guru->links() }}
 @endsection

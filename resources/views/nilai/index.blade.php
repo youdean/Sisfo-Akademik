@@ -42,4 +42,5 @@
         @endforeach
     </tbody>
 </table>
+{{ $nilai->links() }}
 @endsection

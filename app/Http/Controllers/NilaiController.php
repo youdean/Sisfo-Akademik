@@ -40,7 +40,7 @@ class NilaiController extends Controller
             });
         }
 
-        $nilai = $query->get();
+        $nilai = $query->paginate(10)->withQueryString();
 
         return view('nilai.index', compact('nilai', 'search'));
     }

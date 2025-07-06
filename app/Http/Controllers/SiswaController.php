@@ -23,7 +23,7 @@ class SiswaController extends Controller
             });
         }
 
-        $siswa = $query->get();
+        $siswa = $query->paginate(10)->withQueryString();
 
         return view('siswa.index', compact('siswa', 'search'));
     }
