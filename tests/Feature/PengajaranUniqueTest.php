@@ -44,7 +44,7 @@ class PengajaranUniqueTest extends TestCase
             'start_date' => '2024-07-01',
             'end_date' => '2025-06-30',
         ]);
-        $kelas = Kelas::create(['nama' => '10', 'guru_id' => $wali->id, 'tahun_ajaran_id' => $ta->id]);
+        $kelas = Kelas::create(['nama' => 'X', 'guru_id' => $wali->id, 'tahun_ajaran_id' => $ta->id]);
 
         $this->actingAs($user)->post('/pengajaran', [
             'guru_nama' => $guruA->nama,
