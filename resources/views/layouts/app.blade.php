@@ -11,11 +11,9 @@
     <!-- Navbar di sini -->
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
-            @auth
-            <button class="navbar-toggler me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            @endauth
+        @auth
+        <!-- Sidebar is always visible so no toggle button is required -->
+        @endauth
             <a class="navbar-brand" href="{{ route('dashboard') }}">Sisfo Akademik</a>
             <div class="d-flex ms-auto">
                 @auth
@@ -35,14 +33,11 @@
             </div>
         </div>
     </nav>
+    <div class="d-flex">
     @auth
-    <div class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="--bs-offcanvas-width: 260px;">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body p-0">
+        <nav class="bg-light border-end" style="width:260px; min-height:100vh;">
             <div class="list-group list-group-flush">
+                <div class="list-group-item bg-light fw-semibold">Menu</div>
                 <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
                 </a>
@@ -93,28 +88,18 @@
                         <i class="bi bi-card-checklist me-2"></i>Nilai Saya
                     </a>
                 @endif
-                <button type="button" class="list-group-item list-group-item-action" data-bs-dismiss="offcanvas">
-                    <i class="bi bi-chevron-left me-2"></i>Sembunyikan Menu
-                </button>
+            </div>
+        </nav>
+    @endauth
+        <div class="flex-grow-1 p-3">
+            <div class="container">
+                @yield('content')
             </div>
         </div>
-    </div>
-    @endauth
-    <div class="container">
-        @yield('content')
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        function showSidebar() {
-            var sidebar = document.getElementById('sidebar');
-            if (!sidebar) return;
-            var instance = bootstrap.Offcanvas.getOrCreateInstance(sidebar);
-            instance.show();
-        }
-        window.addEventListener('load', showSidebar);
-    </script>
     @yield('scripts')
 </body>
 </html>
