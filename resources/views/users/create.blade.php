@@ -4,6 +4,15 @@
 
 @section('content')
 <h1>Tambah User</h1>
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $err)
+                <li>{{ $err }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <form action="{{ route('users.store') }}" method="POST">
     @csrf
     <div class="mb-3">
@@ -13,22 +22,27 @@
             <option value="guru">guru</option>
             <option value="siswa">siswa</option>
         </select>
+        <x-input-error :messages="$errors->get('role')" class="mt-1" />
     </div>
     <div class="mb-3" id="field-name">
         <label>Nama</label>
         <input type="text" name="name" class="form-control">
+        <x-input-error :messages="$errors->get('name')" class="mt-1" />
     </div>
     <div class="mb-3" id="field-email">
         <label>Email</label>
         <input type="email" name="email" class="form-control">
+        <x-input-error :messages="$errors->get('email')" class="mt-1" />
     </div>
     <div class="mb-3" id="field-password">
         <label>Password</label>
         <input type="password" name="password" class="form-control">
+        <x-input-error :messages="$errors->get('password')" class="mt-1" />
     </div>
     <div class="mb-3" id="field-password-confirm">
         <label>Konfirmasi Password</label>
         <input type="password" name="password_confirmation" class="form-control">
+        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1" />
     </div>
     <input type="hidden" name="guru_id" id="guru-id">
     <input type="hidden" name="siswa_id" id="siswa-id">

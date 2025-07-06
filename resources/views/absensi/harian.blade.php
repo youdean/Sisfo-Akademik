@@ -7,6 +7,15 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $err)
+                <li>{{ $err }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <form method="GET" class="row g-2 mb-3">
     <div class="col-auto">
         <select name="kelas" class="form-select" onchange="this.form.submit()">

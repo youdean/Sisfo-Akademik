@@ -7,6 +7,15 @@
 @if(session('error'))
     <div class="alert alert-danger">{{ session('error') }}</div>
 @endif
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $err)
+                <li>{{ $err }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <form action="{{ route('pengajaran.store') }}" method="POST">
     @csrf
     <div class="mb-3">
@@ -17,6 +26,7 @@
                 <option value="{{ $g->nama }}"></option>
             @endforeach
         </datalist>
+        <x-input-error :messages="$errors->get('guru_nama')" class="mt-1" />
     </div>
     <div class="mb-3">
         <label>Mata Pelajaran</label>
@@ -25,6 +35,7 @@
                 <option value="{{ $m->id }}">{{ $m->nama }}</option>
             @endforeach
         </select>
+        <x-input-error :messages="$errors->get('mapel_id')" class="mt-1" />
     </div>
     <div class="mb-3">
         <label>Kelas</label>
@@ -33,6 +44,7 @@
                 <option value="{{ $k->nama }}">{{ $k->nama }}</option>
             @endforeach
         </select>
+        <x-input-error :messages="$errors->get('kelas')" class="mt-1" />
     </div>
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('pengajaran.index') }}" class="btn btn-secondary">Batal</a>

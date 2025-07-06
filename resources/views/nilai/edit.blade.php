@@ -4,6 +4,15 @@
 
 @section('content')
 <h1>Edit Nilai</h1>
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $err)
+                <li>{{ $err }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <form action="{{ route('nilai.update', $nilai->id) }}" method="POST">
     @csrf @method('PUT')
     <div class="mb-3">
@@ -14,6 +23,7 @@
                 <option value="{{ $s->id }}" @if($nilai->siswa_id == $s->id) selected @endif>{{ $s->nama }}</option>
             @endforeach
         </select>
+        <x-input-error :messages="$errors->get('siswa_id')" class="mt-1" />
     </div>
     <div class="mb-3">
         <label>Mata Pelajaran</label>
@@ -23,10 +33,12 @@
                 <option value="{{ $m->id }}" @if($nilai->mapel_id == $m->id) selected @endif>{{ $m->nama }}</option>
             @endforeach
         </select>
+        <x-input-error :messages="$errors->get('mapel_id')" class="mt-1" />
     </div>
     <div class="mb-3">
         <label>Nilai</label>
         <input type="number" name="nilai" class="form-control" min="0" max="100" value="{{ $nilai->nilai }}" required>
+        <x-input-error :messages="$errors->get('nilai')" class="mt-1" />
     </div>
     <button class="btn btn-primary">Update</button>
     <a href="{{ route('nilai.index') }}" class="btn btn-secondary">Batal</a>
