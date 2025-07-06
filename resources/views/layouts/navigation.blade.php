@@ -42,6 +42,9 @@
                         @endif
                         @if(in_array(Auth::user()->role, ['admin', 'guru']))
                             <x-dropdown-link :href="route('nilai.absensi')">Nilai Absensi</x-dropdown-link>
+                            @if(Auth::user()->role === 'guru')
+                                <x-dropdown-link :href="route('input-nilai.index')">Input Nilai</x-dropdown-link>
+                            @endif
                             <x-dropdown-link :href="route('penilaian.index')">Penilaian</x-dropdown-link>
                             <x-dropdown-link :href="route('absensi.index')">Absensi Siswa</x-dropdown-link>
                         @endif
