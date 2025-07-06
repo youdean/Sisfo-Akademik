@@ -46,7 +46,7 @@ class AbsensiController extends Controller
             });
         }
 
-        $absensi = $query->get();
+        $absensi = $query->paginate(10)->withQueryString();
 
         return view('absensi.index', compact('absensi', 'search'));
     }

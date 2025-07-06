@@ -46,4 +46,5 @@
         @endforeach
     </tbody>
 </table>
+{{ $absensi->links() }}
 @endsection

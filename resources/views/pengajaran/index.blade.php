@@ -42,4 +42,5 @@
         @endforeach
     </tbody>
 </table>
+{{ $pengajaran->links() }}
 @endsection

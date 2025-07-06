@@ -9,8 +9,8 @@ class MapelController extends Controller
 {
     public function index()
     {
-        $mapel = MataPelajaran::all();
-        return view('mapel.index', compact('mapel'));
+        $mapel = MataPelajaran::paginate(10)->withQueryString();
+        return view('mapel.index', compact('mapel')); 
     }
 
     public function create()

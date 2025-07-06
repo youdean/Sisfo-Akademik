@@ -29,7 +29,7 @@ class PengajaranController extends Controller
             });
         }
 
-        $pengajaran = $query->get();
+        $pengajaran = $query->paginate(10)->withQueryString();
 
         return view('pengajaran.index', compact('pengajaran', 'search'));
     }

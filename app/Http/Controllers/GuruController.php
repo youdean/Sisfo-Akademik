@@ -19,7 +19,7 @@ class GuruController extends Controller
             });
         }
 
-        $guru = $query->get();
+        $guru = $query->paginate(10)->withQueryString();
 
         return view('guru.index', compact('guru', 'search'));
     }

@@ -14,9 +14,14 @@ class KelasCrudTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'admin']);
 
+        for ($i = 1; $i <= 11; $i++) {
+            \App\Models\Kelas::create(['nama' => 'K'.$i]);
+        }
+
         $response = $this->actingAs($user)->get('/kelas');
 
         $response->assertOk();
         $response->assertSee('Daftar Kelas');
+        $response->assertSee('?page=2');
     }
 }
