@@ -33,7 +33,7 @@ class JadwalPengajaranTeacherLockTest extends TestCase
             'tanggal_lahir' => '1985-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Bahasa Indonesia']);
-        $kelas = Kelas::create(['nama' => '10A']);
+        $kelas = Kelas::create(['nama' => '10']);
 
         $this->actingAs($user)->post('/jadwal', [
             'kelas_id' => $kelas->id,

@@ -25,7 +25,7 @@ class JadwalPengajaranSyncTest extends TestCase
             'tanggal_lahir' => '1980-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Matematika']);
-        $kelas = Kelas::create(['nama' => '10A']);
+        $kelas = Kelas::create(['nama' => '10']);
 
         $response = $this->actingAs($user)->post('/jadwal', [
             'kelas_id' => $kelas->id,
@@ -62,7 +62,7 @@ class JadwalPengajaranSyncTest extends TestCase
             'tanggal_lahir' => '1985-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'IPA']);
-        $kelas = Kelas::create(['nama' => '10A']);
+        $kelas = Kelas::create(['nama' => '10']);
 
         $this->actingAs($user)->post('/jadwal', [
             'kelas_id' => $kelas->id,
@@ -73,18 +73,22 @@ class JadwalPengajaranSyncTest extends TestCase
             'jam_selesai' => '08:00',
         ])->assertRedirect('/jadwal');
 
-        $this->actingAs($user)->post('/jadwal', [
-            'kelas_id' => $kelas->id,
-            'mapel_id' => $mapel->id,
-            'guru_id' => $guruB->id,
-            'hari' => 'Selasa',
-            'jam_mulai' => '07:00',
-            'jam_selesai' => '08:00',
-        ])->assertRedirect('/jadwal');
+        $response = $this->actingAs($user)
+            ->from('/jadwal/create')
+            ->post('/jadwal', [
+                'kelas_id' => $kelas->id,
+                'mapel_id' => $mapel->id,
+                'guru_id' => $guruB->id,
+                'hari' => 'Selasa',
+                'jam_mulai' => '07:00',
+                'jam_selesai' => '08:00',
+            ]);
 
+        $response->assertRedirect('/jadwal/create');
+        $response->assertSessionHas('error');
         $this->assertEquals(1, Pengajaran::count());
         $this->assertDatabaseHas('pengajaran', [
-            'guru_id' => $guruB->id,
+            'guru_id' => $guruA->id,
             'mapel_id' => $mapel->id,
             'kelas' => $kelas->nama,
         ]);

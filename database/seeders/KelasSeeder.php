@@ -9,21 +9,14 @@ class KelasSeeder extends Seeder
 {
     public function run(): void
     {
-        $data = [];
-
-        // Grade 10 does not have majors
-        foreach (['A', 'B', 'C'] as $suffix) {
-            $data[] = ['nama' => '10' . $suffix];
-        }
-
-        // Grades 11 and 12 have IPA and IPS majors
-        foreach ([11, 12] as $grade) {
-            foreach (['IPA', 'IPS'] as $major) {
-                foreach (['A', 'B'] as $suffix) {
-                    $data[] = ['nama' => $grade . ' ' . $major . ' ' . $suffix];
-                }
-            }
-        }
+        // Only create the base classes without A/B/C subdivisions
+        $data = [
+            ['nama' => '10'],
+            ['nama' => '11 IPA'],
+            ['nama' => '11 IPS'],
+            ['nama' => '12 IPA'],
+            ['nama' => '12 IPS'],
+        ];
 
         DB::table('kelas')->insert($data);
     }
