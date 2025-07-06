@@ -34,5 +34,5 @@
         @endforeach
     </tbody>
 </table>
-{{ $mapel->links() }}
+{{ $mapel->links('pagination::bootstrap-5') }}
 @endsection

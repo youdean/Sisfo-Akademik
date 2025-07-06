@@ -46,5 +46,5 @@
         @endforeach
     </tbody>
 </table>
-{{ $guru->links() }}
+{{ $guru->links('pagination::bootstrap-5') }}
 @endsection

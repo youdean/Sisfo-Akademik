@@ -42,5 +42,5 @@
         @endforeach
     </tbody>
 </table>
-{{ $nilai->links() }}
+{{ $nilai->links('pagination::bootstrap-5') }}
 @endsection
