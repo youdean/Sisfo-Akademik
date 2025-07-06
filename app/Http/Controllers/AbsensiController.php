@@ -176,7 +176,9 @@ public function update(Request $request, Absensi $absensi)
             abort(403);
         }
 
-        $tanggal = $request->input('tanggal', date('Y-m-d'));
+        $tanggal = Auth::user()?->role === 'guru'
+            ? date('Y-m-d')
+            : $request->input('tanggal', date('Y-m-d'));
 
         $siswa = [];
         $absen = [];
@@ -200,7 +202,9 @@ public function update(Request $request, Absensi $absensi)
     public function harianStore(Request $request)
     {
         $kelas = $request->input('kelas');
-        $tanggal = $request->input('tanggal');
+        $tanggal = Auth::user()?->role === 'guru'
+            ? date('Y-m-d')
+            : $request->input('tanggal');
         if (!$kelas || !in_array($kelas, $this->kelasGuru())) {
             abort(403);
         }
@@ -258,7 +262,9 @@ public function update(Request $request, Absensi $absensi)
             abort(403);
         }
 
-        $tanggal = $request->input('tanggal', date('Y-m-d'));
+        $tanggal = Auth::user()?->role === 'guru'
+            ? date('Y-m-d')
+            : $request->input('tanggal', date('Y-m-d'));
         $kelasNama = $jadwal->kelas->nama;
         $siswa = Siswa::where('kelas', $kelasNama)->get();
         $absen = Absensi::whereIn('siswa_id', $siswa->pluck('id'))
@@ -287,7 +293,9 @@ public function update(Request $request, Absensi $absensi)
             'status' => 'array',
         ]);
 
-        $tanggal = $request->input('tanggal');
+        $tanggal = Auth::user()?->role === 'guru'
+            ? date('Y-m-d')
+            : $request->input('tanggal');
         $siswaIds = Siswa::where('kelas', $jadwal->kelas->nama)->pluck('id');
         $statusData = $request->input('status', []);
         foreach ($siswaIds as $id) {

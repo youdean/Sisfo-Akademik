@@ -24,9 +24,14 @@
             @endforeach
         </select>
     </div>
+    @if(auth()->user()->role !== 'guru')
     <div class="col-auto">
         <input type="date" name="tanggal" value="{{ $tanggal }}" class="form-control" onchange="this.form.submit()">
     </div>
+    @else
+        <input type="hidden" name="tanggal" value="{{ $tanggal }}">
+        <div class="col-auto align-self-center">{{ $tanggal }}</div>
+    @endif
     <noscript class="col-auto"><button class="btn btn-primary">Tampilkan</button></noscript>
 </form>
 @if($selected)
