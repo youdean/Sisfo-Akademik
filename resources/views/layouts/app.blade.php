@@ -34,6 +34,7 @@
                     @endif
                     @if(in_array(Auth::user()->role, ['admin', 'guru']))
                         <li><a href="{{ route('nilai.index') }}" class="dropdown-item"><i class="bi bi-card-checklist me-2"></i>Nilai Siswa</a></li>
+                        <li><a href="{{ route('penilaian.index') }}" class="dropdown-item"><i class="bi bi-clipboard-check me-2"></i>Penilaian</a></li>
                         <li><a href="{{ route('absensi.index') }}" class="dropdown-item"><i class="bi bi-person-check me-2"></i>Absensi Siswa</a></li>
                     @endif
                     @if(Auth::user()->role === 'siswa')
