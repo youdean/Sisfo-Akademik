@@ -18,8 +18,10 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>NIP</th>
+            <th>NUPTK</th>
             <th>Nama</th>
+            <th>Tempat Lahir</th>
+            <th>Jenis Kelamin</th>
             <th>Tanggal Lahir</th>
             <th>Aksi</th>
         </tr>
@@ -28,8 +30,10 @@
         @foreach ($guru as $g)
         <tr>
             <td>{{ $g->id }}</td>
-            <td>{{ $g->nip }}</td>
+            <td>{{ $g->nuptk }}</td>
             <td>{{ $g->nama }}</td>
+            <td>{{ $g->tempat_lahir }}</td>
+            <td>{{ $g->jenis_kelamin }}</td>
             <td>{{ $g->tanggal_lahir }}</td>
             <td>
                 <a href="{{ route('guru.edit', $g->id) }}" class="btn btn-sm btn-warning">Edit</a>

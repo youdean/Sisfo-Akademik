@@ -18,8 +18,10 @@ class JadwalValidationTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'admin']);
         $guru = Guru::create([
-            'nip' => '999',
+            'nuptk' => '999',
             'nama' => 'Guru Test',
+            'tempat_lahir' => 'Bandung',
+            'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1990-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Matematika']);

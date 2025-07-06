@@ -18,13 +18,17 @@ class PengajaranUniqueTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'admin']);
         $guruA = Guru::create([
-            'nip' => '1001',
+            'nuptk' => '1001',
             'nama' => 'Guru A',
+            'tempat_lahir' => 'Bandung',
+            'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1980-01-01',
         ]);
         $guruB = Guru::create([
-            'nip' => '1002',
+            'nuptk' => '1002',
             'nama' => 'Guru B',
+            'tempat_lahir' => 'Jakarta',
+            'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1985-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Matematika']);

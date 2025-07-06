@@ -20,6 +20,8 @@
         <tr>
             <th>Nama</th>
             <th>NISN</th>
+            <th>Tempat Lahir</th>
+            <th>Jenis Kelamin</th>
             <th>Tanggal Lahir</th>
             <th>Aksi</th>
         </tr>
@@ -29,6 +31,8 @@
         <tr>
             <td>{{ $s->nama }}</td>
             <td>{{ $s->nisn }}</td>
+            <td>{{ $s->tempat_lahir }}</td>
+            <td>{{ $s->jenis_kelamin }}</td>
             <td>{{ $s->tanggal_lahir }}</td>
             <td>
                 <a href="{{ route('rapor.cetak', $s->id) }}" class="btn btn-sm btn-info" target="_blank">Cetak Rapor</a>

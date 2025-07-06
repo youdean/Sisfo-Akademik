@@ -49,8 +49,8 @@ class UserController extends Controller
 
         if ($data['role'] === 'guru') {
             $guru = Guru::findOrFail($data['guru_id']);
-            $name = $guru->nip.' - '.$guru->nama;
-            $email = $guru->nip.'@muhammadiyah.ac.id';
+            $name = $guru->nuptk.' - '.$guru->nama;
+            $email = $guru->nuptk.'@muhammadiyah.ac.id';
             $password = Carbon::parse($guru->tanggal_lahir)->format('ymd');
         } elseif ($data['role'] === 'siswa') {
             $siswa = Siswa::findOrFail($data['siswa_id']);

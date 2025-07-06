@@ -40,6 +40,8 @@ public function store(Request $request)
         'nama' => 'required',
         'nisn' => 'required|unique:siswa,nisn',
         'kelas' => 'required',
+        'tempat_lahir' => 'required',
+        'jenis_kelamin' => 'required',
         'tanggal_lahir' => 'required|date'
     ]));
 
@@ -58,6 +60,8 @@ public function update(Request $request, Siswa $siswa)
         'nama' => 'required',
         'nisn' => 'required|unique:siswa,nisn,' . $siswa->id,
         'kelas' => 'required',
+        'tempat_lahir' => 'required',
+        'jenis_kelamin' => 'required',
         'tanggal_lahir' => 'required|date'
     ]));
 

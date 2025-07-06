@@ -18,8 +18,10 @@ class JadwalPengajaranSyncTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'admin']);
         $guru = Guru::create([
-            'nip' => '123',
+            'nuptk' => '123',
             'nama' => 'Guru Test',
+            'tempat_lahir' => 'Jakarta',
+            'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1980-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Matematika']);
@@ -46,13 +48,17 @@ class JadwalPengajaranSyncTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'admin']);
         $guruA = Guru::create([
-            'nip' => '111',
+            'nuptk' => '111',
             'nama' => 'Guru A',
+            'tempat_lahir' => 'Bandung',
+            'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1980-01-01',
         ]);
         $guruB = Guru::create([
-            'nip' => '222',
+            'nuptk' => '222',
             'nama' => 'Guru B',
+            'tempat_lahir' => 'Jakarta',
+            'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1985-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'IPA']);

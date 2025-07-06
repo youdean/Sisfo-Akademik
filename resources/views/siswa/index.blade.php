@@ -22,6 +22,8 @@
             <th>Nama</th>
             <th>NISN</th>
             <th>Kelas</th>
+            <th>Tempat Lahir</th>
+            <th>Jenis Kelamin</th>
             <th>Tanggal Lahir</th>
             <th>Aksi</th>
         </tr>
@@ -33,6 +35,8 @@
             <td>{{ $s->nama }}</td>
             <td>{{ $s->nisn }}</td>
             <td>{{ $s->kelas }}</td>
+            <td>{{ $s->tempat_lahir }}</td>
+            <td>{{ $s->jenis_kelamin }}</td>
             <td>{{ $s->tanggal_lahir }}</td>
             <td>
                 <a href="{{ route('siswa.edit', $s->id) }}" class="btn btn-sm btn-warning">Edit</a>
