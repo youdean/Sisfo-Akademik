@@ -10,12 +10,17 @@ class PengajaranSeeder extends Seeder
     public function run(): void
     {
         $data = [];
-        for ($i = 1; $i <= 30; $i++) {
-            $data[] = [
-                'guru_id' => ($i % 20) + 1,
-                'mapel_id' => ($i % 10) + 1,
-                'kelas' => '10' . chr(64 + ($i % 3) + 1),
-            ];
+        $kelasList = ['10A', '10B', '10C'];
+        $index = 0;
+        for ($mapel = 1; $mapel <= 10; $mapel++) {
+            foreach ($kelasList as $kelas) {
+                $data[] = [
+                    'guru_id' => ($index % 20) + 1,
+                    'mapel_id' => $mapel,
+                    'kelas' => $kelas,
+                ];
+                $index++;
+            }
         }
         DB::table('pengajaran')->insert($data);
     }

@@ -50,8 +50,7 @@ class PengajaranController extends Controller
         ]);
 
         $guru = Guru::where('nama', $validated['guru_nama'])->first();
-        $exists = Pengajaran::where('guru_id', $guru->id)
-            ->where('mapel_id', $validated['mapel_id'])
+        $exists = Pengajaran::where('mapel_id', $validated['mapel_id'])
             ->where('kelas', $validated['kelas'])
             ->exists();
         if ($exists) {
@@ -84,8 +83,7 @@ class PengajaranController extends Controller
         ]);
 
         $guru = Guru::where('nama', $validated['guru_nama'])->first();
-        $exists = Pengajaran::where('guru_id', $guru->id)
-            ->where('mapel_id', $validated['mapel_id'])
+        $exists = Pengajaran::where('mapel_id', $validated['mapel_id'])
             ->where('kelas', $validated['kelas'])
             ->where('id', '!=', $pengajaran->id)
             ->exists();
