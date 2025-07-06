@@ -12,7 +12,9 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
         @auth
-        <!-- Sidebar is always visible so no toggle button is required -->
+            <button class="btn btn-outline-light me-2" id="toggle-sidebar">
+                <i class="bi bi-list"></i>
+            </button>
         @endauth
             <a class="navbar-brand" href="{{ route('dashboard') }}">Sisfo Akademik</a>
             <div class="d-flex ms-auto">
@@ -35,7 +37,7 @@
     </nav>
     <div class="d-flex">
     @auth
-        <nav class="bg-light border-end" style="width:260px; min-height:100vh;">
+        <nav id="sidebar" class="bg-light border-end" style="width:260px; min-height:100vh;">
             <div class="list-group list-group-flush">
                 <div class="list-group-item bg-light fw-semibold">Menu</div>
                 <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action">
@@ -100,6 +102,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        const toggleButton = document.getElementById('toggle-sidebar');
+        if (toggleButton) {
+            toggleButton.addEventListener('click', () => {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) {
+                    sidebar.classList.toggle('d-none');
+                }
+            });
+        }
+    </script>
     @yield('scripts')
 </body>
 </html>
