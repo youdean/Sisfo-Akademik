@@ -73,6 +73,16 @@ class JadwalController extends Controller
         if ($exists) {
             return back()->withInput()->with('error', 'Guru sudah dijadwalkan pada jam tersebut');
         }
+
+        $kelasNama = Kelas::find($data['kelas_id'])->nama ?? null;
+        $pengajaranExists = Pengajaran::where('mapel_id', $data['mapel_id'])
+            ->where('kelas', $kelasNama)
+            ->where('guru_id', '!=', $data['guru_id'])
+            ->exists();
+
+        if ($pengajaranExists) {
+            return back()->withInput()->with('error', 'Kelas sudah memiliki guru untuk mata pelajaran tersebut');
+        }
         Jadwal::create($data);
         $this->syncPengajaran($data);
 
@@ -106,6 +116,16 @@ class JadwalController extends Controller
 
         if ($exists) {
             return back()->withInput()->with('error', 'Guru sudah dijadwalkan pada jam tersebut');
+        }
+
+        $kelasNama = Kelas::find($data['kelas_id'])->nama ?? null;
+        $pengajaranExists = Pengajaran::where('mapel_id', $data['mapel_id'])
+            ->where('kelas', $kelasNama)
+            ->where('guru_id', '!=', $data['guru_id'])
+            ->exists();
+
+        if ($pengajaranExists) {
+            return back()->withInput()->with('error', 'Kelas sudah memiliki guru untuk mata pelajaran tersebut');
         }
         $jadwal->update($data);
         $this->syncPengajaran($data);
