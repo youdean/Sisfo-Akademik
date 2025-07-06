@@ -12,7 +12,7 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
             @auth
-            <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+            <button class="navbar-toggler me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             @endauth
@@ -36,7 +36,7 @@
         </div>
     </nav>
     @auth
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+    <div class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="--bs-offcanvas-width: 260px;">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
