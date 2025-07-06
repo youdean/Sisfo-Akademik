@@ -14,11 +14,17 @@ class SiswaSeeder extends Seeder
         $faker = Faker::create('id_ID');
         $data = [];
         $siswaUser = User::where('email', 'siswa@demo.com')->first();
+        $kelasList = [
+            '10A', '10B', '10C',
+            '11 IPA A', '11 IPA B', '11 IPS A', '11 IPS B',
+            '12 IPA A', '12 IPA B', '12 IPS A', '12 IPS B',
+        ];
+
         for ($i = 1; $i <= 50; $i++) {
             $data[] = [
                 'nama' => $i === 1 ? 'Siswa' : $faker->unique()->name,
                 'nisn' => $faker->unique()->numerify('############'),
-                'kelas' => '10' . chr(64 + ($i % 3) + 1),
+                'kelas' => $faker->randomElement($kelasList),
                 'tempat_lahir' => $faker->city,
                 'jenis_kelamin' => $faker->randomElement(['L', 'P']),
                 'tanggal_lahir' => $faker->dateTimeBetween('2008-01-01', '2008-12-31')->format('Y-m-d'),
