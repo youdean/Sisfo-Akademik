@@ -10,7 +10,7 @@ class SiswaExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        return Siswa::select('id', 'nama', 'nisn', 'kelas', 'tanggal_lahir')->get();
+        return Siswa::select('id', 'nama', 'nisn', 'kelas', 'tempat_lahir', 'jenis_kelamin', 'tanggal_lahir')->get();
     }
 
     public function headings(): array
@@ -20,6 +20,8 @@ class SiswaExport implements FromCollection, WithHeadings
             'Nama',
             'NISN',
             'Kelas',
+            'Tempat Lahir',
+            'Jenis Kelamin',
             'Tanggal Lahir',
         ];
     }

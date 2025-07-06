@@ -19,13 +19,17 @@ class JadwalPengajaranTeacherLockTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'admin']);
         $guruA = Guru::create([
-            'nip' => '5001',
+            'nuptk' => '5001',
             'nama' => 'Guru A',
+            'tempat_lahir' => 'Bandung',
+            'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1980-01-01',
         ]);
         $guruB = Guru::create([
-            'nip' => '5002',
+            'nuptk' => '5002',
             'nama' => 'Guru B',
+            'tempat_lahir' => 'Jakarta',
+            'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1985-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Bahasa Indonesia']);
