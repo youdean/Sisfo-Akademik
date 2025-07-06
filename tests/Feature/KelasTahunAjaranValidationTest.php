@@ -27,7 +27,7 @@ class KelasTahunAjaranValidationTest extends TestCase
         $response = $this->actingAs($user)
             ->from('/kelas/create')
             ->post('/kelas', [
-                'nama' => '10',
+                'nama' => 'X',
                 'guru_id' => $guru->id,
                 'tahun_ajaran_id' => 999,
             ]);
@@ -43,7 +43,7 @@ class KelasTahunAjaranValidationTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post('/kelas', [
-                'nama' => '10',
+                'nama' => 'X',
                 'guru_id' => $guru->id,
                 'tahun_ajaran_id' => $ta->id,
             ]);

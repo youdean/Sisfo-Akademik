@@ -11,9 +11,9 @@ class PengajaranSeeder extends Seeder
     {
         $data = [];
         $kelasList = [
-            '10',
-            '11 IPA', '11 IPS',
-            '12 IPA', '12 IPS',
+            'X',
+            'XI IPA', 'XI IPS',
+            'XII IPA', 'XII IPS',
         ];
         $index = 0;
         for ($mapel = 1; $mapel <= 10; $mapel++) {

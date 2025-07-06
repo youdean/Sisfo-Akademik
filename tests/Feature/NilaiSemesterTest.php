@@ -16,7 +16,7 @@ class NilaiSemesterTest extends TestCase
         $siswa = Siswa::create([
             'nama' => 'Siswa Test',
             'nisn' => '0000000001',
-            'kelas' => '10',
+            'kelas' => 'X',
             'tempat_lahir' => 'Bandung',
             'jenis_kelamin' => 'L',
             'tanggal_lahir' => '2000-01-01',
