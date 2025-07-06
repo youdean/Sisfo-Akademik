@@ -9,9 +9,13 @@ use PDF;
 
 class RaporController extends Controller
 {
-    public function cetak(Siswa $siswa)
+    public function cetak(Request $request, Siswa $siswa)
     {
-        $nilai = Nilai::with('mapel')->where('siswa_id', $siswa->id)->get();
+        $query = Nilai::with('mapel')->where('siswa_id', $siswa->id);
+        if ($request->filled('semester')) {
+            $query->where('semester', $request->input('semester'));
+        }
+        $nilai = $query->get();
 
         $pdf = PDF::loadView('rapor.pdf', [
             'siswa' => $siswa,

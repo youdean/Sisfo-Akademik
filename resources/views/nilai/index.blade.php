@@ -21,6 +21,7 @@
             <th>Nama Siswa</th>
             <th>Mapel</th>
             <th>Nilai</th>
+            <th>Semester</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -31,6 +32,7 @@
             <td>{{ $n->siswa->nama }}</td>
             <td>{{ $n->mapel->nama }}</td>
             <td>{{ $n->nilai }}</td>
+            <td>{{ $n->semester }}</td>
             <td>
                 <a href="{{ route('nilai.edit', $n->id) }}" class="btn btn-sm btn-warning">Edit</a>
                 <form action="{{ route('nilai.destroy', $n->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">

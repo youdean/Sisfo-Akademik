@@ -59,20 +59,28 @@ class StudentController extends Controller
     /**
      * Show logged in student's grades.
      */
-    public function nilai()
+    public function nilai(Request $request)
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
-        $nilai = Nilai::with('mapel')->where('siswa_id', $siswa->id)->get();
+        $query = Nilai::with('mapel')->where('siswa_id', $siswa->id);
+        if ($request->filled('semester')) {
+            $query->where('semester', $request->input('semester'));
+        }
+        $nilai = $query->get();
         return view('siswa.nilai', compact('siswa', 'nilai'));
     }
 
     /**
      * Download logged in student's report.
      */
-    public function rapor()
+    public function rapor(Request $request)
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
-        $nilai = Nilai::with('mapel')->where('siswa_id', $siswa->id)->get();
+        $query = Nilai::with('mapel')->where('siswa_id', $siswa->id);
+        if ($request->filled('semester')) {
+            $query->where('semester', $request->input('semester'));
+        }
+        $nilai = $query->get();
 
         $pdf = PDF::loadView('rapor.pdf', [
             'siswa' => $siswa,

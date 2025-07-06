@@ -9,6 +9,7 @@
         <tr>
             <th>Mata Pelajaran</th>
             <th>Nilai</th>
+            <th>Semester</th>
         </tr>
     </thead>
     <tbody>
@@ -16,6 +17,7 @@
         <tr>
             <td>{{ $n->mapel->nama }}</td>
             <td>{{ $n->nilai }}</td>
+            <td>{{ $n->semester }}</td>
         </tr>
         @endforeach
     </tbody>
