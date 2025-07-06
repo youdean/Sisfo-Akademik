@@ -15,6 +15,7 @@
         <tr>
             <th>ID</th>
             <th>Nama Kelas</th>
+            <th>Wali Kelas</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -23,6 +24,7 @@
         <tr>
             <td>{{ $k->id }}</td>
             <td>{{ $k->nama }}</td>
+            <td>{{ $k->waliKelas->nama ?? '' }}</td>
             <td>
                 <a href="{{ route('kelas.edit', $k->id) }}" class="btn btn-sm btn-warning">Edit</a>
                 <form action="{{ route('kelas.destroy', $k->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">

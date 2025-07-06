@@ -3,25 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kelas;
+use App\Models\Guru;
 use Illuminate\Http\Request;
 
 class KelasController extends Controller
 {
     public function index()
     {
-        $kelas = Kelas::paginate(10)->withQueryString();
+        $kelas = Kelas::with('waliKelas')->paginate(10)->withQueryString();
         return view('kelas.index', compact('kelas'));
     }
 
     public function create()
     {
-        return view('kelas.create');
+        $guru = Guru::all();
+        return view('kelas.create', compact('guru'));
     }
 
     public function store(Request $request)
     {
         Kelas::create($request->validate([
-            'nama' => 'required'
+            'nama' => 'required',
+            'guru_id' => 'required|exists:guru,id'
         ]));
 
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil ditambahkan');
@@ -29,13 +32,15 @@ class KelasController extends Controller
 
     public function edit(Kelas $kela)
     {
-        return view('kelas.edit', ['kela' => $kela]);
+        $guru = Guru::all();
+        return view('kelas.edit', ['kela' => $kela, 'guru' => $guru]);
     }
 
     public function update(Request $request, Kelas $kela)
     {
         $kela->update($request->validate([
-            'nama' => 'required'
+            'nama' => 'required',
+            'guru_id' => 'required|exists:guru,id'
         ]));
 
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil diupdate');
