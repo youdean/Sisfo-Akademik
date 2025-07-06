@@ -10,16 +10,24 @@ class MataPelajaranSeeder extends Seeder
     public function run(): void
     {
         $mapel = [
-            'Matematika',
-            'Bahasa Indonesia',
-            'Bahasa Inggris',
+            'Biologi',
+            'Geografi',
+            'Pendidikan Pancasila dan Kewarganegaraan',
             'Kimia',
             'Fisika',
-            'Biologi',
+            'Pendidikan Agama Islam dan Budi Pekerti',
+            'Bahasa Indonesia',
+            'Matematika',
+            'Teknologi Informasi dan Komunikasi',
+            'Seni Budaya',
+            'Kemuhammadiyahan',
+            'Bahasa Arab',
+            'Pendidikan Jasmani, Olahraga, dan Kesehatan',
             'Ekonomi',
             'Sejarah',
-            'Geografi',
-            'Seni Budaya',
+            'Sosiologi',
+            'Sejarah Indonesia',
+            'Bahasa Inggris',
         ];
         $data = [];
         foreach ($mapel as $nama) {
