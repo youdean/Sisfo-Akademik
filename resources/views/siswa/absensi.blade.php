@@ -7,6 +7,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th>Mapel</th>
             <th>Tanggal</th>
             <th>Status</th>
         </tr>
@@ -14,6 +15,7 @@
     <tbody>
         @foreach($absensi as $a)
         <tr>
+            <td>{{ $a->mapel->nama ?? '-' }}</td>
             <td>{{ $a->tanggal }}</td>
             <td>{{ $a->status }}</td>
         </tr>

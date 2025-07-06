@@ -15,6 +15,7 @@ class AbsensiSeeder extends Seeder
             for ($d = 1; $d <= 5; $d++) {
                 $data[] = [
                     'siswa_id' => $s,
+                    'mapel_id' => rand(1, 5),
                     'tanggal' => date('Y-m-d', strtotime("2025-07-" . str_pad($d, 2, '0', STR_PAD_LEFT))),
                     'status' => $statuses[array_rand($statuses)],
                 ];

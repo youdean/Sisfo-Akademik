@@ -19,6 +19,16 @@
 <form action="{{ route('student.absen') }}" method="POST">
     @csrf
     <div class="mb-3">
+        <label>Mata Pelajaran</label>
+        <select name="mapel_id" class="form-control" required>
+            <option value="">-- Pilih Mapel --</option>
+            @foreach($mapel as $m)
+                <option value="{{ $m->id }}">{{ $m->nama }}</option>
+            @endforeach
+        </select>
+        <x-input-error :messages="$errors->get('mapel_id')" class="mt-1" />
+    </div>
+    <div class="mb-3">
         <label>Status</label>
         <select name="status" class="form-control" required>
             <option value="">-- Pilih Status --</option>

@@ -8,6 +8,8 @@ use App\Models\Siswa;
 use App\Models\Guru;
 use App\Models\Pengajaran;
 use App\Models\Kelas;
+use App\Models\Jadwal;
+use App\Models\MataPelajaran;
 use App\Exports\RekapAbsensiExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +33,9 @@ class AbsensiController extends Controller
 
     public function index(Request $request)
     {
+        if (Auth::user()?->role === 'guru') {
+            return redirect()->route('absensi.pelajaran');
+        }
         $query = Absensi::with('siswa')->whereHas('siswa', function ($q) {
             $q->whereIn('kelas', $this->kelasGuru());
         });
@@ -54,13 +59,15 @@ class AbsensiController extends Controller
 public function create()
 {
     $siswa = Siswa::whereIn('kelas', $this->kelasGuru())->get();
-    return view('absensi.create', compact('siswa'));
+    $mapel = MataPelajaran::all();
+    return view('absensi.create', compact('siswa', 'mapel'));
 }
 
 public function store(Request $request)
 {
     $data = $request->validate([
         'siswa_id' => ['required', Rule::exists('siswa', 'id')->whereIn('kelas', $this->kelasGuru())],
+        'mapel_id' => 'required|exists:mata_pelajaran,id',
         'tanggal' => 'required|date',
         'status' => 'required|in:Hadir,Izin,Sakit,Alpha'
     ]);
@@ -75,7 +82,8 @@ public function edit(Absensi $absensi)
         abort(403);
     }
     $siswa = Siswa::whereIn('kelas', $this->kelasGuru())->get();
-    return view('absensi.edit', compact('absensi', 'siswa'));
+    $mapel = MataPelajaran::all();
+    return view('absensi.edit', compact('absensi', 'siswa', 'mapel'));
 }
 
 public function update(Request $request, Absensi $absensi)
@@ -85,6 +93,7 @@ public function update(Request $request, Absensi $absensi)
     }
     $data = $request->validate([
         'siswa_id' => ['required', Rule::exists('siswa', 'id')->whereIn('kelas', $this->kelasGuru())],
+        'mapel_id' => 'required|exists:mata_pelajaran,id',
         'tanggal' => 'required|date',
         'status' => 'required|in:Hadir,Izin,Sakit,Alpha'
     ]);
@@ -213,6 +222,84 @@ public function update(Request $request, Absensi $absensi)
         }
 
         return redirect()->route('absensi.harian', ['kelas' => $kelas, 'tanggal' => $tanggal])
+                         ->with('success', 'Absensi berhasil disimpan');
+    }
+
+    public function pelajaran()
+    {
+        $hariMap = [
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+            'Sunday' => 'Minggu',
+        ];
+        $hari = $hariMap[date('l')];
+
+        $guru = Guru::where('user_id', Auth::id())->first();
+        if (!$guru) {
+            $jadwal = collect();
+        } else {
+            $jadwal = Jadwal::with(['mapel', 'kelas'])
+                        ->where('guru_id', $guru->id)
+                        ->where('hari', $hari)
+                        ->get();
+        }
+
+        return view('absensi.pelajaran', compact('jadwal', 'hari'));
+    }
+
+    public function pelajaranForm(Request $request, Jadwal $jadwal)
+    {
+        $guru = Guru::where('user_id', Auth::id())->first();
+        if ($guru && $guru->id !== $jadwal->guru_id && Auth::user()->role !== 'admin') {
+            abort(403);
+        }
+
+        $tanggal = $request->input('tanggal', date('Y-m-d'));
+        $kelasNama = $jadwal->kelas->nama;
+        $siswa = Siswa::where('kelas', $kelasNama)->get();
+        $absen = Absensi::whereIn('siswa_id', $siswa->pluck('id'))
+                    ->where('mapel_id', $jadwal->mapel_id)
+                    ->where('tanggal', $tanggal)
+                    ->get()
+                    ->pluck('status', 'siswa_id');
+
+        return view('absensi.pelajaran_form', [
+            'jadwal' => $jadwal,
+            'tanggal' => $tanggal,
+            'siswa' => $siswa,
+            'absen' => $absen,
+        ]);
+    }
+
+    public function pelajaranStore(Request $request, Jadwal $jadwal)
+    {
+        $guru = Guru::where('user_id', Auth::id())->first();
+        if ($guru && $guru->id !== $jadwal->guru_id && Auth::user()->role !== 'admin') {
+            abort(403);
+        }
+
+        $request->validate([
+            'tanggal' => 'required|date',
+            'status' => 'array',
+        ]);
+
+        $tanggal = $request->input('tanggal');
+        $siswaIds = Siswa::where('kelas', $jadwal->kelas->nama)->pluck('id');
+        $statusData = $request->input('status', []);
+        foreach ($siswaIds as $id) {
+            if (isset($statusData[$id])) {
+                Absensi::updateOrCreate(
+                    ['siswa_id' => $id, 'mapel_id' => $jadwal->mapel_id, 'tanggal' => $tanggal],
+                    ['status' => $statusData[$id]]
+                );
+            }
+        }
+
+        return redirect()->route('absensi.pelajaran.form', [$jadwal->id, 'tanggal' => $tanggal])
                          ->with('success', 'Absensi berhasil disimpan');
     }
 }

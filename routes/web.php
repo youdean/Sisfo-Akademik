@@ -48,6 +48,9 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::resource('penilaian', PenilaianController::class)->only('index','create','store','destroy');
     Route::get('/absensi/harian', [AbsensiController::class, 'harian'])->name('absensi.harian');
     Route::post('/absensi/harian', [AbsensiController::class, 'harianStore'])->name('absensi.harian.store');
+    Route::get('/absensi/pelajaran', [AbsensiController::class, 'pelajaran'])->name('absensi.pelajaran');
+    Route::get('/absensi/pelajaran/{jadwal}', [AbsensiController::class, 'pelajaranForm'])->name('absensi.pelajaran.form');
+    Route::post('/absensi/pelajaran/{jadwal}', [AbsensiController::class, 'pelajaranStore'])->name('absensi.pelajaran.store');
     Route::get('/absensi/rekap', [AbsensiController::class, 'rekap'])->name('absensi.rekap');
     Route::get('/absensi/rekap/export', [AbsensiController::class, 'exportRekap'])->name('absensi.rekap.export');
     Route::get('/rapor/{siswa}', [RaporController::class, 'cetak'])->name('rapor.cetak');
