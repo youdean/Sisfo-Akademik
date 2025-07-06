@@ -11,12 +11,40 @@
     <!-- Navbar di sini -->
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
-        @auth
-            <button class="navbar-toggler me-2 d-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        @endauth
             <a class="navbar-brand" href="{{ route('dashboard') }}">Sisfo Akademik</a>
+            @auth
+            <div class="dropdown ms-3">
+                <button class="btn btn-outline-light dropdown-toggle btn-sm" type="button" id="menuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Menu
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="menuDropdown">
+                    <li>
+                        <a href="{{ route('dashboard') }}" class="dropdown-item">
+                            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    @if(Auth::user()->role === 'admin')
+                        <li><a href="{{ route('guru.index') }}" class="dropdown-item"><i class="bi bi-person-badge me-2"></i>Manajemen Guru</a></li>
+                        <li><a href="{{ route('siswa.index') }}" class="dropdown-item"><i class="bi bi-people me-2"></i>Manajemen Siswa</a></li>
+                        <li><a href="{{ route('mapel.index') }}" class="dropdown-item"><i class="bi bi-book me-2"></i>Manajemen Mapel</a></li>
+                        <li><a href="{{ route('kelas.index') }}" class="dropdown-item"><i class="bi bi-building me-2"></i>Manajemen Kelas</a></li>
+                        <li><a href="{{ route('pengajaran.index') }}" class="dropdown-item"><i class="bi bi-journal-text me-2"></i>Pengajaran</a></li>
+                        <li><a href="{{ route('jadwal.index') }}" class="dropdown-item"><i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran</a></li>
+                        <li><a href="{{ route('users.index') }}" class="dropdown-item"><i class="bi bi-people-fill me-2"></i>Manajemen User</a></li>
+                    @endif
+                    @if(in_array(Auth::user()->role, ['admin', 'guru']))
+                        <li><a href="{{ route('nilai.index') }}" class="dropdown-item"><i class="bi bi-card-checklist me-2"></i>Nilai Siswa</a></li>
+                        <li><a href="{{ route('absensi.index') }}" class="dropdown-item"><i class="bi bi-person-check me-2"></i>Absensi Siswa</a></li>
+                    @endif
+                    @if(Auth::user()->role === 'siswa')
+                        <li><a href="{{ route('student.profile') }}" class="dropdown-item"><i class="bi bi-person me-2"></i>Data Diri</a></li>
+                        <li><a href="{{ route('student.absensi') }}" class="dropdown-item"><i class="bi bi-person-check me-2"></i>Absensi Saya</a></li>
+                        <li><a href="{{ route('student.absen.form') }}" class="dropdown-item"><i class="bi bi-pencil-square me-2"></i>Ambil Absen</a></li>
+                        <li><a href="{{ route('student.nilai') }}" class="dropdown-item"><i class="bi bi-card-checklist me-2"></i>Nilai Saya</a></li>
+                    @endif
+                </ul>
+            </div>
+            @endauth
             <div class="d-flex ms-auto">
                 @auth
                     <span class="navbar-text me-3">
@@ -35,102 +63,12 @@
             </div>
         </div>
     </nav>
-    @auth
-    <div class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" data-bs-backdrop="static" style="--bs-offcanvas-width: 260px;">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body p-0">
-            <div class="list-group list-group-flush">
-                <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action">
-                    <i class="bi bi-speedometer2 me-2"></i>Dashboard
-                </a>
-                @if(Auth::user()->role === 'admin')
-                    <a href="{{ route('guru.index') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-person-badge me-2"></i>Manajemen Guru
-                    </a>
-                    <a href="{{ route('siswa.index') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-people me-2"></i>Manajemen Siswa
-                    </a>
-                    <a href="{{ route('mapel.index') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-book me-2"></i>Manajemen Mapel
-                    </a>
-                    <a href="{{ route('kelas.index') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-building me-2"></i>Manajemen Kelas
-                    </a>
-                    <a href="{{ route('pengajaran.index') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-journal-text me-2"></i>Pengajaran
-                    </a>
-                    <a href="{{ route('jadwal.index') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran
-                    </a>
-                    <a href="{{ route('users.index') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-people-fill me-2"></i>Manajemen User
-                    </a>
-                @endif
-
-                @if(in_array(Auth::user()->role, ['admin', 'guru']))
-                    <a href="{{ route('nilai.index') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-card-checklist me-2"></i>Nilai Siswa
-                    </a>
-                    <a href="{{ route('absensi.index') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-person-check me-2"></i>Absensi Siswa
-                    </a>
-                @endif
-
-                @if(Auth::user()->role === 'siswa')
-                    <a href="{{ route('student.profile') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-person me-2"></i>Data Diri
-                    </a>
-                    <a href="{{ route('student.absensi') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-person-check me-2"></i>Absensi Saya
-                    </a>
-                    <a href="{{ route('student.absen.form') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-pencil-square me-2"></i>Ambil Absen
-                    </a>
-                    <a href="{{ route('student.nilai') }}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-card-checklist me-2"></i>Nilai Saya
-                    </a>
-                @endif
-                <button type="button" class="list-group-item list-group-item-action" data-bs-dismiss="offcanvas">
-                    <i class="bi bi-chevron-left me-2"></i>Sembunyikan Menu
-                </button>
-            </div>
-        </div>
-    </div>
-    @endauth
     <div class="container">
         @yield('content')
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        function handleSidebar() {
-            var sidebar = document.getElementById('sidebar');
-            if (!sidebar) return;
-            var instance = bootstrap.Offcanvas.getOrCreateInstance(sidebar);
-            if (window.innerWidth >= 992) {
-                instance.show();
-            } else {
-                instance.hide();
-            }
-        }
-        var sidebar = document.getElementById('sidebar');
-        window.addEventListener('load', handleSidebar);
-        window.addEventListener('resize', handleSidebar);
-        if (sidebar) {
-            sidebar.querySelectorAll('a.list-group-item-action').forEach(function (link) {
-                link.addEventListener('click', function () {
-                    var instance = bootstrap.Offcanvas.getInstance(sidebar);
-                    if (instance) {
-                        instance.hide();
-                    }
-                });
-            });
-        }
-    </script>
     @yield('scripts')
 </body>
 </html>
