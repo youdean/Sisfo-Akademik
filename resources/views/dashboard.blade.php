@@ -48,11 +48,8 @@
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-6">
+    <div class="col-md-8 offset-md-2">
         <canvas id="absensiChart"></canvas>
-    </div>
-    <div class="col-md-6">
-        <canvas id="nilaiChart"></canvas>
     </div>
 </div>
 
@@ -79,24 +76,5 @@
         }
     });
 
-    const nilaiLabels = @json($topNilai->pluck('siswa.nama'));
-    const nilaiData = @json($topNilai->pluck('rata'));
-    new Chart(document.getElementById('nilaiChart'), {
-        type: 'bar',
-        data: {
-            labels: nilaiLabels,
-            datasets: [{
-                label: 'Rata-rata Nilai',
-                data: nilaiData,
-                backgroundColor: 'rgba(255, 99, 132, 0.5)'
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            scales: {
-                x: { beginAtZero: true }
-            }
-        }
-    });
 </script>
 @endsection
