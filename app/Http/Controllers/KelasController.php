@@ -24,7 +24,7 @@ class KelasController extends Controller
     {
         Kelas::create($request->validate([
             'nama' => 'required',
-            'guru_id' => 'required|exists:guru,id'
+            'guru_id' => 'required|exists:guru,id|unique:kelas,guru_id'
         ]));
 
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil ditambahkan');
@@ -40,7 +40,7 @@ class KelasController extends Controller
     {
         $kela->update($request->validate([
             'nama' => 'required',
-            'guru_id' => 'required|exists:guru,id'
+            'guru_id' => 'required|exists:guru,id|unique:kelas,guru_id,' . $kela->id
         ]));
 
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil diupdate');

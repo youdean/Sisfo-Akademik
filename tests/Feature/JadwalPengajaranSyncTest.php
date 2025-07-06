@@ -25,7 +25,14 @@ class JadwalPengajaranSyncTest extends TestCase
             'tanggal_lahir' => '1980-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Matematika']);
-        $kelas = Kelas::create(['nama' => '10']);
+        $wali = Guru::create([
+            'nuptk' => '1234',
+            'nama' => 'Wali 10',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+        $kelas = Kelas::create(['nama' => '10', 'guru_id' => $wali->id]);
 
         $response = $this->actingAs($user)->post('/jadwal', [
             'kelas_id' => $kelas->id,
@@ -62,7 +69,14 @@ class JadwalPengajaranSyncTest extends TestCase
             'tanggal_lahir' => '1985-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'IPA']);
-        $kelas = Kelas::create(['nama' => '10']);
+        $wali = Guru::create([
+            'nuptk' => '1235',
+            'nama' => 'Wali 10B',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+        $kelas = Kelas::create(['nama' => '10', 'guru_id' => $wali->id]);
 
         $this->actingAs($user)->post('/jadwal', [
             'kelas_id' => $kelas->id,

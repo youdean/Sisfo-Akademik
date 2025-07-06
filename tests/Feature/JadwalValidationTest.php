@@ -25,7 +25,14 @@ class JadwalValidationTest extends TestCase
             'tanggal_lahir' => '1990-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Matematika']);
-        $kelas = Kelas::create(['nama' => '10']);
+        $wali = Guru::create([
+            'nuptk' => '998',
+            'nama' => 'Wali 10',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+        $kelas = Kelas::create(['nama' => '10', 'guru_id' => $wali->id]);
 
         $response = $this->actingAs($user)
             ->from('/jadwal/create')

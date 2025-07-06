@@ -25,8 +25,22 @@ class JadwalConflictTest extends TestCase
             'tanggal_lahir' => '1980-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Matematika']);
-        $kelasA = Kelas::create(['nama' => 'A']);
-        $kelasB = Kelas::create(['nama' => 'B']);
+        $waliA = Guru::create([
+            'nuptk' => '301',
+            'nama' => 'Wali A',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+        $waliB = Guru::create([
+            'nuptk' => '302',
+            'nama' => 'Wali B',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+        $kelasA = Kelas::create(['nama' => 'A', 'guru_id' => $waliA->id]);
+        $kelasB = Kelas::create(['nama' => 'B', 'guru_id' => $waliB->id]);
 
         $this->actingAs($user)->post('/jadwal', [
             'kelas_id' => $kelasA->id,
@@ -65,8 +79,22 @@ class JadwalConflictTest extends TestCase
             'tanggal_lahir' => '1985-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'IPA']);
-        $kelasA = Kelas::create(['nama' => 'A']);
-        $kelasB = Kelas::create(['nama' => 'B']);
+        $waliA = Guru::create([
+            'nuptk' => '303',
+            'nama' => 'Wali C',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+        $waliB = Guru::create([
+            'nuptk' => '304',
+            'nama' => 'Wali D',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+        $kelasA = Kelas::create(['nama' => 'A', 'guru_id' => $waliA->id]);
+        $kelasB = Kelas::create(['nama' => 'B', 'guru_id' => $waliB->id]);
 
         $this->actingAs($user)->post('/jadwal', [
             'kelas_id' => $kelasA->id,
