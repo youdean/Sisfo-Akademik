@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             SiswaSeeder::class,
             TahunAjaranSeeder::class,
             MataPelajaranSeeder::class,
-            NilaiSeeder::class,
             AbsensiSeeder::class,
             KelasSeeder::class,
             PengajaranSeeder::class,
