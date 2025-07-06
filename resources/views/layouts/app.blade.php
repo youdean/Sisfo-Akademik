@@ -106,6 +106,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        function handleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
+            var instance = bootstrap.Offcanvas.getOrCreateInstance(sidebar);
+            if (window.innerWidth >= 992) {
+                instance.show();
+            } else {
+                instance.hide();
+            }
+        }
+        window.addEventListener('load', handleSidebar);
+        window.addEventListener('resize', handleSidebar);
+    </script>
     @yield('scripts')
 </body>
 </html>
