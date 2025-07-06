@@ -57,7 +57,8 @@ public function store(Request $request)
     $data = $request->validate([
         'siswa_id' => ['required', Rule::exists('siswa', 'id')->whereIn('kelas', $this->kelasGuru())],
         'mapel_id' => 'required|exists:mata_pelajaran,id',
-        'nilai' => 'required|integer|min:0|max:100'
+        'nilai' => 'required|integer|min:0|max:100',
+        'semester' => 'required|integer|in:1,2'
     ]);
     Nilai::create($data);
 
@@ -82,7 +83,8 @@ public function update(Request $request, Nilai $nilai)
     $data = $request->validate([
         'siswa_id' => ['required', Rule::exists('siswa', 'id')->whereIn('kelas', $this->kelasGuru())],
         'mapel_id' => 'required|exists:mata_pelajaran,id',
-        'nilai' => 'required|integer|min:0|max:100'
+        'nilai' => 'required|integer|min:0|max:100',
+        'semester' => 'required|integer|in:1,2'
     ]);
     $nilai->update($data);
 

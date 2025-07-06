@@ -40,6 +40,15 @@
         <input type="number" name="nilai" class="form-control" min="0" max="100" required>
         <x-input-error :messages="$errors->get('nilai')" class="mt-1" />
     </div>
+    <div class="mb-3">
+        <label>Semester</label>
+        <select name="semester" class="form-control" required>
+            <option value="">-- Pilih Semester --</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+        <x-input-error :messages="$errors->get('semester')" class="mt-1" />
+    </div>
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('nilai.index') }}" class="btn btn-secondary">Batal</a>
 </form>

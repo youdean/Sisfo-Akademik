@@ -16,6 +16,7 @@ class NilaiSeeder extends Seeder
                     'siswa_id' => $s,
                     'mapel_id' => $m,
                     'nilai' => rand(60, 100),
+                    'semester' => rand(1, 2),
                 ];
             }
         }
