@@ -36,7 +36,7 @@
         </div>
     </nav>
     @auth
-    <div class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="--bs-offcanvas-width: 260px;">
+    <div class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" data-bs-backdrop="static" style="--bs-offcanvas-width: 260px;">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
