@@ -17,11 +17,15 @@ class JadwalController extends Controller
         if (!$kelasNama) {
             return;
         }
-        Pengajaran::firstOrCreate([
-            'guru_id' => $data['guru_id'],
-            'mapel_id' => $data['mapel_id'],
-            'kelas' => $kelasNama,
-        ]);
+        Pengajaran::updateOrCreate(
+            [
+                'mapel_id' => $data['mapel_id'],
+                'kelas' => $kelasNama,
+            ],
+            [
+                'guru_id' => $data['guru_id'],
+            ]
+        );
     }
     public function index(Request $request)
     {
