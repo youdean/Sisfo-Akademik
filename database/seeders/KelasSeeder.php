@@ -10,12 +10,13 @@ class KelasSeeder extends Seeder
     public function run(): void
     {
         // Only create the base classes without A/B/C subdivisions
+        $taId = DB::table('tahun_ajaran')->value('id');
         $data = [
-            ['nama' => '10', 'guru_id' => 1],
-            ['nama' => '11 IPA', 'guru_id' => 2],
-            ['nama' => '11 IPS', 'guru_id' => 3],
-            ['nama' => '12 IPA', 'guru_id' => 4],
-            ['nama' => '12 IPS', 'guru_id' => 5],
+            ['nama' => '10', 'guru_id' => 1, 'tahun_ajaran_id' => $taId],
+            ['nama' => '11 IPA', 'guru_id' => 2, 'tahun_ajaran_id' => $taId],
+            ['nama' => '11 IPS', 'guru_id' => 3, 'tahun_ajaran_id' => $taId],
+            ['nama' => '12 IPA', 'guru_id' => 4, 'tahun_ajaran_id' => $taId],
+            ['nama' => '12 IPS', 'guru_id' => 5, 'tahun_ajaran_id' => $taId],
         ];
 
         DB::table('kelas')->insert($data);
