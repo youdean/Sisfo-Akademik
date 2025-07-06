@@ -120,6 +120,16 @@
         var sidebar = document.getElementById('sidebar');
         window.addEventListener('load', handleSidebar);
         window.addEventListener('resize', handleSidebar);
+        if (sidebar) {
+            sidebar.querySelectorAll('a.list-group-item-action').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    var instance = bootstrap.Offcanvas.getInstance(sidebar);
+                    if (instance) {
+                        instance.hide();
+                    }
+                });
+            });
+        }
     </script>
     @yield('scripts')
 </body>
