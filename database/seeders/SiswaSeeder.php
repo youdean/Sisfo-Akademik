@@ -15,9 +15,9 @@ class SiswaSeeder extends Seeder
         $data = [];
         $siswaUser = User::where('email', 'siswa@demo.com')->first();
         $kelasList = [
-            '10A', '10B', '10C',
-            '11 IPA A', '11 IPA B', '11 IPS A', '11 IPS B',
-            '12 IPA A', '12 IPA B', '12 IPS A', '12 IPS B',
+            '10',
+            '11 IPA', '11 IPS',
+            '12 IPA', '12 IPS',
         ];
 
         for ($i = 1; $i <= 50; $i++) {

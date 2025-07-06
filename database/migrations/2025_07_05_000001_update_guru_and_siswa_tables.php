@@ -11,7 +11,13 @@ return new class extends Migration {
         // Older MariaDB versions (<10.5) do not support the "RENAME COLUMN"
         // syntax used by Laravel's renameColumn method. Instead we manually
         // issue a "CHANGE" statement to ensure compatibility.
-        DB::statement('ALTER TABLE guru CHANGE nip nuptk VARCHAR(255)');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE guru CHANGE nip nuptk VARCHAR(255)');
+        } else {
+            Schema::table('guru', function (Blueprint $table) {
+                $table->renameColumn('nip', 'nuptk');
+            });
+        }
 
         Schema::table('guru', function (Blueprint $table) {
             $table->string('tempat_lahir')->after('nama');
@@ -25,7 +31,13 @@ return new class extends Migration {
 
     public function down(): void
     {
-        DB::statement('ALTER TABLE guru CHANGE nuptk nip VARCHAR(255)');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE guru CHANGE nuptk nip VARCHAR(255)');
+        } else {
+            Schema::table('guru', function (Blueprint $table) {
+                $table->renameColumn('nuptk', 'nip');
+            });
+        }
         Schema::table('guru', function (Blueprint $table) {
             $table->dropColumn(['tempat_lahir', 'jenis_kelamin']);
         });

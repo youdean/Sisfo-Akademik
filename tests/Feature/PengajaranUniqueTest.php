@@ -32,7 +32,7 @@ class PengajaranUniqueTest extends TestCase
             'tanggal_lahir' => '1985-01-01',
         ]);
         $mapel = MataPelajaran::create(['nama' => 'Matematika']);
-        $kelas = Kelas::create(['nama' => '10A']);
+        $kelas = Kelas::create(['nama' => '10']);
 
         $this->actingAs($user)->post('/pengajaran', [
             'guru_nama' => $guruA->nama,
