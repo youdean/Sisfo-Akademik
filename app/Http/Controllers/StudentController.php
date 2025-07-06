@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Siswa;
-use App\Models\Nilai;
 use App\Models\Absensi;
 use App\Models\MataPelajaran;
 use Illuminate\Support\Facades\Auth;
-use PDF;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -60,36 +58,30 @@ class StudentController extends Controller
     }
 
     /**
-     * Show logged in student's grades.
+     * Show logged in student's attendance grade.
      */
-    public function nilai(Request $request)
+    public function nilaiAbsensi()
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
-        $query = Nilai::with('mapel')->where('siswa_id', $siswa->id);
-        if ($request->filled('semester')) {
-            $query->where('semester', $request->input('semester'));
-        }
-        $nilai = $query->get();
-        return view('siswa.nilai', compact('siswa', 'nilai'));
-    }
+        $counts = $siswa->absensi()
+            ->selectRaw('status, count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
 
-    /**
-     * Download logged in student's report.
-     */
-    public function rapor(Request $request)
-    {
-        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
-        $query = Nilai::with('mapel')->where('siswa_id', $siswa->id);
-        if ($request->filled('semester')) {
-            $query->where('semester', $request->input('semester'));
-        }
-        $nilai = $query->get();
+        $hadir = $counts['Hadir'] ?? 0;
+        $izin = $counts['Izin'] ?? 0;
+        $sakit = $counts['Sakit'] ?? 0;
+        $alpha = $counts['Alpha'] ?? 0;
+        $total = $hadir + $izin + $sakit + $alpha;
+        $nilaiAbsensi = $total ? ($hadir / $total) * 100 : 0;
 
-        $pdf = PDF::loadView('rapor.pdf', [
+        return view('siswa.nilai_absensi', [
             'siswa' => $siswa,
-            'nilai' => $nilai,
+            'hadir' => $hadir,
+            'izin' => $izin,
+            'sakit' => $sakit,
+            'alpha' => $alpha,
+            'nilaiAbsensi' => $nilaiAbsensi,
         ]);
-
-        return $pdf->download('rapor-'.$siswa->nama.'.pdf');
     }
 }

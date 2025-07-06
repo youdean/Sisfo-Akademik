@@ -7,7 +7,6 @@ use App\Models\Guru;
 use App\Models\MataPelajaran;
 use App\Models\Kelas;
 use App\Models\Absensi;
-use App\Models\Nilai;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -24,12 +23,6 @@ class DashboardController extends Controller
             ->orderBy('tanggal')
             ->get();
 
-        $topNilai = Nilai::select('siswa_id', DB::raw('avg(nilai) as rata'))
-            ->groupBy('siswa_id')
-            ->orderByDesc('rata')
-            ->with('siswa')
-            ->take(10)
-            ->get();
 
         return view('dashboard', [
             'totalSiswa' => Siswa::count(),
@@ -38,7 +31,6 @@ class DashboardController extends Controller
             'totalKelas' => Kelas::count(),
             'absensiHariIni' => Absensi::where('tanggal', $today->toDateString())->where('status', 'Hadir')->count(),
             'absensiPerHari' => $absensiPerHari,
-            'topNilai' => $topNilai,
         ]);
     }
 }

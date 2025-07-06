@@ -33,14 +33,14 @@
                         <li><a href="{{ route('users.index') }}" class="dropdown-item"><i class="bi bi-people-fill me-2"></i>Manajemen User</a></li>
                     @endif
                     @if(in_array(Auth::user()->role, ['admin', 'guru']))
-                        <li><a href="{{ route('nilai.index') }}" class="dropdown-item"><i class="bi bi-card-checklist me-2"></i>Nilai Siswa</a></li>
+                        <li><a href="{{ route('nilai.absensi') }}" class="dropdown-item"><i class="bi bi-card-checklist me-2"></i>Nilai Absensi</a></li>
                         <li><a href="{{ route('absensi.index') }}" class="dropdown-item"><i class="bi bi-person-check me-2"></i>Absensi Siswa</a></li>
                     @endif
                     @if(Auth::user()->role === 'siswa')
                         <li><a href="{{ route('student.profile') }}" class="dropdown-item"><i class="bi bi-person me-2"></i>Data Diri</a></li>
                         <li><a href="{{ route('student.absensi') }}" class="dropdown-item"><i class="bi bi-person-check me-2"></i>Absensi Saya</a></li>
                         <li><a href="{{ route('student.absen.form') }}" class="dropdown-item"><i class="bi bi-pencil-square me-2"></i>Ambil Absen</a></li>
-                        <li><a href="{{ route('student.nilai') }}" class="dropdown-item"><i class="bi bi-card-checklist me-2"></i>Nilai Saya</a></li>
+                        <li><a href="{{ route('student.nilai.absensi') }}" class="dropdown-item"><i class="bi bi-card-checklist me-2"></i>Nilai Absensi</a></li>
                     @endif
                 </ul>
             </div>
