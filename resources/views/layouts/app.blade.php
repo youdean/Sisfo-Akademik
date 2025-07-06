@@ -37,8 +37,8 @@
     </nav>
     <div class="d-flex">
     @auth
-        <nav id="sidebar" class="bg-light border-end" style="width:260px; min-height:100vh;">
-            <div class="list-group list-group-flush">
+        <nav id="sidebar" class="bg-light border-end d-none d-md-block" style="width:260px; min-height:100vh; resize: horizontal; overflow: auto;">
+            <div class="list-group list-group-flush d-flex flex-column" style="min-height:100%;">
                 <div class="list-group-item bg-light fw-semibold">Menu</div>
                 <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
@@ -90,6 +90,9 @@
                         <i class="bi bi-card-checklist me-2"></i>Nilai Saya
                     </a>
                 @endif
+                <div class="p-2 border-top mt-auto text-center">
+                    <button id="hide-sidebar" class="btn btn-outline-secondary btn-sm">&laquo;</button>
+                </div>
             </div>
         </nav>
     @endauth
@@ -104,11 +107,20 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         const toggleButton = document.getElementById('toggle-sidebar');
+        const hideButton = document.getElementById('hide-sidebar');
         if (toggleButton) {
             toggleButton.addEventListener('click', () => {
                 const sidebar = document.getElementById('sidebar');
                 if (sidebar) {
                     sidebar.classList.toggle('d-none');
+                }
+            });
+        }
+        if (hideButton) {
+            hideButton.addEventListener('click', () => {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) {
+                    sidebar.classList.add('d-none');
                 }
             });
         }
