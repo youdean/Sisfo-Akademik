@@ -12,7 +12,7 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
         @auth
-            <button class="navbar-toggler me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+            <button class="navbar-toggler me-2 d-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
                 <span class="navbar-toggler-icon"></span>
             </button>
         @endauth
@@ -116,6 +116,15 @@
             } else {
                 instance.hide();
             }
+        }
+        var sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.addEventListener('hidden.bs.offcanvas', function () {
+                if (window.innerWidth >= 992) {
+                    var instance = bootstrap.Offcanvas.getOrCreateInstance(sidebar);
+                    instance.show();
+                }
+            });
         }
         window.addEventListener('load', handleSidebar);
         window.addEventListener('resize', handleSidebar);
