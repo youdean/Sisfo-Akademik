@@ -46,5 +46,5 @@
         @endforeach
     </tbody>
 </table>
-{{ $absensi->links() }}
+{{ $absensi->links('pagination::bootstrap-5') }}
 @endsection

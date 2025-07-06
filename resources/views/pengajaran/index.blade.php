@@ -42,5 +42,5 @@
         @endforeach
     </tbody>
 </table>
-{{ $pengajaran->links() }}
+{{ $pengajaran->links('pagination::bootstrap-5') }}
 @endsection

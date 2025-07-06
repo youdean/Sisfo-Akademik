@@ -34,5 +34,5 @@
         @endforeach
     </tbody>
 </table>
-{{ $kelas->links() }}
+{{ $kelas->links('pagination::bootstrap-5') }}
 @endsection

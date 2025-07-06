@@ -50,5 +50,5 @@
         @endforeach
     </tbody>
 </table>
-{{ $siswa->links() }}
+{{ $siswa->links('pagination::bootstrap-5') }}
 @endsection
