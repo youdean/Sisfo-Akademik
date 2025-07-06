@@ -8,6 +8,7 @@ use App\Models\Siswa;
 use App\Models\MataPelajaran;
 use App\Models\Guru;
 use App\Models\Pengajaran;
+use App\Models\Kelas;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
@@ -15,10 +16,16 @@ class NilaiController extends Controller
 {
     private function kelasGuru(): array
     {
-        $guru = Guru::where('user_id', Auth::id())->first();
+        $user = Auth::user();
+        if ($user && $user->role === 'admin') {
+            return Kelas::pluck('nama')->toArray();
+        }
+
+        $guru = Guru::where('user_id', $user?->id)->first();
         if (!$guru) {
             return [];
         }
+
         return Pengajaran::where('guru_id', $guru->id)->pluck('kelas')->toArray();
     }
     public function index(Request $request)
