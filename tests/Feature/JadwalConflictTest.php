@@ -39,8 +39,13 @@ class JadwalConflictTest extends TestCase
             'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1990-01-01',
         ]);
-        $kelasA = Kelas::create(['nama' => 'A', 'guru_id' => $waliA->id]);
-        $kelasB = Kelas::create(['nama' => 'B', 'guru_id' => $waliB->id]);
+        $ta = \App\Models\TahunAjaran::create([
+            'nama' => '2024/2025',
+            'start_date' => '2024-07-01',
+            'end_date' => '2025-06-30',
+        ]);
+        $kelasA = Kelas::create(['nama' => 'A', 'guru_id' => $waliA->id, 'tahun_ajaran_id' => $ta->id]);
+        $kelasB = Kelas::create(['nama' => 'B', 'guru_id' => $waliB->id, 'tahun_ajaran_id' => $ta->id]);
 
         $this->actingAs($user)->post('/jadwal', [
             'kelas_id' => $kelasA->id,
@@ -93,8 +98,13 @@ class JadwalConflictTest extends TestCase
             'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1990-01-01',
         ]);
-        $kelasA = Kelas::create(['nama' => 'A', 'guru_id' => $waliA->id]);
-        $kelasB = Kelas::create(['nama' => 'B', 'guru_id' => $waliB->id]);
+        $ta = \App\Models\TahunAjaran::create([
+            'nama' => '2025/2026',
+            'start_date' => '2025-07-01',
+            'end_date' => '2026-06-30',
+        ]);
+        $kelasA = Kelas::create(['nama' => 'A', 'guru_id' => $waliA->id, 'tahun_ajaran_id' => $ta->id]);
+        $kelasB = Kelas::create(['nama' => 'B', 'guru_id' => $waliB->id, 'tahun_ajaran_id' => $ta->id]);
 
         $this->actingAs($user)->post('/jadwal', [
             'kelas_id' => $kelasA->id,

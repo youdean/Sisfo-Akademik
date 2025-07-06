@@ -30,6 +30,16 @@
         </select>
         <x-input-error :messages="$errors->get('guru_id')" class="mt-1" />
     </div>
+    <div class="mb-3">
+        <label>Tahun Ajaran</label>
+        <select name="tahun_ajaran_id" class="form-control" required>
+            <option value="">-- Pilih Tahun Ajaran --</option>
+            @foreach($tahun_ajaran as $ta)
+                <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
+            @endforeach
+        </select>
+        <x-input-error :messages="$errors->get('tahun_ajaran_id')" class="mt-1" />
+    </div>
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('kelas.index') }}" class="btn btn-secondary">Batal</a>
 </form>
