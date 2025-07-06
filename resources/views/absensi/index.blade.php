@@ -8,6 +8,7 @@
     <div>
         <a href="{{ route('absensi.rekap') }}" class="btn btn-secondary me-2">Rekap Bulanan</a>
         <a href="{{ route('absensi.harian') }}" class="btn btn-success me-2">Input Harian</a>
+        <a href="{{ route('absensi.pelajaran') }}" class="btn btn-info me-2">Input Per Mapel</a>
         <a href="{{ route('absensi.create') }}" class="btn btn-primary">+ Tambah Absensi</a>
     </div>
 </div>

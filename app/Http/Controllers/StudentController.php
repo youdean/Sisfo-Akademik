@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Siswa;
 use App\Models\Nilai;
 use App\Models\Absensi;
+use App\Models\MataPelajaran;
 use Illuminate\Support\Facades\Auth;
 use PDF;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class StudentController extends Controller
     public function absensi()
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
-        $absensi = $siswa->absensi()->get();
+        $absensi = $siswa->absensi()->with('mapel')->get();
         return view('siswa.absensi', compact('siswa', 'absensi'));
     }
 
@@ -35,7 +36,8 @@ class StudentController extends Controller
      */
     public function absenForm()
     {
-        return view('siswa.absen');
+        $mapel = MataPelajaran::all();
+        return view('siswa.absen', compact('mapel'));
     }
 
     /**
@@ -45,11 +47,12 @@ class StudentController extends Controller
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $data = $request->validate([
+            'mapel_id' => 'required|exists:mata_pelajaran,id',
             'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
         ]);
 
         Absensi::updateOrCreate(
-            ['siswa_id' => $siswa->id, 'tanggal' => date('Y-m-d')],
+            ['siswa_id' => $siswa->id, 'mapel_id' => $data['mapel_id'], 'tanggal' => date('Y-m-d')],
             ['status' => $data['status']]
         );
 
