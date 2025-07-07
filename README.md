@@ -4,7 +4,7 @@ Aplikasi Sistem Informasi Akademik berbasis Laravel.
 
 ## Fitur
 - Login Multi-Role (Admin, Guru, Siswa)
-- Absensi Harian Siswa
+- Tambah Absensi Siswa
 - Input dan Cetak Rapor
 - Manajemen Siswa & Kelas
 - CRUD Master Data Kelas
