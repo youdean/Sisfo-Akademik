@@ -12,9 +12,6 @@
     </select>
     <noscript><button class="btn btn-primary">Lihat</button></noscript>
 </form>
-<div class="mb-3">
-    <a href="{{ route('absensi.harian', ['kelas' => $selected]) }}" class="btn btn-success">Input Absensi Harian</a>
-</div>
 <table class="table table-bordered">
     <thead>
         <tr>
