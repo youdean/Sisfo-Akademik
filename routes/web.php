@@ -45,6 +45,7 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::get('/nilai-absensi', [\App\Http\Controllers\NilaiAbsensiController::class, 'index'])->name('nilai.absensi');
     Route::resource('absensi', AbsensiController::class)->except('show');
     Route::resource('penilaian', PenilaianController::class)->only('index','create','store','destroy');
+    Route::redirect('/absensi/harian', '/absensi')->name('absensi.harian');
     Route::get('/absensi/pelajaran', [AbsensiController::class, 'pelajaran'])->name('absensi.pelajaran');
     Route::get('/absensi/pelajaran/{jadwal}', [AbsensiController::class, 'pelajaranForm'])->name('absensi.pelajaran.form');
     Route::post('/absensi/pelajaran/{jadwal}', [AbsensiController::class, 'pelajaranStore'])->name('absensi.pelajaran.store');
