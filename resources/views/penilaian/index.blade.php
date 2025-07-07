@@ -12,7 +12,6 @@
             <th>Semester</th>
             <th>Nilai Absensi</th>
             <th>Nilai Tugas</th>
-            <th>Nilai Harian</th>
             <th>PTS</th>
             <th>PAT</th>
             <th>Nilai Raport</th>
@@ -26,7 +25,6 @@
             <td>{{ $p->semester }}</td>
             <td>{{ number_format($p->nilai_absensi, 2) }}</td>
             <td>{{ number_format($p->nilai_tugas, 2) }}</td>
-            <td>{{ number_format($p->nilai_harian, 2) }}</td>
             <td>{{ $p->pts }}</td>
             <td>{{ $p->pat }}</td>
             <td>{{ number_format($p->nilai_raport, 2) }}</td>
