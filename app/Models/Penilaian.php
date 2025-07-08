@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\MataPelajaran;
+use App\Models\NilaiTugas;
 
 class Penilaian extends Model
 {
@@ -11,15 +13,24 @@ class Penilaian extends Model
 
     protected $table = 'penilaian';
     protected $fillable = [
-        'siswa_id', 'semester',
+        'siswa_id', 'mapel_id', 'semester',
         'hadir', 'sakit', 'izin', 'alpha',
-        'tugas1', 'tugas2', 'tugas3',
         'pts', 'pat'
     ];
 
     public function siswa()
     {
         return $this->belongsTo(Siswa::class);
+    }
+
+    public function mapel()
+    {
+        return $this->belongsTo(MataPelajaran::class, 'mapel_id');
+    }
+
+    public function tugas()
+    {
+        return $this->hasMany(NilaiTugas::class);
     }
 
     public function getNilaiAbsensiAttribute(): float
@@ -30,8 +41,8 @@ class Penilaian extends Model
 
     public function getNilaiTugasAttribute(): float
     {
-        $tugas = array_filter([$this->tugas1, $this->tugas2, $this->tugas3], fn($v) => $v !== null);
-        return count($tugas) ? array_sum($tugas) / count($tugas) : 0;
+        $nilai = $this->tugas->pluck('nilai')->filter();
+        return $nilai->count() ? $nilai->avg() : 0;
     }
 
     public function getNilaiHarianAttribute(): float

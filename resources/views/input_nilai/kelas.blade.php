@@ -7,7 +7,7 @@
 <ul class="list-group">
     @foreach($kelasList as $k)
         <li class="list-group-item">
-            <a href="{{ route('input-nilai.nilai', [$mapel->id, $k]) }}">{{ $k }}</a>
+            <a href="{{ route('input-nilai.opsi', [$mapel->id, $k]) }}">{{ $k }}</a>
         </li>
     @endforeach
 </ul>

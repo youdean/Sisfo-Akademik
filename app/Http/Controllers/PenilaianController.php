@@ -7,6 +7,7 @@ use App\Models\Siswa;
 use App\Models\Kelas;
 use App\Models\Guru;
 use App\Models\Pengajaran;
+use App\Models\MataPelajaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -48,21 +49,20 @@ class PenilaianController extends Controller
     public function create()
     {
         $siswa = Siswa::whereIn('kelas', $this->kelasGuru())->get();
-        return view('penilaian.create', compact('siswa'));
+        $mapel = MataPelajaran::all();
+        return view('penilaian.create', compact('siswa', 'mapel'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'siswa_id' => ['required', Rule::exists('siswa', 'id')->whereIn('kelas', $this->kelasGuru())],
+            'mapel_id' => 'required|exists:mata_pelajaran,id',
             'semester' => 'required|integer|in:1,2',
             'hadir' => 'required|integer|min:0',
             'sakit' => 'required|integer|min:0',
             'izin' => 'required|integer|min:0',
             'alpha' => 'required|integer|min:0',
-            'tugas1' => 'nullable|integer|min:0|max:100',
-            'tugas2' => 'nullable|integer|min:0|max:100',
-            'tugas3' => 'nullable|integer|min:0|max:100',
             'pts' => 'nullable|integer|min:0|max:100',
             'pat' => 'nullable|integer|min:0|max:100',
         ]);

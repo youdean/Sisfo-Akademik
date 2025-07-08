@@ -9,6 +9,7 @@
     <thead>
         <tr>
             <th>Nama Siswa</th>
+            <th>Mata Pelajaran</th>
             <th>Semester</th>
             <th>Nilai Absensi</th>
             <th>Nilai Tugas</th>
@@ -22,6 +23,7 @@
         @foreach($penilaian as $p)
         <tr>
             <td>{{ $p->siswa->nama }}</td>
+            <td>{{ $p->mapel->nama }}</td>
             <td>{{ $p->semester }}</td>
             <td>{{ number_format($p->nilai_absensi, 2) }}</td>
             <td>{{ number_format($p->nilai_tugas, 2) }}</td>
