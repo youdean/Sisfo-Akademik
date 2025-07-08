@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Nilai Tugas')
+@section('title', 'Masukkan Nilai Tugas')
 
 @section('content')
 <h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }}</h1>
+<a href="{{ route('input-nilai.tugas.form', [$mapel->id, $kelas]) }}" class="btn btn-primary mb-3">Input Nilai Tugas</a>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
