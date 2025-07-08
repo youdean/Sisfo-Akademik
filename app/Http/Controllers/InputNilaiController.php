@@ -7,6 +7,9 @@ use App\Models\Guru;
 use App\Models\MataPelajaran;
 use App\Models\Pengajaran;
 use App\Models\Siswa;
+use App\Models\Penilaian;
+use App\Models\NilaiTugas;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class InputNilaiController extends Controller
@@ -40,7 +43,24 @@ class InputNilaiController extends Controller
         ]);
     }
 
-    public function nilai(MataPelajaran $mapel, $kelas)
+    public function opsi(MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        return view('input_nilai.opsi', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+        ]);
+    }
+
+    public function absensi(MataPelajaran $mapel, $kelas)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -73,5 +93,64 @@ class InputNilaiController extends Controller
             'siswa' => $siswa,
             'nilaiAbsensi' => $nilaiAbsensi,
         ]);
+    }
+
+    public function tugasForm(MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $siswa = Siswa::where('kelas', $kelas)->get();
+
+        return view('input_nilai.tugas', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+            'siswa' => $siswa,
+        ]);
+    }
+
+    public function tugasStore(Request $request, MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'nomor' => 'required|integer|min:1',
+            'nilai.*' => 'nullable|integer|min:0|max:100',
+        ]);
+
+        foreach ($request->input('nilai', []) as $siswaId => $nilai) {
+            if ($nilai === null || $nilai === '') {
+                continue;
+            }
+
+            $penilaian = Penilaian::firstOrCreate([
+                'siswa_id' => $siswaId,
+                'mapel_id' => $mapel->id,
+                'semester' => 1,
+            ]);
+
+            \App\Models\NilaiTugas::updateOrCreate([
+                'penilaian_id' => $penilaian->id,
+                'nomor' => $validated['nomor'],
+            ], [
+                'nilai' => $nilai,
+            ]);
+        }
+
+        return redirect()->route('input-nilai.tugas.form', [$mapel->id, $kelas])
+            ->with('success', 'Nilai tugas berhasil disimpan');
     }
 }

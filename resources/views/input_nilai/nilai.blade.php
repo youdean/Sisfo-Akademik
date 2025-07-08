@@ -20,5 +20,5 @@
         @endforeach
     </tbody>
 </table>
-<a href="{{ route('input-nilai.kelas', $mapel->id) }}" class="btn btn-secondary mt-3">Kembali</a>
+<a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas]) }}" class="btn btn-secondary mt-3">Kembali</a>
 @endsection

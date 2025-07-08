@@ -25,6 +25,15 @@
         </select>
     </div>
     <div class="mb-3">
+        <label>Mata Pelajaran</label>
+        <select name="mapel_id" class="form-control" required>
+            <option value="">-- Pilih Mapel --</option>
+            @foreach ($mapel as $m)
+                <option value="{{ $m->id }}">{{ $m->nama }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
         <label>Semester</label>
         <select name="semester" class="form-control" required>
             <option value="1">1</option>
@@ -47,20 +56,6 @@
         <div class="col">
             <label>Alpha</label>
             <input type="number" name="alpha" class="form-control" min="0" required>
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col">
-            <label>Tugas 1</label>
-            <input type="number" name="tugas1" class="form-control" min="0" max="100">
-        </div>
-        <div class="col">
-            <label>Tugas 2</label>
-            <input type="number" name="tugas2" class="form-control" min="0" max="100">
-        </div>
-        <div class="col">
-            <label>Tugas 3</label>
-            <input type="number" name="tugas3" class="form-control" min="0" max="100">
         </div>
     </div>
     <div class="row mt-3">

@@ -57,7 +57,10 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/kelas-saya', [GuruKelasController::class, 'index'])->name('guru.kelas');
     Route::get('/input-nilai', [\App\Http\Controllers\InputNilaiController::class, 'index'])->name('input-nilai.index');
     Route::get('/input-nilai/{mapel}', [\App\Http\Controllers\InputNilaiController::class, 'kelas'])->name('input-nilai.kelas');
-    Route::get('/input-nilai/{mapel}/{kelas}', [\App\Http\Controllers\InputNilaiController::class, 'nilai'])->name('input-nilai.nilai');
+    Route::get('/input-nilai/{mapel}/{kelas}', [\App\Http\Controllers\InputNilaiController::class, 'opsi'])->name('input-nilai.opsi');
+    Route::get('/input-nilai/{mapel}/{kelas}/absensi', [\App\Http\Controllers\InputNilaiController::class, 'absensi'])->name('input-nilai.nilai');
+    Route::get('/input-nilai/{mapel}/{kelas}/tugas', [\App\Http\Controllers\InputNilaiController::class, 'tugasForm'])->name('input-nilai.tugas.form');
+    Route::post('/input-nilai/{mapel}/{kelas}/tugas', [\App\Http\Controllers\InputNilaiController::class, 'tugasStore'])->name('input-nilai.tugas.store');
 });
 
 // Profile dapat diakses oleh semua user yang login
