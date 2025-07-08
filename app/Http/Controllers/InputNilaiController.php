@@ -153,4 +153,102 @@ class InputNilaiController extends Controller
         return redirect()->route('input-nilai.tugas.form', [$mapel->id, $kelas])
             ->with('success', 'Nilai tugas berhasil disimpan');
     }
+
+    public function tugasList(MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $siswa = Siswa::where('kelas', $kelas)->get();
+        $siswaIds = $siswa->pluck('id');
+
+        $tugas = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $siswaIds) {
+            $q->where('mapel_id', $mapel->id)
+                ->whereIn('siswa_id', $siswaIds);
+        })->get()->groupBy('nomor');
+
+        return view('input_nilai.tugas_list', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+            'siswa' => $siswa,
+            'tugas' => $tugas,
+        ]);
+    }
+
+    public function tugasEditForm(MataPelajaran $mapel, $kelas, $nomor)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $siswa = Siswa::where('kelas', $kelas)->get();
+        $nilai = [];
+        foreach ($siswa as $s) {
+            $nilaiTugas = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $s) {
+                $q->where('mapel_id', $mapel->id)
+                    ->where('siswa_id', $s->id);
+            })->where('nomor', $nomor)->first();
+            $nilai[$s->id] = $nilaiTugas->nilai ?? null;
+        }
+
+        return view('input_nilai.tugas_edit', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+            'siswa' => $siswa,
+            'nomor' => $nomor,
+            'nilai' => $nilai,
+        ]);
+    }
+
+    public function tugasUpdate(Request $request, MataPelajaran $mapel, $kelas, $nomor)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'nilai.*' => 'nullable|integer|min:0|max:100',
+        ]);
+
+        foreach ($request->input('nilai', []) as $siswaId => $nilai) {
+            $penilaian = Penilaian::firstOrCreate([
+                'siswa_id' => $siswaId,
+                'mapel_id' => $mapel->id,
+                'semester' => 1,
+            ]);
+
+            if ($nilai === null || $nilai === '') {
+                NilaiTugas::where('penilaian_id', $penilaian->id)
+                    ->where('nomor', $nomor)
+                    ->delete();
+                continue;
+            }
+
+            NilaiTugas::updateOrCreate([
+                'penilaian_id' => $penilaian->id,
+                'nomor' => $nomor,
+            ], [
+                'nilai' => $nilai,
+            ]);
+        }
+
+        return redirect()->route('input-nilai.tugas.list', [$mapel->id, $kelas])
+            ->with('success', 'Nilai tugas berhasil diperbarui');
+    }
 }
