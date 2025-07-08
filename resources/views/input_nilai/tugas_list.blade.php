@@ -8,43 +8,45 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
-<div class="accordion" id="tugasAccordion">
-    @forelse($tugas as $nomor => $list)
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="heading{{ $loop->iteration }}">
-            <div class="d-flex align-items-center">
-                <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }} flex-grow-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $loop->iteration }}" aria-expanded="{{ $loop->first ? 'true' : 'false' }}" aria-controls="collapse{{ $loop->iteration }}">
-                    Tugas Nomor {{ $nomor }}
-                </button>
-                <a href="{{ route('input-nilai.tugas.edit', [$mapel->id, $kelas, $nomor]) }}" class="btn btn-sm btn-warning ms-2">Edit</a>
-            </div>
-        </h2>
-        <div id="collapse{{ $loop->iteration }}" class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}" aria-labelledby="heading{{ $loop->iteration }}" data-bs-parent="#tugasAccordion">
-            <div class="accordion-body p-2">
-                <table class="table table-bordered mb-0">
-                    <thead>
-                        <tr>
-                            <th>Nama Siswa</th>
-                            <th>Nilai</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($siswa as $s)
+@forelse($tugas as $nomor => $list)
+<div class="mb-3">
+    <div class="d-flex align-items-center">
+        <h5 class="mb-0 flex-grow-1">Tugas Nomor {{ $nomor }}</h5>
+        <a href="{{ route('input-nilai.tugas.edit', [$mapel->id, $kelas, $nomor]) }}" class="btn btn-sm btn-warning me-2">Edit</a>
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tugasModal{{ $loop->iteration }}">Lihat</button>
+    </div>
+
+    <div class="modal fade" id="tugasModal{{ $loop->iteration }}" tabindex="-1" aria-labelledby="tugasModalLabel{{ $loop->iteration }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tugasModalLabel{{ $loop->iteration }}">Tugas Nomor {{ $nomor }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <table class="table table-bordered mb-0">
+                        <thead>
                             <tr>
-                                <td>{{ $s->nama }}</td>
-                                <td>
-                                    {{ optional($list->firstWhere('penilaian.siswa_id', $s->id))->nilai ?? '-' }}
-                                </td>
+                                <th>Nama Siswa</th>
+                                <th>Nilai</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach($siswa as $s)
+                                <tr>
+                                    <td>{{ $s->nama }}</td>
+                                    <td>{{ optional($list->firstWhere('penilaian.siswa_id', $s->id))->nilai ?? '-' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    @empty
-        <p>Tidak ada nilai tugas.</p>
-    @endforelse
 </div>
+@empty
+    <p>Tidak ada nilai tugas.</p>
+@endforelse
 <a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas]) }}" class="btn btn-secondary mt-3">Kembali</a>
 @endsection
