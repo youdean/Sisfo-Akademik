@@ -46,6 +46,6 @@ class TugasListPageTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Tugas Nomor 1');
-        $response->assertSee('accordion-item');
+        $response->assertSee('Input Nilai Tugas');
     }
 }
