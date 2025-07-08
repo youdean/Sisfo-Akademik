@@ -150,7 +150,7 @@ class InputNilaiController extends Controller
             ]);
         }
 
-        return redirect()->route('input-nilai.tugas.form', [$mapel->id, $kelas])
+        return redirect()->route('input-nilai.tugas.list', [$mapel->id, $kelas])
             ->with('success', 'Nilai tugas berhasil disimpan');
     }
 
