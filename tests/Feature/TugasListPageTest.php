@@ -38,14 +38,14 @@ class TugasListPageTest extends TestCase
         ]);
         \App\Models\NilaiTugas::create([
             'penilaian_id' => $penilaian->id,
-            'nomor' => 1,
+            'nama' => 'Ulangan Harian',
             'nilai' => 80,
         ]);
 
         $response = $this->actingAs($user)->get("/input-nilai/{$mapel->id}/1A/tugas-list");
 
         $response->assertOk();
-        $response->assertSee('Tugas Nomor 1');
+        $response->assertSee('Nama Tugas: Ulangan Harian');
         $response->assertSee('tugasModal1');
     }
 }

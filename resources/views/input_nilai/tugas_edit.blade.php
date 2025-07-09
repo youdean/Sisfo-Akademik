@@ -13,12 +13,12 @@
         </ul>
     </div>
 @endif
-<form method="POST" action="{{ route('input-nilai.tugas.update', [$mapel->id, $kelas, $nomor]) }}">
+<form method="POST" action="{{ route('input-nilai.tugas.update', [$mapel->id, $kelas, $nama]) }}">
     @csrf
     @method('PUT')
     <div class="mb-3">
-        <label>Nomor Tugas</label>
-        <input type="number" name="nomor" class="form-control" value="{{ $nomor }}" readonly>
+        <label>Nama Tugas</label>
+        <input type="text" name="nama" class="form-control" value="{{ $nama }}" readonly>
     </div>
     <table class="table table-bordered">
         <thead>

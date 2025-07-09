@@ -62,8 +62,8 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/input-nilai/{mapel}/{kelas}/tugas', [\App\Http\Controllers\InputNilaiController::class, 'tugasForm'])->name('input-nilai.tugas.form');
     Route::post('/input-nilai/{mapel}/{kelas}/tugas', [\App\Http\Controllers\InputNilaiController::class, 'tugasStore'])->name('input-nilai.tugas.store');
     Route::get('/input-nilai/{mapel}/{kelas}/tugas-list', [\App\Http\Controllers\InputNilaiController::class, 'tugasList'])->name('input-nilai.tugas.list');
-    Route::get('/input-nilai/{mapel}/{kelas}/tugas/{nomor}/edit', [\App\Http\Controllers\InputNilaiController::class, 'tugasEditForm'])->name('input-nilai.tugas.edit');
-    Route::put('/input-nilai/{mapel}/{kelas}/tugas/{nomor}', [\App\Http\Controllers\InputNilaiController::class, 'tugasUpdate'])->name('input-nilai.tugas.update');
+    Route::get('/input-nilai/{mapel}/{kelas}/tugas/{nama}/edit', [\App\Http\Controllers\InputNilaiController::class, 'tugasEditForm'])->name('input-nilai.tugas.edit');
+    Route::put('/input-nilai/{mapel}/{kelas}/tugas/{nama}', [\App\Http\Controllers\InputNilaiController::class, 'tugasUpdate'])->name('input-nilai.tugas.update');
 });
 
 // Profile dapat diakses oleh semua user yang login

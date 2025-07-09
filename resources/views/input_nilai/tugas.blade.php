@@ -19,8 +19,8 @@
 <form method="POST" action="{{ route('input-nilai.tugas.store', [$mapel->id, $kelas]) }}">
     @csrf
     <div class="mb-3">
-        <label>Nomor Tugas</label>
-        <input type="number" name="nomor" class="form-control" min="1" required>
+        <label>Nama Tugas</label>
+        <input type="text" name="nama" class="form-control" required>
     </div>
     <table class="table table-bordered">
         <thead>
