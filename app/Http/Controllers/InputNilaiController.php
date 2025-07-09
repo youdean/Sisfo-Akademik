@@ -127,7 +127,7 @@ class InputNilaiController extends Controller
         }
 
         $validated = $request->validate([
-            'nomor' => 'required|integer|min:1',
+            'nama' => 'required|string|max:255',
             'nilai.*' => 'nullable|integer|min:0|max:100',
         ]);
 
@@ -144,7 +144,7 @@ class InputNilaiController extends Controller
 
             \App\Models\NilaiTugas::updateOrCreate([
                 'penilaian_id' => $penilaian->id,
-                'nomor' => $validated['nomor'],
+                'nama' => $validated['nama'],
             ], [
                 'nilai' => $nilai,
             ]);
@@ -171,7 +171,7 @@ class InputNilaiController extends Controller
         $tugas = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $siswaIds) {
             $q->where('mapel_id', $mapel->id)
                 ->whereIn('siswa_id', $siswaIds);
-        })->get()->groupBy('nomor');
+        })->get()->groupBy('nama');
 
         return view('input_nilai.tugas_list', [
             'mapel' => $mapel,
@@ -181,7 +181,7 @@ class InputNilaiController extends Controller
         ]);
     }
 
-    public function tugasEditForm(MataPelajaran $mapel, $kelas, $nomor)
+    public function tugasEditForm(MataPelajaran $mapel, $kelas, $nama)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -198,7 +198,7 @@ class InputNilaiController extends Controller
             $nilaiTugas = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $s) {
                 $q->where('mapel_id', $mapel->id)
                     ->where('siswa_id', $s->id);
-            })->where('nomor', $nomor)->first();
+            })->where('nama', $nama)->first();
             $nilai[$s->id] = $nilaiTugas->nilai ?? null;
         }
 
@@ -206,12 +206,12 @@ class InputNilaiController extends Controller
             'mapel' => $mapel,
             'kelas' => $kelas,
             'siswa' => $siswa,
-            'nomor' => $nomor,
+            'nama' => $nama,
             'nilai' => $nilai,
         ]);
     }
 
-    public function tugasUpdate(Request $request, MataPelajaran $mapel, $kelas, $nomor)
+    public function tugasUpdate(Request $request, MataPelajaran $mapel, $kelas, $nama)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -235,14 +235,14 @@ class InputNilaiController extends Controller
 
             if ($nilai === null || $nilai === '') {
                 NilaiTugas::where('penilaian_id', $penilaian->id)
-                    ->where('nomor', $nomor)
+                    ->where('nama', $nama)
                     ->delete();
                 continue;
             }
 
             NilaiTugas::updateOrCreate([
                 'penilaian_id' => $penilaian->id,
-                'nomor' => $nomor,
+                'nama' => $nama,
             ], [
                 'nilai' => $nilai,
             ]);

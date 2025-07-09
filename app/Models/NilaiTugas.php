@@ -10,7 +10,7 @@ class NilaiTugas extends Model
     use HasFactory;
 
     protected $table = 'nilai_tugas';
-    protected $fillable = ['penilaian_id', 'nomor', 'nilai'];
+    protected $fillable = ['penilaian_id', 'nama', 'nilai'];
 
     public function penilaian()
     {

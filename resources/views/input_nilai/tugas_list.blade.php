@@ -8,11 +8,11 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
-@forelse($tugas as $nomor => $list)
+@forelse($tugas as $nama => $list)
 <div class="mb-3">
     <div class="d-flex align-items-center">
-        <h5 class="mb-0 flex-grow-1">Tugas Nomor {{ $nomor }}</h5>
-        <a href="{{ route('input-nilai.tugas.edit', [$mapel->id, $kelas, $nomor]) }}" class="btn btn-sm btn-warning me-2">Edit</a>
+        <h5 class="mb-0 flex-grow-1">Nama Tugas: {{ $nama }}</h5>
+        <a href="{{ route('input-nilai.tugas.edit', [$mapel->id, $kelas, $nama]) }}" class="btn btn-sm btn-warning me-2">Edit</a>
         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tugasModal{{ $loop->iteration }}">Lihat</button>
     </div>
 
@@ -20,7 +20,7 @@
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="tugasModalLabel{{ $loop->iteration }}">Tugas Nomor {{ $nomor }}</h5>
+                    <h5 class="modal-title" id="tugasModalLabel{{ $loop->iteration }}">Nama Tugas: {{ $nama }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-0">
