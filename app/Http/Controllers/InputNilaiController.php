@@ -264,4 +264,73 @@ class InputNilaiController extends Controller
         return redirect()->route('input-nilai.tugas.list', [$mapel->id, $kelas])
             ->with('success', 'Nilai tugas berhasil diperbarui');
     }
+
+    public function ptsPatForm(MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $siswa = Siswa::where('kelas', $kelas)->get();
+        $nilai = [];
+        foreach ($siswa as $s) {
+            $penilaian = Penilaian::where('siswa_id', $s->id)
+                ->where('mapel_id', $mapel->id)
+                ->where('semester', 1)
+                ->first();
+            $nilai[$s->id] = [
+                'pts' => $penilaian->pts ?? null,
+                'pat' => $penilaian->pat ?? null,
+            ];
+        }
+
+        return view('input_nilai.pts_pat', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+            'siswa' => $siswa,
+            'nilai' => $nilai,
+        ]);
+    }
+
+    public function ptsPatStore(Request $request, MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'pts.*' => 'nullable|integer|min:0|max:100',
+            'pat.*' => 'nullable|integer|min:0|max:100',
+        ]);
+
+        $pts = $request->input('pts', []);
+        $pat = $request->input('pat', []);
+
+        $siswaIds = array_unique(array_merge(array_keys($pts), array_keys($pat)));
+        foreach ($siswaIds as $siswaId) {
+            $penilaian = Penilaian::firstOrCreate([
+                'siswa_id' => $siswaId,
+                'mapel_id' => $mapel->id,
+                'semester' => 1,
+            ]);
+
+            $penilaian->update([
+                'pts' => $pts[$siswaId] !== null && $pts[$siswaId] !== '' ? $pts[$siswaId] : null,
+                'pat' => $pat[$siswaId] !== null && $pat[$siswaId] !== '' ? $pat[$siswaId] : null,
+            ]);
+        }
+
+        return redirect()->route('input-nilai.pts-pat.form', [$mapel->id, $kelas])
+            ->with('success', 'Nilai PTS dan PAT berhasil disimpan');
+    }
 }

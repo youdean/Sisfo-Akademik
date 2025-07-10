@@ -62,6 +62,9 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/input-nilai/{mapel}/{kelas}/tugas-list', [\App\Http\Controllers\InputNilaiController::class, 'tugasList'])->name('input-nilai.tugas.list');
     Route::get('/input-nilai/{mapel}/{kelas}/tugas/{nama}/edit', [\App\Http\Controllers\InputNilaiController::class, 'tugasEditForm'])->name('input-nilai.tugas.edit');
     Route::put('/input-nilai/{mapel}/{kelas}/tugas/{nama}', [\App\Http\Controllers\InputNilaiController::class, 'tugasUpdate'])->name('input-nilai.tugas.update');
+
+    Route::get('/input-nilai/{mapel}/{kelas}/pts-pat', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatForm'])->name('input-nilai.pts-pat.form');
+    Route::post('/input-nilai/{mapel}/{kelas}/pts-pat', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatStore'])->name('input-nilai.pts-pat.store');
 });
 
 // Profile dapat diakses oleh semua user yang login
