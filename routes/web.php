@@ -65,6 +65,7 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
 
     Route::get('/input-nilai/{mapel}/{kelas}/pts-pat', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatForm'])->name('input-nilai.pts-pat.form');
     Route::post('/input-nilai/{mapel}/{kelas}/pts-pat', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatStore'])->name('input-nilai.pts-pat.store');
+    Route::get('/input-nilai/{mapel}/{kelas}/pts-pat-nilai', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatList'])->name('input-nilai.pts-pat.list');
     Route::get('/input-nilai/{mapel}/{kelas}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsForm'])->name('input-nilai.pts.form');
     Route::post('/input-nilai/{mapel}/{kelas}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsStore'])->name('input-nilai.pts.store');
     Route::get('/input-nilai/{mapel}/{kelas}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patForm'])->name('input-nilai.pat.form');

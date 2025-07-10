@@ -453,4 +453,36 @@ class InputNilaiController extends Controller
         return redirect()->route('input-nilai.pat.form', [$mapel->id, $kelas])
             ->with('success', 'Nilai PAT berhasil disimpan');
     }
+
+    public function ptsPatList(MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $siswa = Siswa::where('kelas', $kelas)->get();
+        $nilai = [];
+        foreach ($siswa as $s) {
+            $penilaian = Penilaian::where('siswa_id', $s->id)
+                ->where('mapel_id', $mapel->id)
+                ->where('semester', 1)
+                ->first();
+            $nilai[$s->id] = [
+                'pts' => $penilaian->pts ?? null,
+                'pat' => $penilaian->pat ?? null,
+            ];
+        }
+
+        return view('input_nilai.pts_pat_list', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+            'siswa' => $siswa,
+            'nilai' => $nilai,
+        ]);
+    }
 }
