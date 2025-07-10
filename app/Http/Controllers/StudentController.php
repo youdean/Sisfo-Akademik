@@ -57,31 +57,4 @@ class StudentController extends Controller
         return redirect()->route('student.absensi')->with('success', 'Absensi berhasil dicatat');
     }
 
-    /**
-     * Show logged in student's attendance grade.
-     */
-    public function nilaiAbsensi()
-    {
-        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
-        $counts = $siswa->absensi()
-            ->selectRaw('status, count(*) as total')
-            ->groupBy('status')
-            ->pluck('total', 'status');
-
-        $hadir = $counts['Hadir'] ?? 0;
-        $izin = $counts['Izin'] ?? 0;
-        $sakit = $counts['Sakit'] ?? 0;
-        $alpha = $counts['Alpha'] ?? 0;
-        $total = $hadir + $izin + $sakit + $alpha;
-        $nilaiAbsensi = $total ? ($hadir / $total) * 100 : 0;
-
-        return view('siswa.nilai_absensi', [
-            'siswa' => $siswa,
-            'hadir' => $hadir,
-            'izin' => $izin,
-            'sakit' => $sakit,
-            'alpha' => $alpha,
-            'nilaiAbsensi' => $nilaiAbsensi,
-        ]);
-    }
 }
