@@ -174,11 +174,13 @@ class InputNilaiController extends Controller
         })->select('nama')->distinct()->orderBy('nama');
 
         $names = $query->paginate(10);
+        $names->getCollection()->transform(fn ($item) => $item->nama);
+        $nameValues = $names->items();
 
         $tugas = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $siswaIds) {
             $q->where('mapel_id', $mapel->id)
                 ->whereIn('siswa_id', $siswaIds);
-        })->whereIn('nama', $names->items())->get()->groupBy('nama');
+        })->whereIn('nama', $nameValues)->get()->groupBy('nama');
 
         return view('input_nilai.tugas_list', [
             'mapel' => $mapel,
