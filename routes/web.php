@@ -68,8 +68,14 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/input-nilai/{mapel}/{kelas}/pts-pat-nilai', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatList'])->name('input-nilai.pts-pat.list');
     Route::get('/input-nilai/{mapel}/{kelas}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsForm'])->name('input-nilai.pts.form');
     Route::post('/input-nilai/{mapel}/{kelas}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsStore'])->name('input-nilai.pts.store');
+    Route::get('/input-nilai/{mapel}/{kelas}/pts-nilai', [\App\Http\Controllers\InputNilaiController::class, 'ptsList'])->name('input-nilai.pts.list');
+    Route::get('/input-nilai/{mapel}/{kelas}/pts/edit', [\App\Http\Controllers\InputNilaiController::class, 'ptsEditForm'])->name('input-nilai.pts.edit');
+    Route::put('/input-nilai/{mapel}/{kelas}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsUpdate'])->name('input-nilai.pts.update');
     Route::get('/input-nilai/{mapel}/{kelas}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patForm'])->name('input-nilai.pat.form');
     Route::post('/input-nilai/{mapel}/{kelas}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patStore'])->name('input-nilai.pat.store');
+    Route::get('/input-nilai/{mapel}/{kelas}/pat-nilai', [\App\Http\Controllers\InputNilaiController::class, 'patList'])->name('input-nilai.pat.list');
+    Route::get('/input-nilai/{mapel}/{kelas}/pat/edit', [\App\Http\Controllers\InputNilaiController::class, 'patEditForm'])->name('input-nilai.pat.edit');
+    Route::put('/input-nilai/{mapel}/{kelas}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patUpdate'])->name('input-nilai.pat.update');
 });
 
 // Profile dapat diakses oleh semua user yang login
