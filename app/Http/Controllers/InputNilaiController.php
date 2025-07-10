@@ -454,6 +454,184 @@ class InputNilaiController extends Controller
             ->with('success', 'Nilai PAT berhasil disimpan');
     }
 
+    public function ptsList(MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $siswa = Siswa::where('kelas', $kelas)->get();
+        $nilai = [];
+        foreach ($siswa as $s) {
+            $penilaian = Penilaian::where('siswa_id', $s->id)
+                ->where('mapel_id', $mapel->id)
+                ->where('semester', 1)
+                ->first();
+            $nilai[$s->id] = $penilaian->pts ?? null;
+        }
+
+        return view('input_nilai.pts_list', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+            'siswa' => $siswa,
+            'nilai' => $nilai,
+        ]);
+    }
+
+    public function ptsEditForm(MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $siswa = Siswa::where('kelas', $kelas)->get();
+        $nilai = [];
+        foreach ($siswa as $s) {
+            $penilaian = Penilaian::where('siswa_id', $s->id)
+                ->where('mapel_id', $mapel->id)
+                ->where('semester', 1)
+                ->first();
+            $nilai[$s->id] = $penilaian->pts ?? null;
+        }
+
+        return view('input_nilai.pts_edit', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+            'siswa' => $siswa,
+            'nilai' => $nilai,
+        ]);
+    }
+
+    public function ptsUpdate(Request $request, MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'pts.*' => 'nullable|integer|min:0|max:100',
+        ]);
+
+        foreach ($request->input('pts', []) as $siswaId => $nilai) {
+            $penilaian = Penilaian::firstOrCreate([
+                'siswa_id' => $siswaId,
+                'mapel_id' => $mapel->id,
+                'semester' => 1,
+            ]);
+
+            $penilaian->update([
+                'pts' => $nilai !== null && $nilai !== '' ? $nilai : null,
+            ]);
+        }
+
+        return redirect()->route('input-nilai.pts.list', [$mapel->id, $kelas])
+            ->with('success', 'Nilai PTS berhasil diperbarui');
+    }
+
+    public function patList(MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $siswa = Siswa::where('kelas', $kelas)->get();
+        $nilai = [];
+        foreach ($siswa as $s) {
+            $penilaian = Penilaian::where('siswa_id', $s->id)
+                ->where('mapel_id', $mapel->id)
+                ->where('semester', 1)
+                ->first();
+            $nilai[$s->id] = $penilaian->pat ?? null;
+        }
+
+        return view('input_nilai.pat_list', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+            'siswa' => $siswa,
+            'nilai' => $nilai,
+        ]);
+    }
+
+    public function patEditForm(MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $siswa = Siswa::where('kelas', $kelas)->get();
+        $nilai = [];
+        foreach ($siswa as $s) {
+            $penilaian = Penilaian::where('siswa_id', $s->id)
+                ->where('mapel_id', $mapel->id)
+                ->where('semester', 1)
+                ->first();
+            $nilai[$s->id] = $penilaian->pat ?? null;
+        }
+
+        return view('input_nilai.pat_edit', [
+            'mapel' => $mapel,
+            'kelas' => $kelas,
+            'siswa' => $siswa,
+            'nilai' => $nilai,
+        ]);
+    }
+
+    public function patUpdate(Request $request, MataPelajaran $mapel, $kelas)
+    {
+        $guru = $this->guru();
+        $exists = Pengajaran::where('guru_id', $guru->id)
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas', $kelas)
+            ->exists();
+        if (!$exists) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'pat.*' => 'nullable|integer|min:0|max:100',
+        ]);
+
+        foreach ($request->input('pat', []) as $siswaId => $nilai) {
+            $penilaian = Penilaian::firstOrCreate([
+                'siswa_id' => $siswaId,
+                'mapel_id' => $mapel->id,
+                'semester' => 1,
+            ]);
+
+            $penilaian->update([
+                'pat' => $nilai !== null && $nilai !== '' ? $nilai : null,
+            ]);
+        }
+
+        return redirect()->route('input-nilai.pat.list', [$mapel->id, $kelas])
+            ->with('success', 'Nilai PAT berhasil diperbarui');
+    }
+
     public function ptsPatList(MataPelajaran $mapel, $kelas)
     {
         $guru = $this->guru();
