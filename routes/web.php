@@ -8,7 +8,6 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\TahunAjaranController;
-use App\Http\Controllers\NilaiAbsensiController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\StudentController;
@@ -42,7 +41,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 // Fitur yang dapat diakses oleh admin dan guru
 Route::middleware(['auth', 'role:admin,guru'])->group(function () {
-    Route::get('/nilai-absensi', [\App\Http\Controllers\NilaiAbsensiController::class, 'index'])->name('nilai.absensi');
     Route::resource('absensi', AbsensiController::class)->except('show');
     Route::resource('penilaian', PenilaianController::class)->only('index','create','store','destroy');
     Route::get('/absensi/pelajaran', [AbsensiController::class, 'pelajaran'])->name('absensi.pelajaran');
@@ -79,7 +77,6 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/saya/absensi', [StudentController::class, 'absensi'])->name('student.absensi');
     Route::get('/saya/absen', [StudentController::class, 'absenForm'])->name('student.absen.form');
     Route::post('/saya/absen', [StudentController::class, 'absen'])->name('student.absen');
-    Route::get('/saya/nilai-absensi', [StudentController::class, 'nilaiAbsensi'])->name('student.nilai.absensi');
 });
 
 require __DIR__.'/auth.php';
