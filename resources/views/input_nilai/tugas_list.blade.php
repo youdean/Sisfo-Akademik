@@ -22,7 +22,7 @@
                     <td>{{ $nama }}</td>
                     <td>
                         <a href="{{ route('input-nilai.tugas.edit', [$mapel->id, $kelas, $nama]) }}" class="btn btn-sm btn-warning me-2">Edit</a>
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tugasModal{{ $index + 1 }}">Lihat</button>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tugasModal{{ $namaTugas->firstItem() + $index }}">Lihat</button>
                     </td>
                 </tr>
             @endforeach
@@ -30,11 +30,11 @@
     </table>
 
     @foreach($namaTugas as $index => $nama)
-        <div class="modal fade" id="tugasModal{{ $index + 1 }}" tabindex="-1" aria-labelledby="tugasModalLabel{{ $index + 1 }}" aria-hidden="true">
+        <div class="modal fade" id="tugasModal{{ $namaTugas->firstItem() + $index }}" tabindex="-1" aria-labelledby="tugasModalLabel{{ $namaTugas->firstItem() + $index }}" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="tugasModalLabel{{ $index + 1 }}">Nama Tugas: {{ $nama }}</h5>
+                        <h5 class="modal-title" id="tugasModalLabel{{ $namaTugas->firstItem() + $index }}">Nama Tugas: {{ $nama }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-0">

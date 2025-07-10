@@ -171,7 +171,10 @@ class InputNilaiController extends Controller
         $query = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $siswaIds) {
             $q->where('mapel_id', $mapel->id)
                 ->whereIn('siswa_id', $siswaIds);
-        })->select('nama')->distinct()->orderBy('nama');
+        })
+            ->select('nama')
+            ->groupBy('nama')
+            ->orderBy('nama');
 
         $names = $query->paginate(10);
         $names->getCollection()->transform(fn ($item) => $item->nama);
