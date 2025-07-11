@@ -21,10 +21,10 @@
         <a href="{{ route('input-nilai.pat.list', [$mapel->id, $kelas]) }}">Lihat Nilai PAT</a>
     </li>
     <li class="list-group-item">
-        <a href="{{ route('input-nilai.pts.form', [$mapel->id, $kelas]) }}">Masukkan Nilai PTS</a>
+        <a href="{{ route('input-nilai.pts.list', [$mapel->id, $kelas]) }}">Masukkan Nilai PTS</a>
     </li>
     <li class="list-group-item">
-        <a href="{{ route('input-nilai.pat.form', [$mapel->id, $kelas]) }}">Masukkan Nilai PAT</a>
+        <a href="{{ route('input-nilai.pat.list', [$mapel->id, $kelas]) }}">Masukkan Nilai PAT</a>
     </li>
 </ul>
 <a href="{{ route('input-nilai.kelas', $mapel->id) }}" class="btn btn-secondary mt-3">Kembali</a>
