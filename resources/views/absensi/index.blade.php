@@ -7,8 +7,10 @@
     <h1>Daftar Absensi</h1>
     <div>
         <a href="{{ route('absensi.rekap') }}" class="btn btn-secondary me-2">Rekap Bulanan</a>
-        @if(Auth::user()->role === 'guru')
+        @if(in_array(Auth::user()->role, ['guru', 'admin']))
             <a href="{{ route('absensi.pelajaran') }}" class="btn btn-info me-2">Input Per Mapel</a>
+        @endif
+        @if(Auth::user()->role === 'guru')
             <a href="{{ route('absensi.create') }}" class="btn btn-primary">+ Tambah Absensi</a>
         @endif
     </div>

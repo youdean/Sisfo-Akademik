@@ -169,7 +169,7 @@ public function update(Request $request, Absensi $absensi)
     }
 
 
-    public function pelajaran()
+    public function pelajaran(Request $request)
     {
         $hariMap = [
             'Monday' => 'Senin',
@@ -180,7 +180,35 @@ public function update(Request $request, Absensi $absensi)
             'Saturday' => 'Sabtu',
             'Sunday' => 'Minggu',
         ];
-        $hari = $hariMap[date('l')];
+
+        $tanggal = $request->input('tanggal', date('Y-m-d'));
+        $hari = $request->input('hari', $hariMap[date('l', strtotime($tanggal))]);
+
+        if (Auth::user()->role === 'admin') {
+            $jadwalQuery = Jadwal::with(['mapel', 'kelas'])->where('hari', $hari);
+
+            if ($request->filled('kelas_id')) {
+                $jadwalQuery->where('kelas_id', $request->kelas_id);
+            }
+
+            if ($request->filled('mapel_id')) {
+                $jadwalQuery->where('mapel_id', $request->mapel_id);
+            }
+
+            $jadwal = $jadwalQuery->get();
+            $kelasOptions = Kelas::all();
+            $mapelOptions = MataPelajaran::all();
+            $hariOptions = array_values($hariMap);
+
+            return view('absensi.pelajaran', compact(
+                'jadwal',
+                'hari',
+                'tanggal',
+                'kelasOptions',
+                'mapelOptions',
+                'hariOptions'
+            ));
+        }
 
         $guru = Guru::where('user_id', Auth::id())->first();
         if (!$guru) {
@@ -192,7 +220,7 @@ public function update(Request $request, Absensi $absensi)
                         ->get();
         }
 
-        return view('absensi.pelajaran', compact('jadwal', 'hari'));
+        return view('absensi.pelajaran', compact('jadwal', 'hari', 'tanggal'));
     }
 
     public function pelajaranForm(Request $request, Jadwal $jadwal)
