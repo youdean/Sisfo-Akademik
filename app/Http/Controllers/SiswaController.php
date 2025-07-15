@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Siswa;
 use App\Models\Kelas;
+use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
 use App\Exports\SiswaExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -12,7 +13,7 @@ class SiswaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Siswa::query();
+        $query = Siswa::with('tahunAjaran');
 
         $search = $request->input('search');
         if ($search) {
@@ -31,7 +32,8 @@ class SiswaController extends Controller
 public function create()
 {
     $kelas = Kelas::all();
-    return view('siswa.create', compact('kelas'));
+    $tahun_ajaran = TahunAjaran::all();
+    return view('siswa.create', compact('kelas', 'tahun_ajaran'));
 }
 
 public function store(Request $request)
@@ -42,7 +44,8 @@ public function store(Request $request)
         'kelas' => 'required',
         'tempat_lahir' => 'required',
         'jenis_kelamin' => 'required',
-        'tanggal_lahir' => 'required|date'
+        'tanggal_lahir' => 'required|date',
+        'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id'
     ]));
 
     return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambahkan');
@@ -51,7 +54,8 @@ public function store(Request $request)
 public function edit(Siswa $siswa)
 {
     $kelas = Kelas::all();
-    return view('siswa.edit', compact('siswa', 'kelas'));
+    $tahun_ajaran = TahunAjaran::all();
+    return view('siswa.edit', compact('siswa', 'kelas', 'tahun_ajaran'));
 }
 
 public function update(Request $request, Siswa $siswa)
@@ -62,7 +66,8 @@ public function update(Request $request, Siswa $siswa)
         'kelas' => 'required',
         'tempat_lahir' => 'required',
         'jenis_kelamin' => 'required',
-        'tanggal_lahir' => 'required|date'
+        'tanggal_lahir' => 'required|date',
+        'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id'
     ]));
 
     return redirect()->route('siswa.index')->with('success', 'Siswa berhasil diupdate');

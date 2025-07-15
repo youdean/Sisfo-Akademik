@@ -7,6 +7,7 @@ use App\Models\NilaiTugas;
 use App\Models\Pengajaran;
 use App\Models\Penilaian;
 use App\Models\Siswa;
+use App\Models\TahunAjaran;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -26,6 +27,11 @@ class TugasPaginationTest extends TestCase
             'tanggal_lahir' => '1990-01-01',
             'user_id' => $user->id,
         ]);
+        $ta = TahunAjaran::create([
+            'nama' => '2024/2025',
+            'start_date' => '2024-07-01',
+            'end_date' => '2025-06-30',
+        ]);
         $mapel = MataPelajaran::create(['nama' => 'Matematika']);
         Pengajaran::create(['guru_id' => $guru->id, 'mapel_id' => $mapel->id, 'kelas' => '1A']);
         $siswa = [];
@@ -34,6 +40,7 @@ class TugasPaginationTest extends TestCase
                 'nama' => 'Siswa '.$i,
                 'nisn' => str_pad((string)$i, 10, '0', STR_PAD_LEFT),
                 'kelas' => '1A',
+                'tahun_ajaran_id' => $ta->id,
                 'tempat_lahir' => 'Kota',
                 'jenis_kelamin' => 'L',
                 'tanggal_lahir' => '2000-01-01',
