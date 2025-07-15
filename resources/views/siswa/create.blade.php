@@ -36,6 +36,16 @@
         <x-input-error :messages="$errors->get('kelas')" class="mt-1" />
     </div>
     <div class="mb-3">
+        <label>Tahun Ajaran</label>
+        <select name="tahun_ajaran_id" class="form-control" required>
+            <option value="">-- Pilih Tahun Ajaran --</option>
+            @foreach ($tahun_ajaran as $ta)
+                <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
+            @endforeach
+        </select>
+        <x-input-error :messages="$errors->get('tahun_ajaran_id')" class="mt-1" />
+    </div>
+    <div class="mb-3">
         <label>Tempat Lahir</label>
         <input type="text" name="tempat_lahir" class="form-control" required>
         <x-input-error :messages="$errors->get('tempat_lahir')" class="mt-1" />

@@ -69,6 +69,7 @@ class AdminPelajaranAbsensiTest extends TestCase
             'nama' => 'Siswa 1',
             'nisn' => '1',
             'kelas' => $kelas->nama,
+            'tahun_ajaran_id' => $kelas->tahun_ajaran_id,
             'tempat_lahir' => 'Kota',
             'jenis_kelamin' => 'L',
             'tanggal_lahir' => '2000-01-01',

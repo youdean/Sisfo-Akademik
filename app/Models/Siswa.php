@@ -17,7 +17,8 @@ class Siswa extends Model
         'tempat_lahir',
         'jenis_kelamin',
         'tanggal_lahir',
-        'user_id'
+        'user_id',
+        'tahun_ajaran_id'
     ];
 
     public function user()
@@ -31,5 +32,10 @@ class Siswa extends Model
     public function absensi()
     {
         return $this->hasMany(Absensi::class);
+    }
+
+    public function tahunAjaran()
+    {
+        return $this->belongsTo(TahunAjaran::class, 'tahun_ajaran_id');
     }
 }
