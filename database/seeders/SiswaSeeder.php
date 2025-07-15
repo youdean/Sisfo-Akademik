@@ -14,6 +14,7 @@ class SiswaSeeder extends Seeder
         $faker = Faker::create('id_ID');
         $data = [];
         $siswaUser = User::where('email', 'siswa@demo.com')->first();
+        $tahunAjaranId = DB::table('tahun_ajaran')->value('id');
         $kelasList = [
             'X',
             'XI IPA', 'XI IPS',
@@ -29,6 +30,7 @@ class SiswaSeeder extends Seeder
                 'jenis_kelamin' => $faker->randomElement(['L', 'P']),
                 'tanggal_lahir' => $faker->dateTimeBetween('2008-01-01', '2008-12-31')->format('Y-m-d'),
                 'user_id' => $i === 1 && $siswaUser ? $siswaUser->id : null,
+                'tahun_ajaran_id' => $tahunAjaranId,
             ];
         }
         DB::table('siswa')->insert($data);
