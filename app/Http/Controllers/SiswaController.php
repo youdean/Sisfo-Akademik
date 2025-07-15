@@ -24,9 +24,15 @@ class SiswaController extends Controller
             });
         }
 
-        $siswa = $query->paginate(10)->withQueryString();
+        $tahunAjaranId = $request->input('tahun_ajaran_id');
+        if ($tahunAjaranId) {
+            $query->where('tahun_ajaran_id', $tahunAjaranId);
+        }
 
-        return view('siswa.index', compact('siswa', 'search'));
+        $siswa = $query->paginate(10)->withQueryString();
+        $tahun_ajaran = TahunAjaran::all();
+
+        return view('siswa.index', compact('siswa', 'search', 'tahun_ajaran', 'tahunAjaranId'));
     }
 
 public function create()

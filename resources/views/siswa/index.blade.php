@@ -7,9 +7,19 @@
     <h1>Daftar Siswa</h1>
     <a href="{{ route('siswa.create') }}" class="btn btn-primary">+ Tambah Siswa</a>
 </div>
-<form method="GET" class="mb-3 d-flex" action="{{ route('siswa.index') }}">
-    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari siswa..." class="form-control me-2">
-    <button class="btn btn-outline-secondary" type="submit">Search</button>
+<form method="GET" class="mb-3 d-flex align-items-end" action="{{ route('siswa.index') }}">
+    <div class="me-2">
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari siswa..." class="form-control">
+    </div>
+    <div class="me-2">
+        <select name="tahun_ajaran_id" class="form-select">
+            <option value="">-- Semua Tahun Ajaran --</option>
+            @foreach($tahun_ajaran as $ta)
+                <option value="{{ $ta->id }}" {{ request('tahun_ajaran_id') == $ta->id ? 'selected' : '' }}>{{ $ta->nama }}</option>
+            @endforeach
+        </select>
+    </div>
+    <button class="btn btn-outline-secondary" type="submit">Filter</button>
 </form>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
