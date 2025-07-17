@@ -20,6 +20,7 @@
             <th>ID</th>
             <th>NUPTK</th>
             <th>Nama</th>
+            <th>Email</th>
             <th>Tempat Lahir</th>
             <th>Jenis Kelamin</th>
             <th>Tanggal Lahir</th>
@@ -32,6 +33,7 @@
             <td>{{ $g->id }}</td>
             <td>{{ $g->nuptk }}</td>
             <td>{{ $g->nama }}</td>
+            <td>{{ $g->email }}</td>
             <td>{{ $g->tempat_lahir }}</td>
             <td>{{ $g->jenis_kelamin }}</td>
             <td>{{ $g->tanggal_lahir }}</td>
