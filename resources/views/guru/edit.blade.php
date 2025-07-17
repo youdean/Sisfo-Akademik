@@ -26,6 +26,11 @@
         <x-input-error :messages="$errors->get('nama')" class="mt-1" />
     </div>
     <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" value="{{ $guru->email }}">
+        <x-input-error :messages="$errors->get('email')" class="mt-1" />
+    </div>
+    <div class="mb-3">
         <label>Tempat Lahir</label>
         <input type="text" name="tempat_lahir" class="form-control" value="{{ $guru->tempat_lahir }}" required>
         <x-input-error :messages="$errors->get('tempat_lahir')" class="mt-1" />
