@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Siswa;
 use App\Models\Absensi;
 use App\Models\MataPelajaran;
+use App\Models\Jadwal;
+use App\Models\Kelas;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -55,6 +57,29 @@ class StudentController extends Controller
         );
 
         return redirect()->route('student.absensi')->with('success', 'Absensi berhasil dicatat');
+    }
+
+    /**
+     * Display schedule for the logged in student.
+     */
+    public function jadwal()
+    {
+        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
+        $kelas = Kelas::where('nama', $siswa->kelas)->first();
+
+        if ($kelas) {
+            $jadwal = Jadwal::with(['mapel', 'guru'])
+                ->where('kelas_id', $kelas->id)
+                ->get()
+                ->groupBy('hari');
+        } else {
+            $jadwal = collect();
+        }
+
+        return view('siswa.jadwal', [
+            'siswa' => $siswa,
+            'jadwal' => $jadwal,
+        ]);
     }
 
 }
