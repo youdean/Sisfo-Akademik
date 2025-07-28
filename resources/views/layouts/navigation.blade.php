@@ -50,7 +50,7 @@
                         @if(Auth::user()->role === 'siswa')
                             <x-dropdown-link :href="route('student.profile')">Data Diri</x-dropdown-link>
                             <x-dropdown-link :href="route('student.absensi')">Absensi Saya</x-dropdown-link>
-                            <x-dropdown-link :href="route('student.absen.form')">Ambil Absen</x-dropdown-link>
+                            <x-dropdown-link :href="route('student.jadwal')">Ambil Absen</x-dropdown-link>
                         @endif
                     </x-slot>
                 </x-dropdown>

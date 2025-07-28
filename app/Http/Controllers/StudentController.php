@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Siswa;
 use App\Models\Absensi;
-use App\Models\MataPelajaran;
 use App\Models\Jadwal;
 use App\Models\Kelas;
 use Illuminate\Support\Facades\Auth;
@@ -31,33 +30,6 @@ class StudentController extends Controller
         return view('siswa.absensi', compact('siswa', 'absensi'));
     }
 
-    /**
-     * Form for student to record today's attendance.
-     */
-    public function absenForm()
-    {
-        $mapel = MataPelajaran::all();
-        return view('siswa.absen', compact('mapel'));
-    }
-
-    /**
-     * Store student's attendance for today.
-     */
-    public function absen(Request $request)
-    {
-        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
-        $data = $request->validate([
-            'mapel_id' => 'required|exists:mata_pelajaran,id',
-            'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
-        ]);
-
-        Absensi::updateOrCreate(
-            ['siswa_id' => $siswa->id, 'mapel_id' => $data['mapel_id'], 'tanggal' => date('Y-m-d')],
-            ['status' => $data['status']]
-        );
-
-        return redirect()->route('student.absensi')->with('success', 'Absensi berhasil dicatat');
-    }
 
     /**
      * Display schedule for the logged in student.
@@ -80,6 +52,43 @@ class StudentController extends Controller
             'siswa' => $siswa,
             'jadwal' => $jadwal,
         ]);
+    }
+
+    /**
+     * Form for taking attendance from schedule.
+     */
+    public function jadwalAbsenForm(Jadwal $jadwal)
+    {
+        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
+        $kelas = Kelas::where('nama', $siswa->kelas)->first();
+        if (!$kelas || $jadwal->kelas_id !== $kelas->id) {
+            abort(403);
+        }
+
+        return view('siswa.absen_jadwal', compact('jadwal'));
+    }
+
+    /**
+     * Store attendance from schedule.
+     */
+    public function jadwalAbsen(Request $request, Jadwal $jadwal)
+    {
+        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
+        $kelas = Kelas::where('nama', $siswa->kelas)->first();
+        if (!$kelas || $jadwal->kelas_id !== $kelas->id) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
+        ]);
+
+        Absensi::updateOrCreate(
+            ['siswa_id' => $siswa->id, 'mapel_id' => $jadwal->mapel_id, 'tanggal' => date('Y-m-d')],
+            ['status' => $data['status']]
+        );
+
+        return redirect()->route('student.jadwal')->with('success', 'Absensi berhasil dicatat');
     }
 
 }
