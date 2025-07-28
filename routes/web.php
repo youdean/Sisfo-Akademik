@@ -91,6 +91,7 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/saya/absensi', [StudentController::class, 'absensi'])->name('student.absensi');
     Route::get('/saya/absen', [StudentController::class, 'absenForm'])->name('student.absen.form');
     Route::post('/saya/absen', [StudentController::class, 'absen'])->name('student.absen');
+    Route::get('/saya/jadwal', [StudentController::class, 'jadwal'])->name('student.jadwal');
 });
 
 require __DIR__.'/auth.php';
