@@ -3,7 +3,7 @@
 @section('title', 'Edit Nilai Tugas')
 
 @section('content')
-<h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }}</h1>
+<h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }} Semester {{ $semester }}</h1>
 @if($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
@@ -13,7 +13,7 @@
         </ul>
     </div>
 @endif
-<form method="POST" action="{{ route('input-nilai.tugas.update', [$mapel->id, $kelas, $nama]) }}">
+<form method="POST" action="{{ route('input-nilai.tugas.update', [$mapel->id, $kelas, $semester, $nama]) }}">
     @csrf
     @method('PUT')
     <div class="mb-3">
@@ -37,6 +37,6 @@
         </tbody>
     </table>
     <button class="btn btn-success">Simpan</button>
-    <a href="{{ route('input-nilai.tugas.list', [$mapel->id, $kelas]) }}" class="btn btn-secondary">Batal</a>
+    <a href="{{ route('input-nilai.tugas.list', [$mapel->id, $kelas, $semester]) }}" class="btn btn-secondary">Batal</a>
 </form>
 @endsection

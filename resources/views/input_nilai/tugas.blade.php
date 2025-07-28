@@ -3,7 +3,7 @@
 @section('title', 'Input Nilai Tugas')
 
 @section('content')
-<h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }}</h1>
+<h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }} Semester {{ $semester }}</h1>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
@@ -16,7 +16,7 @@
         </ul>
     </div>
 @endif
-<form method="POST" action="{{ route('input-nilai.tugas.store', [$mapel->id, $kelas]) }}">
+<form method="POST" action="{{ route('input-nilai.tugas.store', [$mapel->id, $kelas, $semester]) }}">
     @csrf
     <div class="mb-3">
         <label>Nama Tugas</label>
@@ -39,6 +39,6 @@
         </tbody>
     </table>
     <button class="btn btn-success">Simpan</button>
-    <a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas]) }}" class="btn btn-secondary">Batal</a>
+    <a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas, 'semester' => $semester]) }}" class="btn btn-secondary">Batal</a>
 </form>
 @endsection

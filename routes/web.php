@@ -57,25 +57,25 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/input-nilai/{mapel}', [\App\Http\Controllers\InputNilaiController::class, 'kelas'])->name('input-nilai.kelas');
     Route::get('/input-nilai/{mapel}/{kelas}', [\App\Http\Controllers\InputNilaiController::class, 'opsi'])->name('input-nilai.opsi');
     Route::get('/input-nilai/{mapel}/{kelas}/absensi', [\App\Http\Controllers\InputNilaiController::class, 'absensi'])->name('input-nilai.nilai');
-    Route::get('/input-nilai/{mapel}/{kelas}/tugas', [\App\Http\Controllers\InputNilaiController::class, 'tugasForm'])->name('input-nilai.tugas.form');
-    Route::post('/input-nilai/{mapel}/{kelas}/tugas', [\App\Http\Controllers\InputNilaiController::class, 'tugasStore'])->name('input-nilai.tugas.store');
-    Route::get('/input-nilai/{mapel}/{kelas}/tugas-list', [\App\Http\Controllers\InputNilaiController::class, 'tugasList'])->name('input-nilai.tugas.list');
-    Route::get('/input-nilai/{mapel}/{kelas}/tugas/{nama}/edit', [\App\Http\Controllers\InputNilaiController::class, 'tugasEditForm'])->name('input-nilai.tugas.edit');
-    Route::put('/input-nilai/{mapel}/{kelas}/tugas/{nama}', [\App\Http\Controllers\InputNilaiController::class, 'tugasUpdate'])->name('input-nilai.tugas.update');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/tugas', [\App\Http\Controllers\InputNilaiController::class, 'tugasForm'])->name('input-nilai.tugas.form');
+    Route::post('/input-nilai/{mapel}/{kelas}/{semester}/tugas', [\App\Http\Controllers\InputNilaiController::class, 'tugasStore'])->name('input-nilai.tugas.store');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/tugas-list', [\App\Http\Controllers\InputNilaiController::class, 'tugasList'])->name('input-nilai.tugas.list');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/tugas/{nama}/edit', [\App\Http\Controllers\InputNilaiController::class, 'tugasEditForm'])->name('input-nilai.tugas.edit');
+    Route::put('/input-nilai/{mapel}/{kelas}/{semester}/tugas/{nama}', [\App\Http\Controllers\InputNilaiController::class, 'tugasUpdate'])->name('input-nilai.tugas.update');
 
-    Route::get('/input-nilai/{mapel}/{kelas}/pts-pat', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatForm'])->name('input-nilai.pts-pat.form');
-    Route::post('/input-nilai/{mapel}/{kelas}/pts-pat', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatStore'])->name('input-nilai.pts-pat.store');
-    Route::get('/input-nilai/{mapel}/{kelas}/pts-pat-nilai', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatList'])->name('input-nilai.pts-pat.list');
-    Route::get('/input-nilai/{mapel}/{kelas}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsForm'])->name('input-nilai.pts.form');
-    Route::post('/input-nilai/{mapel}/{kelas}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsStore'])->name('input-nilai.pts.store');
-    Route::get('/input-nilai/{mapel}/{kelas}/pts-nilai', [\App\Http\Controllers\InputNilaiController::class, 'ptsList'])->name('input-nilai.pts.list');
-    Route::get('/input-nilai/{mapel}/{kelas}/pts/edit', [\App\Http\Controllers\InputNilaiController::class, 'ptsEditForm'])->name('input-nilai.pts.edit');
-    Route::put('/input-nilai/{mapel}/{kelas}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsUpdate'])->name('input-nilai.pts.update');
-    Route::get('/input-nilai/{mapel}/{kelas}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patForm'])->name('input-nilai.pat.form');
-    Route::post('/input-nilai/{mapel}/{kelas}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patStore'])->name('input-nilai.pat.store');
-    Route::get('/input-nilai/{mapel}/{kelas}/pat-nilai', [\App\Http\Controllers\InputNilaiController::class, 'patList'])->name('input-nilai.pat.list');
-    Route::get('/input-nilai/{mapel}/{kelas}/pat/edit', [\App\Http\Controllers\InputNilaiController::class, 'patEditForm'])->name('input-nilai.pat.edit');
-    Route::put('/input-nilai/{mapel}/{kelas}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patUpdate'])->name('input-nilai.pat.update');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/pts-pat', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatForm'])->name('input-nilai.pts-pat.form');
+    Route::post('/input-nilai/{mapel}/{kelas}/{semester}/pts-pat', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatStore'])->name('input-nilai.pts-pat.store');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/pts-pat-nilai', [\App\Http\Controllers\InputNilaiController::class, 'ptsPatList'])->name('input-nilai.pts-pat.list');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsForm'])->name('input-nilai.pts.form');
+    Route::post('/input-nilai/{mapel}/{kelas}/{semester}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsStore'])->name('input-nilai.pts.store');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/pts-nilai', [\App\Http\Controllers\InputNilaiController::class, 'ptsList'])->name('input-nilai.pts.list');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/pts/edit', [\App\Http\Controllers\InputNilaiController::class, 'ptsEditForm'])->name('input-nilai.pts.edit');
+    Route::put('/input-nilai/{mapel}/{kelas}/{semester}/pts', [\App\Http\Controllers\InputNilaiController::class, 'ptsUpdate'])->name('input-nilai.pts.update');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patForm'])->name('input-nilai.pat.form');
+    Route::post('/input-nilai/{mapel}/{kelas}/{semester}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patStore'])->name('input-nilai.pat.store');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/pat-nilai', [\App\Http\Controllers\InputNilaiController::class, 'patList'])->name('input-nilai.pat.list');
+    Route::get('/input-nilai/{mapel}/{kelas}/{semester}/pat/edit', [\App\Http\Controllers\InputNilaiController::class, 'patEditForm'])->name('input-nilai.pat.edit');
+    Route::put('/input-nilai/{mapel}/{kelas}/{semester}/pat', [\App\Http\Controllers\InputNilaiController::class, 'patUpdate'])->name('input-nilai.pat.update');
 });
 
 // Profile dapat diakses oleh semua user yang login
