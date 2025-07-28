@@ -48,7 +48,7 @@
     <input type="hidden" name="siswa_id" id="siswa-id">
     <datalist id="guru-list">
         @foreach ($guru as $g)
-            <option value="{{ $g->nuptk }} - {{ $g->nama }}" data-id="{{ $g->id }}" data-nuptk="{{ $g->nuptk }}" data-tanggallahir="{{ $g->tanggal_lahir }}"></option>
+            <option value="{{ $g->nuptk }} - {{ $g->nama }}" data-id="{{ $g->id }}" data-nuptk="{{ $g->nuptk }}" data-email="{{ $g->email }}" data-tanggallahir="{{ $g->tanggal_lahir }}"></option>
         @endforeach
     </datalist>
     <datalist id="siswa-list">
@@ -73,7 +73,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const id = type === 'guru' ? opt.dataset.nuptk : opt.dataset.nisn;
         const tgl = opt.dataset.tanggallahir || '';
         if (id) {
-            emailInput.value = id + '@muhammadiyah.ac.id';
+            if (type === 'guru') {
+                emailInput.value = opt.dataset.email || id + '@muhammadiyah.ac.id';
+            } else {
+                emailInput.value = id + '@muhammadiyah.ac.id';
+            }
             if (tgl) {
                 const parts = tgl.split('-');
                 passInput.value = parts[0].slice(2) + parts[1] + parts[2];
