@@ -3,10 +3,10 @@
 @section('title', 'Nilai PTS & PAT')
 
 @section('content')
-<h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }}</h1>
+<h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }} Semester {{ $semester }}</h1>
 <div class="mb-3">
-    <a href="{{ route('input-nilai.pts.edit', [$mapel->id, $kelas]) }}" class="btn btn-sm btn-primary me-2">Edit PTS</a>
-    <a href="{{ route('input-nilai.pat.edit', [$mapel->id, $kelas]) }}" class="btn btn-sm btn-primary">Edit PAT</a>
+    <a href="{{ route('input-nilai.pts.edit', [$mapel->id, $kelas, $semester]) }}" class="btn btn-sm btn-primary me-2">Edit PTS</a>
+    <a href="{{ route('input-nilai.pat.edit', [$mapel->id, $kelas, $semester]) }}" class="btn btn-sm btn-primary">Edit PAT</a>
 </div>
 <table class="table table-bordered">
     <thead>
@@ -26,5 +26,5 @@
         @endforeach
     </tbody>
 </table>
-<a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas]) }}" class="btn btn-secondary mt-3">Kembali</a>
+<a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas, 'semester' => $semester]) }}" class="btn btn-secondary mt-3">Kembali</a>
 @endsection

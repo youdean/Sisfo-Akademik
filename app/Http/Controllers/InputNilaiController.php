@@ -43,7 +43,7 @@ class InputNilaiController extends Controller
         ]);
     }
 
-    public function opsi(MataPelajaran $mapel, $kelas)
+    public function opsi(Request $request, MataPelajaran $mapel, $kelas)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -57,6 +57,7 @@ class InputNilaiController extends Controller
         return view('input_nilai.opsi', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $request->query('semester', 1),
         ]);
     }
 
@@ -95,7 +96,7 @@ class InputNilaiController extends Controller
         ]);
     }
 
-    public function tugasForm(MataPelajaran $mapel, $kelas)
+    public function tugasForm(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -111,11 +112,12 @@ class InputNilaiController extends Controller
         return view('input_nilai.tugas', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
         ]);
     }
 
-    public function tugasStore(Request $request, MataPelajaran $mapel, $kelas)
+    public function tugasStore(Request $request, MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -139,7 +141,7 @@ class InputNilaiController extends Controller
             $penilaian = Penilaian::firstOrCreate([
                 'siswa_id' => $siswaId,
                 'mapel_id' => $mapel->id,
-                'semester' => 1,
+                'semester' => $semester,
             ]);
 
             \App\Models\NilaiTugas::updateOrCreate([
@@ -150,11 +152,11 @@ class InputNilaiController extends Controller
             ]);
         }
 
-        return redirect()->route('input-nilai.tugas.list', [$mapel->id, $kelas])
+        return redirect()->route('input-nilai.tugas.list', [$mapel->id, $kelas, $semester])
             ->with('success', 'Nilai tugas berhasil disimpan');
     }
 
-    public function tugasList(MataPelajaran $mapel, $kelas)
+    public function tugasList(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -168,8 +170,9 @@ class InputNilaiController extends Controller
         $siswa = Siswa::where('kelas', $kelas)->get();
         $siswaIds = $siswa->pluck('id');
 
-        $query = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $siswaIds) {
+        $query = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $siswaIds, $semester) {
             $q->where('mapel_id', $mapel->id)
+                ->where('semester', $semester)
                 ->whereIn('siswa_id', $siswaIds);
         })
             ->select('nama')
@@ -180,21 +183,23 @@ class InputNilaiController extends Controller
         $names->getCollection()->transform(fn ($item) => $item->nama);
         $nameValues = $names->items();
 
-        $tugas = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $siswaIds) {
+        $tugas = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $siswaIds, $semester) {
             $q->where('mapel_id', $mapel->id)
+                ->where('semester', $semester)
                 ->whereIn('siswa_id', $siswaIds);
         })->whereIn('nama', $nameValues)->get()->groupBy('nama');
 
         return view('input_nilai.tugas_list', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'namaTugas' => $names,
             'tugas' => $tugas,
         ]);
     }
 
-    public function tugasEditForm(MataPelajaran $mapel, $kelas, $nama)
+    public function tugasEditForm(MataPelajaran $mapel, $kelas, $semester, $nama)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -208,8 +213,9 @@ class InputNilaiController extends Controller
         $siswa = Siswa::where('kelas', $kelas)->get();
         $nilai = [];
         foreach ($siswa as $s) {
-            $nilaiTugas = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $s) {
+            $nilaiTugas = NilaiTugas::whereHas('penilaian', function ($q) use ($mapel, $s, $semester) {
                 $q->where('mapel_id', $mapel->id)
+                    ->where('semester', $semester)
                     ->where('siswa_id', $s->id);
             })->where('nama', $nama)->first();
             $nilai[$s->id] = $nilaiTugas->nilai ?? null;
@@ -218,13 +224,14 @@ class InputNilaiController extends Controller
         return view('input_nilai.tugas_edit', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'nama' => $nama,
             'nilai' => $nilai,
         ]);
     }
 
-    public function tugasUpdate(Request $request, MataPelajaran $mapel, $kelas, $nama)
+    public function tugasUpdate(Request $request, MataPelajaran $mapel, $kelas, $semester, $nama)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -243,7 +250,7 @@ class InputNilaiController extends Controller
             $penilaian = Penilaian::firstOrCreate([
                 'siswa_id' => $siswaId,
                 'mapel_id' => $mapel->id,
-                'semester' => 1,
+                'semester' => $semester,
             ]);
 
             if ($nilai === null || $nilai === '') {
@@ -261,11 +268,11 @@ class InputNilaiController extends Controller
             ]);
         }
 
-        return redirect()->route('input-nilai.tugas.list', [$mapel->id, $kelas])
+        return redirect()->route('input-nilai.tugas.list', [$mapel->id, $kelas, $semester])
             ->with('success', 'Nilai tugas berhasil diperbarui');
     }
 
-    public function ptsPatForm(MataPelajaran $mapel, $kelas)
+    public function ptsPatForm(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -281,7 +288,7 @@ class InputNilaiController extends Controller
         foreach ($siswa as $s) {
             $penilaian = Penilaian::where('siswa_id', $s->id)
                 ->where('mapel_id', $mapel->id)
-                ->where('semester', 1)
+                ->where('semester', $semester)
                 ->first();
             $nilai[$s->id] = [
                 'pts' => $penilaian->pts ?? null,
@@ -292,12 +299,13 @@ class InputNilaiController extends Controller
         return view('input_nilai.pts_pat', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'nilai' => $nilai,
         ]);
     }
 
-    public function ptsPatStore(Request $request, MataPelajaran $mapel, $kelas)
+    public function ptsPatStore(Request $request, MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -321,7 +329,7 @@ class InputNilaiController extends Controller
             $penilaian = Penilaian::firstOrCreate([
                 'siswa_id' => $siswaId,
                 'mapel_id' => $mapel->id,
-                'semester' => 1,
+                'semester' => $semester,
             ]);
 
             $penilaian->update([
@@ -330,11 +338,11 @@ class InputNilaiController extends Controller
             ]);
         }
 
-        return redirect()->route('input-nilai.pts-pat.form', [$mapel->id, $kelas])
+        return redirect()->route('input-nilai.pts-pat.form', [$mapel->id, $kelas, $semester])
             ->with('success', 'Nilai PTS dan PAT berhasil disimpan');
     }
 
-    public function ptsForm(MataPelajaran $mapel, $kelas)
+    public function ptsForm(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -350,7 +358,7 @@ class InputNilaiController extends Controller
         foreach ($siswa as $s) {
             $penilaian = Penilaian::where('siswa_id', $s->id)
                 ->where('mapel_id', $mapel->id)
-                ->where('semester', 1)
+                ->where('semester', $semester)
                 ->first();
             $nilai[$s->id] = $penilaian->pts ?? null;
         }
@@ -358,12 +366,13 @@ class InputNilaiController extends Controller
         return view('input_nilai.pts', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'nilai' => $nilai,
         ]);
     }
 
-    public function ptsStore(Request $request, MataPelajaran $mapel, $kelas)
+    public function ptsStore(Request $request, MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -382,7 +391,7 @@ class InputNilaiController extends Controller
             $penilaian = Penilaian::firstOrCreate([
                 'siswa_id' => $siswaId,
                 'mapel_id' => $mapel->id,
-                'semester' => 1,
+                'semester' => $semester,
             ]);
 
             $penilaian->update([
@@ -390,11 +399,11 @@ class InputNilaiController extends Controller
             ]);
         }
 
-        return redirect()->route('input-nilai.pts.form', [$mapel->id, $kelas])
+        return redirect()->route('input-nilai.pts.form', [$mapel->id, $kelas, $semester])
             ->with('success', 'Nilai PTS berhasil disimpan');
     }
 
-    public function patForm(MataPelajaran $mapel, $kelas)
+    public function patForm(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -410,7 +419,7 @@ class InputNilaiController extends Controller
         foreach ($siswa as $s) {
             $penilaian = Penilaian::where('siswa_id', $s->id)
                 ->where('mapel_id', $mapel->id)
-                ->where('semester', 1)
+                ->where('semester', $semester)
                 ->first();
             $nilai[$s->id] = $penilaian->pat ?? null;
         }
@@ -418,12 +427,13 @@ class InputNilaiController extends Controller
         return view('input_nilai.pat', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'nilai' => $nilai,
         ]);
     }
 
-    public function patStore(Request $request, MataPelajaran $mapel, $kelas)
+    public function patStore(Request $request, MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -442,7 +452,7 @@ class InputNilaiController extends Controller
             $penilaian = Penilaian::firstOrCreate([
                 'siswa_id' => $siswaId,
                 'mapel_id' => $mapel->id,
-                'semester' => 1,
+                'semester' => $semester,
             ]);
 
             $penilaian->update([
@@ -450,11 +460,11 @@ class InputNilaiController extends Controller
             ]);
         }
 
-        return redirect()->route('input-nilai.pat.form', [$mapel->id, $kelas])
+        return redirect()->route('input-nilai.pat.form', [$mapel->id, $kelas, $semester])
             ->with('success', 'Nilai PAT berhasil disimpan');
     }
 
-    public function ptsList(MataPelajaran $mapel, $kelas)
+    public function ptsList(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -470,7 +480,7 @@ class InputNilaiController extends Controller
         foreach ($siswa as $s) {
             $penilaian = Penilaian::where('siswa_id', $s->id)
                 ->where('mapel_id', $mapel->id)
-                ->where('semester', 1)
+                ->where('semester', $semester)
                 ->first();
             $nilai[$s->id] = $penilaian->pts ?? null;
         }
@@ -478,12 +488,13 @@ class InputNilaiController extends Controller
         return view('input_nilai.pts_list', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'nilai' => $nilai,
         ]);
     }
 
-    public function ptsEditForm(MataPelajaran $mapel, $kelas)
+    public function ptsEditForm(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -499,7 +510,7 @@ class InputNilaiController extends Controller
         foreach ($siswa as $s) {
             $penilaian = Penilaian::where('siswa_id', $s->id)
                 ->where('mapel_id', $mapel->id)
-                ->where('semester', 1)
+                ->where('semester', $semester)
                 ->first();
             $nilai[$s->id] = $penilaian->pts ?? null;
         }
@@ -507,12 +518,13 @@ class InputNilaiController extends Controller
         return view('input_nilai.pts_edit', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'nilai' => $nilai,
         ]);
     }
 
-    public function ptsUpdate(Request $request, MataPelajaran $mapel, $kelas)
+    public function ptsUpdate(Request $request, MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -531,7 +543,7 @@ class InputNilaiController extends Controller
             $penilaian = Penilaian::firstOrCreate([
                 'siswa_id' => $siswaId,
                 'mapel_id' => $mapel->id,
-                'semester' => 1,
+                'semester' => $semester,
             ]);
 
             $penilaian->update([
@@ -539,11 +551,11 @@ class InputNilaiController extends Controller
             ]);
         }
 
-        return redirect()->route('input-nilai.pts.list', [$mapel->id, $kelas])
+        return redirect()->route('input-nilai.pts.list', [$mapel->id, $kelas, $semester])
             ->with('success', 'Nilai PTS berhasil diperbarui');
     }
 
-    public function patList(MataPelajaran $mapel, $kelas)
+    public function patList(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -559,7 +571,7 @@ class InputNilaiController extends Controller
         foreach ($siswa as $s) {
             $penilaian = Penilaian::where('siswa_id', $s->id)
                 ->where('mapel_id', $mapel->id)
-                ->where('semester', 1)
+                ->where('semester', $semester)
                 ->first();
             $nilai[$s->id] = $penilaian->pat ?? null;
         }
@@ -567,12 +579,13 @@ class InputNilaiController extends Controller
         return view('input_nilai.pat_list', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'nilai' => $nilai,
         ]);
     }
 
-    public function patEditForm(MataPelajaran $mapel, $kelas)
+    public function patEditForm(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -588,7 +601,7 @@ class InputNilaiController extends Controller
         foreach ($siswa as $s) {
             $penilaian = Penilaian::where('siswa_id', $s->id)
                 ->where('mapel_id', $mapel->id)
-                ->where('semester', 1)
+                ->where('semester', $semester)
                 ->first();
             $nilai[$s->id] = $penilaian->pat ?? null;
         }
@@ -596,12 +609,13 @@ class InputNilaiController extends Controller
         return view('input_nilai.pat_edit', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'nilai' => $nilai,
         ]);
     }
 
-    public function patUpdate(Request $request, MataPelajaran $mapel, $kelas)
+    public function patUpdate(Request $request, MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -620,7 +634,7 @@ class InputNilaiController extends Controller
             $penilaian = Penilaian::firstOrCreate([
                 'siswa_id' => $siswaId,
                 'mapel_id' => $mapel->id,
-                'semester' => 1,
+                'semester' => $semester,
             ]);
 
             $penilaian->update([
@@ -628,11 +642,11 @@ class InputNilaiController extends Controller
             ]);
         }
 
-        return redirect()->route('input-nilai.pat.list', [$mapel->id, $kelas])
+        return redirect()->route('input-nilai.pat.list', [$mapel->id, $kelas, $semester])
             ->with('success', 'Nilai PAT berhasil diperbarui');
     }
 
-    public function ptsPatList(MataPelajaran $mapel, $kelas)
+    public function ptsPatList(MataPelajaran $mapel, $kelas, $semester)
     {
         $guru = $this->guru();
         $exists = Pengajaran::where('guru_id', $guru->id)
@@ -648,7 +662,7 @@ class InputNilaiController extends Controller
         foreach ($siswa as $s) {
             $penilaian = Penilaian::where('siswa_id', $s->id)
                 ->where('mapel_id', $mapel->id)
-                ->where('semester', 1)
+                ->where('semester', $semester)
                 ->first();
             $nilai[$s->id] = [
                 'pts' => $penilaian->pts ?? null,
@@ -659,6 +673,7 @@ class InputNilaiController extends Controller
         return view('input_nilai.pts_pat_list', [
             'mapel' => $mapel,
             'kelas' => $kelas,
+            'semester' => $semester,
             'siswa' => $siswa,
             'nilai' => $nilai,
         ]);

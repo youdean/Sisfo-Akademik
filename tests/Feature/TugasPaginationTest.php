@@ -61,11 +61,11 @@ class TugasPaginationTest extends TestCase
             }
         }
 
-        $response = $this->actingAs($user)->get("/input-nilai/{$mapel->id}/1A/tugas-list");
+        $response = $this->actingAs($user)->get("/input-nilai/{$mapel->id}/1A/1/tugas-list");
         $response->assertOk();
         $response->assertSee('?page=2');
 
-        $responsePage2 = $this->actingAs($user)->get("/input-nilai/{$mapel->id}/1A/tugas-list?page=2");
+        $responsePage2 = $this->actingAs($user)->get("/input-nilai/{$mapel->id}/1A/1/tugas-list?page=2");
         $responsePage2->assertOk();
     }
 }

@@ -3,8 +3,8 @@
 @section('title', 'Masukkan Nilai Tugas')
 
 @section('content')
-<h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }}</h1>
-<a href="{{ route('input-nilai.tugas.form', [$mapel->id, $kelas]) }}" class="btn btn-primary mb-3">Input Nilai Tugas</a>
+<h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }} Semester {{ $semester }}</h1>
+<a href="{{ route('input-nilai.tugas.form', [$mapel->id, $kelas, $semester]) }}" class="btn btn-primary mb-3">Input Nilai Tugas</a>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
@@ -21,7 +21,7 @@
                 <tr>
                     <td>{{ $nama }}</td>
                     <td>
-                        <a href="{{ route('input-nilai.tugas.edit', [$mapel->id, $kelas, $nama]) }}" class="btn btn-sm btn-warning me-2">Edit</a>
+                        <a href="{{ route('input-nilai.tugas.edit', [$mapel->id, $kelas, $semester, $nama]) }}" class="btn btn-sm btn-warning me-2">Edit</a>
                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tugasModal{{ $namaTugas->firstItem() + $index }}">Lihat</button>
                     </td>
                 </tr>
@@ -65,5 +65,5 @@
     <p>Tidak ada nilai tugas.</p>
 @endif
 
-<a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas]) }}" class="btn btn-secondary mt-3">Kembali</a>
+<a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas, 'semester' => $semester]) }}" class="btn btn-secondary mt-3">Kembali</a>
 @endsection

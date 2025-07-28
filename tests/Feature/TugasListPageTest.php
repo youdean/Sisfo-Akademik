@@ -49,7 +49,7 @@ class TugasListPageTest extends TestCase
             'nilai' => 80,
         ]);
 
-        $response = $this->actingAs($user)->get("/input-nilai/{$mapel->id}/1A/tugas-list");
+        $response = $this->actingAs($user)->get("/input-nilai/{$mapel->id}/1A/1/tugas-list");
 
         $response->assertOk();
         $response->assertSee('Nama Tugas: Ulangan Harian');
