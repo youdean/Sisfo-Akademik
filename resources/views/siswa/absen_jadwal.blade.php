@@ -3,7 +3,7 @@
 @section('title', 'Ambil Absen')
 
 @section('content')
-<h1>Ambil Absen Hari Ini</h1>
+<h1>Ambil Absen {{ $jadwal->mapel->nama }}</h1>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
@@ -16,18 +16,8 @@
         </ul>
     </div>
 @endif
-<form action="{{ route('student.absen') }}" method="POST">
+<form action="{{ route('student.jadwal.absen', $jadwal->id) }}" method="POST">
     @csrf
-    <div class="mb-3">
-        <label>Mata Pelajaran</label>
-        <select name="mapel_id" class="form-control" required>
-            <option value="">-- Pilih Mapel --</option>
-            @foreach($mapel as $m)
-                <option value="{{ $m->id }}">{{ $m->nama }}</option>
-            @endforeach
-        </select>
-        <x-input-error :messages="$errors->get('mapel_id')" class="mt-1" />
-    </div>
     <div class="mb-3">
         <label>Status</label>
         <select name="status" class="form-control" required>
@@ -40,6 +30,6 @@
         <x-input-error :messages="$errors->get('status')" class="mt-1" />
     </div>
     <button class="btn btn-success">Simpan</button>
-    <a href="{{ route('student.absensi') }}" class="btn btn-secondary">Kembali</a>
+    <a href="{{ route('student.jadwal') }}" class="btn btn-secondary">Kembali</a>
 </form>
 @endsection
