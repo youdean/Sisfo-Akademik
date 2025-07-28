@@ -14,16 +14,19 @@ class GuruSeeder extends Seeder
         $faker = Faker::create('id_ID');
         $data = [];
         $guruUser = User::where('email', 'guru@demo.com')->first();
+
         for ($i = 1; $i <= 20; $i++) {
             $data[] = [
                 'nuptk' => str_pad($i, 18, '0', STR_PAD_LEFT),
                 'nama' => $i === 1 ? 'Guru' : $faker->unique()->name,
+                'email' => $i === 1 ? 'guru@demo.com' : $faker->unique()->safeEmail(),
                 'tempat_lahir' => $faker->city,
                 'jenis_kelamin' => $faker->randomElement(['L', 'P']),
                 'tanggal_lahir' => $faker->dateTimeBetween('1980-01-01', '1995-12-31')->format('Y-m-d'),
                 'user_id' => $i === 1 && $guruUser ? $guruUser->id : null,
             ];
         }
+
         DB::table('guru')->insert($data);
     }
 }
