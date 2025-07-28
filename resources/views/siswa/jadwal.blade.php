@@ -13,7 +13,6 @@
                 <th>Mapel</th>
                 <th>Guru</th>
                 <th>Jam</th>
-                <th>Absen</th>
             </tr>
         </thead>
         <tbody>
@@ -22,10 +21,9 @@
                 <td>{{ $j->mapel->nama }}</td>
                 <td>{{ $j->guru->nama }}</td>
                 <td>{{ $j->jam_mulai }} - {{ $j->jam_selesai }}</td>
-                <td><a href="{{ route('student.jadwal.absen.form', $j->id) }}" class="btn btn-sm btn-primary">Ambil Absen</a></td>
             </tr>
             @empty
-            <tr><td colspan="4" class="text-center">Tidak ada jadwal</td></tr>
+            <tr><td colspan="3" class="text-center">Tidak ada jadwal</td></tr>
             @endforelse
         </tbody>
     </table>
