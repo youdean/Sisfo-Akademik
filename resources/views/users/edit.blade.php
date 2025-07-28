@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const tgl = opt.dataset.tanggallahir || '';
         if (id) {
             if (type === 'guru') {
-                emailInput.value = opt.dataset.email || id + '@muhammadiyah.ac.id';
+                emailInput.value = opt.dataset.email || '';
             } else {
                 emailInput.value = id + '@muhammadiyah.ac.id';
             }
