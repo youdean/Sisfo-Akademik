@@ -49,7 +49,6 @@
                         @endif
                         @if(Auth::user()->role === 'siswa')
                             <x-dropdown-link :href="route('student.profile')">Data Diri</x-dropdown-link>
-                            <x-dropdown-link :href="route('student.absensi')">Absensi Saya</x-dropdown-link>
                             <x-dropdown-link :href="route('student.nilai')">Nilai Saya</x-dropdown-link>
                         @endif
                     </x-slot>

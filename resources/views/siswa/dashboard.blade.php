@@ -82,7 +82,6 @@
 
 <div class="mb-4">
     <a href="{{ route('student.profile') }}" class="btn btn-primary me-2">Profil</a>
-    <a href="{{ route('student.absensi') }}" class="btn btn-secondary me-2">Absensi</a>
     <a href="{{ route('student.nilai') }}" class="btn btn-success me-2">Nilai</a>
     <a href="{{ route('student.jadwal') }}" class="btn btn-info">Jadwal</a>
 </div>
