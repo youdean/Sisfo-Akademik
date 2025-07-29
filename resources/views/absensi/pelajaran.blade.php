@@ -3,7 +3,13 @@
 @section('title', 'Jadwal Pelajaran')
 
 @section('content')
-<h1 class="mb-3">Jadwal Hari {{ $hari }}</h1>
+<h1 class="mb-3">
+    @if(Auth::user()->role === 'guru')
+        Jadwal Minggu Ini
+    @else
+        Jadwal Hari {{ $hari }}
+    @endif
+</h1>
 
 @if(Auth::user()->role === 'admin')
 <form method="GET" class="row g-2 mb-3">
@@ -39,14 +45,30 @@
 </form>
 @endif
 
+@if(Auth::user()->role === 'admin')
 <ul class="list-group">
     @forelse($jadwal as $j)
         <li class="list-group-item d-flex justify-content-between align-items-center">
             <span>{{ $j->kelas->nama }} - {{ $j->mapel->nama }} ({{ $j->jam_mulai }} - {{ $j->jam_selesai }})</span>
-            <a href="{{ route('absensi.pelajaran.form', [$j->id, 'tanggal' => $tanggal]) }}" class="btn btn-sm btn-primary">Isi Absen</a>
+            <a href="{{ route('absensi.pelajaran.form', $j->id) }}" class="btn btn-sm btn-primary">Isi Absen</a>
         </li>
     @empty
-        <li class="list-group-item text-center">Tidak ada jadwal{{ Auth::user()->role === 'guru' ? ' hari ini' : '' }}</li>
+        <li class="list-group-item text-center">Tidak ada jadwal</li>
     @endforelse
 </ul>
+@else
+    @foreach($days as $day)
+        <h4 class="mt-4">{{ $day }}</h4>
+        <ul class="list-group mb-3">
+            @forelse($jadwal->get($day, collect()) as $j)
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ $j->kelas->nama }} - {{ $j->mapel->nama }} ({{ $j->jam_mulai }} - {{ $j->jam_selesai }})</span>
+                    <a href="{{ route('absensi.pelajaran.form', $j->id) }}" class="btn btn-sm btn-primary">Isi Absen</a>
+                </li>
+            @empty
+                <li class="list-group-item text-center">Tidak ada jadwal</li>
+            @endforelse
+        </ul>
+    @endforeach
+@endif
 @endsection
