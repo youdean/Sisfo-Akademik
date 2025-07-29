@@ -6,6 +6,7 @@ use App\Models\Siswa;
 use App\Models\Absensi;
 use App\Models\Jadwal;
 use App\Models\Kelas;
+use App\Models\Penilaian;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,19 @@ class StudentController extends Controller
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $absensi = $siswa->absensi()->with('mapel')->get();
         return view('siswa.absensi', compact('siswa', 'absensi'));
+    }
+
+    /**
+     * Show logged in student's scores.
+     */
+    public function nilai()
+    {
+        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
+        $penilaian = Penilaian::with('mapel', 'tugas')
+            ->where('siswa_id', $siswa->id)
+            ->get();
+
+        return view('siswa.nilai', compact('siswa', 'penilaian'));
     }
 
 
