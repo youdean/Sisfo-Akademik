@@ -16,6 +16,25 @@
         </ul>
     </div>
 @endif
+@if($riwayat->count())
+    <h4 class="mt-4">Riwayat Absen</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Tanggal</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($riwayat as $r)
+            <tr>
+                <td>{{ $r->tanggal }}</td>
+                <td>{{ $r->status }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+@endif
 <form action="{{ route('student.jadwal.absen', $jadwal->id) }}" method="POST">
     @csrf
     <div class="mb-3">
