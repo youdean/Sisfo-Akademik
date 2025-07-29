@@ -65,7 +65,12 @@ class StudentController extends Controller
             abort(403);
         }
 
-        return view('siswa.absen_jadwal', compact('jadwal'));
+        $riwayat = Absensi::where('siswa_id', $siswa->id)
+            ->where('mapel_id', $jadwal->mapel_id)
+            ->orderBy('tanggal', 'desc')
+            ->get();
+
+        return view('siswa.absen_jadwal', compact('jadwal', 'riwayat'));
     }
 
     /**
