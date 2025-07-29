@@ -42,6 +42,7 @@
                     @if(Auth::user()->role === 'siswa')
                         <li><a href="{{ route('student.profile') }}" class="dropdown-item"><i class="bi bi-person me-2"></i>Data Diri</a></li>
                         <li><a href="{{ route('student.absensi') }}" class="dropdown-item"><i class="bi bi-person-check me-2"></i>Absensi Saya</a></li>
+                        <li><a href="{{ route('student.nilai') }}" class="dropdown-item"><i class="bi bi-clipboard-data me-2"></i>Nilai Saya</a></li>
                         <li><a href="{{ route('student.jadwal') }}" class="dropdown-item"><i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran</a></li>
                     @endif
                 </ul>
