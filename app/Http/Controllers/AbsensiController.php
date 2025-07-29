@@ -215,12 +215,19 @@ public function update(Request $request, Absensi $absensi)
             $jadwal = collect();
         } else {
             $jadwal = Jadwal::with(['mapel', 'kelas'])
-                        ->where('guru_id', $guru->id)
-                        ->where('hari', $hari)
-                        ->get();
+                ->where('guru_id', $guru->id)
+                ->orderByRaw("CASE hari WHEN 'Senin' THEN 1 WHEN 'Selasa' THEN 2 WHEN 'Rabu' THEN 3 WHEN 'Kamis' THEN 4 WHEN 'Jumat' THEN 5 WHEN 'Sabtu' THEN 6 ELSE 7 END")
+                ->orderBy('jam_mulai')
+                ->get()
+                ->groupBy('hari');
         }
 
-        return view('absensi.pelajaran', compact('jadwal', 'hari', 'tanggal'));
+        $days = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+
+        return view('absensi.pelajaran', [
+            'jadwal' => $jadwal,
+            'days' => $days,
+        ]);
     }
 
     public function pelajaranForm(Request $request, Jadwal $jadwal)
