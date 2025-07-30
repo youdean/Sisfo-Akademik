@@ -33,9 +33,9 @@ class AbsensiController extends Controller
 
     public function index(Request $request)
     {
-        if (Auth::user()?->role === 'guru') {
-            return redirect()->route('absensi.pelajaran');
-        }
+        // Previously teachers were redirected to the input-per-mapel page.
+        // The redirect is removed so that teachers can also view the absensi
+        // index page like admins.
         $query = Absensi::with('siswa')->whereHas('siswa', function ($q) {
             $q->whereIn('kelas', $this->kelasGuru());
         });
