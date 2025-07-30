@@ -14,12 +14,12 @@
     <body class="bg-light" style="background: linear-gradient(to right, #f8f9fa, #e2e2f2);">
         <div class="container py-5">
             <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-4">
-                    <a href="/">
-                        <x-application-logo class="" />
-                    </a>
-                </div>
                 <div class="col-md-6">
+                    <div class="text-center mb-4">
+                        <a href="/">
+                            <x-application-logo class="" />
+                        </a>
+                    </div>
                     <div class="card shadow-sm">
                         <div class="card-body">
                             {{ $slot }}
