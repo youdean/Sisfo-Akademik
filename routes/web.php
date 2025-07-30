@@ -16,9 +16,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PengajaranController;
 use App\Http\Controllers\JadwalController;
 
-// Landing page
+// Landing page - redirect to login
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 // Custom dashboard (redirect setelah login)
