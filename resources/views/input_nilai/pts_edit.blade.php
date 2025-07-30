@@ -16,7 +16,8 @@
 <form method="POST" action="{{ route('input-nilai.pts.update', [$mapel->id, $kelas, $semester]) }}">
     @csrf
     @method('PUT')
-    <table class="table table-bordered">
+    <div class="table-responsive">
+<table class="table table-bordered">
         <thead>
             <tr>
                 <th>Nama Siswa</th>
@@ -32,6 +33,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('input-nilai.pts.list', [$mapel->id, $kelas, $semester]) }}" class="btn btn-secondary">Batal</a>
 </form>

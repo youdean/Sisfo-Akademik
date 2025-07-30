@@ -25,6 +25,7 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 <a href="{{ route('siswa.export') }}" class="btn btn-success mb-3">Export Semua Siswa (Excel)</a>
+<div class="table-responsive">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -61,5 +62,6 @@
         @endforeach
     </tbody>
 </table>
+</div>
 {{ $siswa->links('pagination::bootstrap-5') }}
 @endsection

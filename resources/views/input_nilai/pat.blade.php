@@ -18,7 +18,8 @@
 @endif
 <form method="POST" action="{{ route('input-nilai.pat.store', [$mapel->id, $kelas, $semester]) }}">
     @csrf
-    <table class="table table-bordered">
+    <div class="table-responsive">
+<table class="table table-bordered">
         <thead>
             <tr>
                 <th>Nama Siswa</th>
@@ -34,6 +35,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas, 'semester' => $semester]) }}" class="btn btn-secondary">Batal</a>
 </form>

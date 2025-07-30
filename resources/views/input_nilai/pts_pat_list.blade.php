@@ -8,6 +8,7 @@
     <a href="{{ route('input-nilai.pts.edit', [$mapel->id, $kelas, $semester]) }}" class="btn btn-sm btn-primary me-2">Edit PTS</a>
     <a href="{{ route('input-nilai.pat.edit', [$mapel->id, $kelas, $semester]) }}" class="btn btn-sm btn-primary">Edit PAT</a>
 </div>
+<div class="table-responsive">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -26,5 +27,6 @@
         @endforeach
     </tbody>
 </table>
+</div>
 <a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas, 'semester' => $semester]) }}" class="btn btn-secondary mt-3">Kembali</a>
 @endsection

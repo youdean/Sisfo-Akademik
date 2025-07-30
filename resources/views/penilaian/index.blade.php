@@ -5,6 +5,7 @@
 @section('content')
 <h1>Data Penilaian</h1>
 <a href="{{ route('penilaian.create') }}" class="btn btn-primary mb-3">Tambah</a>
+<div class="table-responsive">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -40,5 +41,6 @@
         @endforeach
     </tbody>
 </table>
+</div>
 {{ $penilaian->links('pagination::bootstrap-5') }}
 @endsection

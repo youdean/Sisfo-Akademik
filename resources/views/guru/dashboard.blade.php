@@ -10,7 +10,8 @@
     @if($jadwalHariIni->isEmpty())
         <p>Tidak ada jadwal mengajar hari ini.</p>
     @else
-        <table class="table table-bordered">
+        <div class="table-responsive">
+<table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Jam</th>
@@ -28,12 +29,14 @@
                 @endforeach
             </tbody>
         </table>
+</div>
     @endif
 </div>
 
 <div class="mb-4">
     <h4>Kelas &amp; Mapel Diampu</h4>
-    <table class="table table-bordered">
+    <div class="table-responsive">
+<table class="table table-bordered">
         <thead>
             <tr>
                 <th>Kelas</th>
@@ -49,6 +52,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
 </div>
 
 <div class="mb-4">

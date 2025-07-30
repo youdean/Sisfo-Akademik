@@ -25,7 +25,8 @@
 <form action="{{ route('absensi.pelajaran.store', $jadwal->id) }}" method="POST">
     @csrf
     <input type="hidden" name="tanggal" value="{{ $tanggal }}">
-    <table class="table table-bordered">
+    <div class="table-responsive">
+<table class="table table-bordered">
         <thead>
             <tr>
                 <th>Nama</th>
@@ -47,6 +48,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
     <button class="btn btn-success">Simpan</button>
 </form>
 @endsection
