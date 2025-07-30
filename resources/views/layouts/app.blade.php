@@ -21,7 +21,7 @@
 
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="offcanvas offcanvas-start offcanvas-lg text-bg-primary flex-shrink-0 show" tabindex="-1" id="sidebar" style="width:250px;">
+        <div class="offcanvas offcanvas-start offcanvas-lg text-bg-primary flex-shrink-0 show" tabindex="-1" id="sidebar" style="width:250px;" data-bs-scroll="true" data-bs-backdrop="false">
             <div class="offcanvas-header d-lg-none">
                 <h5 class="offcanvas-title" id="sidebarLabel">Sisfo Akademik</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
