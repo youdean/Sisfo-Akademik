@@ -9,15 +9,30 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body class="bg-light" style="background: linear-gradient(to right, #f8f9fa, #e2e2f2);">
+    <!-- Mobile topbar with toggle -->
+    <nav class="navbar navbar-dark bg-primary d-lg-none">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a href="{{ route('dashboard') }}" class="navbar-brand ms-2">Sisfo Akademik</a>
+        </div>
+    </nav>
+
     <div class="d-flex">
         <!-- Sidebar -->
-        <nav class="flex-shrink-0 p-3 bg-primary text-white" style="width:250px;min-height:100vh;">
-            <a href="{{ route('dashboard') }}" class="d-flex align-items-center mb-3 mb-md-0 text-white text-decoration-none">
-                <span class="fs-5 fw-semibold">Sisfo Akademik</span>
-            </a>
-            <hr>
-            @auth
-            <ul class="nav nav-pills flex-column mb-auto">
+        <div class="offcanvas offcanvas-start offcanvas-lg text-bg-primary flex-shrink-0" tabindex="-1" id="sidebar" style="width:250px;">
+            <div class="offcanvas-header d-lg-none">
+                <h5 class="offcanvas-title" id="sidebarLabel">Sisfo Akademik</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body p-3">
+                <a href="{{ route('dashboard') }}" class="d-none d-lg-flex align-items-center mb-3 mb-md-0 text-white text-decoration-none">
+                    <span class="fs-5 fw-semibold">Sisfo Akademik</span>
+                </a>
+                <hr class="d-none d-lg-block">
+                @auth
+                <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link text-white {{ request()->routeIs('dashboard') ? 'active bg-light text-primary' : '' }}">
                         <i class="bi bi-speedometer2 me-2"></i>Dashboard
@@ -61,7 +76,7 @@
                 @endif
             </div>
             @endauth
-        </nav>
+        </div>
         <!-- Main content -->
         <div class="flex-grow-1 p-4">
             @yield('content')
