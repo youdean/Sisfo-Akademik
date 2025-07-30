@@ -5,7 +5,7 @@
 @section('content')
 <h1 class="mb-4">Dashboard</h1>
 <div class="row mb-4">
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <div class="card text-white bg-primary mb-3">
             <div class="card-body">
                 <h4 class="card-title">{{ $totalSiswa }}</h4>
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <div class="card text-white bg-success mb-3">
             <div class="card-body">
                 <h4 class="card-title">{{ $totalGuru }}</h4>
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <div class="card text-white bg-warning mb-3">
             <div class="card-body">
                 <h4 class="card-title">{{ $totalMapel }}</h4>
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <div class="card text-white bg-info mb-3">
             <div class="card-body">
                 <h4 class="card-title">{{ $absensiHariIni }}</h4>
@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <div class="card text-white bg-secondary mb-3">
             <div class="card-body">
                 <h4 class="card-title">{{ $totalKelas }}</h4>
@@ -48,7 +48,7 @@
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-8 offset-md-2">
+    <div class="col-12 col-md-8 offset-md-2">
         <canvas id="absensiChart"></canvas>
     </div>
 </div>
