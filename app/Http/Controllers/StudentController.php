@@ -9,6 +9,7 @@ use App\Models\Kelas;
 use App\Models\Penilaian;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class StudentController extends Controller
 {
@@ -79,6 +80,14 @@ class StudentController extends Controller
             abort(403);
         }
 
+        $now = Carbon::now();
+        $hari = $now->locale('id')->isoFormat('dddd');
+        $time = $now->format('H:i');
+
+        if ($hari !== $jadwal->hari || $time < $jadwal->jam_mulai || $time > $jadwal->jam_selesai) {
+            abort(403);
+        }
+
         $riwayat = Absensi::where('siswa_id', $siswa->id)
             ->where('mapel_id', $jadwal->mapel_id)
             ->orderBy('tanggal', 'desc')
@@ -95,6 +104,14 @@ class StudentController extends Controller
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $kelas = Kelas::where('nama', $siswa->kelas)->first();
         if (!$kelas || $jadwal->kelas_id !== $kelas->id) {
+            abort(403);
+        }
+
+        $now = Carbon::now();
+        $hari = $now->locale('id')->isoFormat('dddd');
+        $time = $now->format('H:i');
+
+        if ($hari !== $jadwal->hari || $time < $jadwal->jam_mulai || $time > $jadwal->jam_selesai) {
             abort(403);
         }
 
