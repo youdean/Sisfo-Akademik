@@ -9,6 +9,7 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Jadwal;
 use App\Models\TahunAjaran;
+use Carbon\Carbon;
 use App\Models\Absensi;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,6 +20,8 @@ class StudentScheduleAbsensiListTest extends TestCase
 
     public function test_absen_form_shows_previous_records(): void
     {
+        Carbon::setTestNow('2024-07-01 07:30:00');
+
         $user = User::factory()->create(['role' => 'siswa']);
         $guru = Guru::create([
             'nuptk' => '1',

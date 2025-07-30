@@ -26,17 +26,19 @@
             @forelse($jadwal->get($day, collect()) as $j)
             @php
                 $jadwalIndex = $dayMap[$j->hari] ?? 7;
-                $isFuture = $jadwalIndex > $currentDayIndex || ($jadwalIndex == $currentDayIndex && $j->jam_mulai > $currentTime);
+                $isActive = $jadwalIndex == $currentDayIndex &&
+                           $currentTime >= $j->jam_mulai &&
+                           $currentTime <= $j->jam_selesai;
             @endphp
             <tr>
                 <td>{{ $j->mapel->nama }}</td>
                 <td>{{ $j->guru->nama }}</td>
                 <td>{{ $j->jam_mulai }} - {{ $j->jam_selesai }}</td>
                 <td>
-                    @if($isFuture)
-                        <button class="btn btn-sm btn-primary" disabled>Ambil Absen</button>
-                    @else
+                    @if($isActive)
                         <a href="{{ route('student.jadwal.absen.form', $j->id) }}" class="btn btn-sm btn-primary">Ambil Absen</a>
+                    @else
+                        <button class="btn btn-sm btn-primary" disabled>Ambil Absen</button>
                     @endif
                 </td>
             </tr>
