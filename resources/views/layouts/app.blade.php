@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Aplikasi Sekolah')</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Gunakan tema Minty dari Bootswatch untuk tampilan lebih segar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/minty/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
-<body>
+<body class="bg-light" style="background: linear-gradient(to right, #f8f9fa, #e2e2f2);">
     <!-- Navbar di sini -->
-    <nav class="navbar navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-dark bg-primary bg-gradient mb-4">
         <div class="container">
             <a class="navbar-brand" href="{{ route('dashboard') }}">Sisfo Akademik</a>
             @auth
