@@ -77,6 +77,7 @@
             </div>
             @endauth
         </div>
+        </div>
         <!-- Main content -->
         <div class="flex-grow-1 p-4">
             @yield('content')
