@@ -37,7 +37,7 @@
                             <li><a href="{{ route('input-nilai.index') }}" class="dropdown-item"><i class="bi bi-pencil-square me-2"></i>Input Nilai</a></li>
                         @endif
                         <li><a href="{{ route('penilaian.index') }}" class="dropdown-item"><i class="bi bi-list-check me-2"></i>Penilaian</a></li>
-                        <li><a href="{{ route('absensi.index') }}" class="dropdown-item"><i class="bi bi-person-check me-2"></i>Absensi Siswa</a></li>
+                        <li><a href="{{ route('absensi.pelajaran') }}" class="dropdown-item"><i class="bi bi-person-check me-2"></i>Absensi Siswa</a></li>
                     @endif
                     @if(Auth::user()->role === 'siswa')
                         <li><a href="{{ route('student.profile') }}" class="dropdown-item"><i class="bi bi-person me-2"></i>Data Diri</a></li>

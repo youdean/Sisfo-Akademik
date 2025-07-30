@@ -45,7 +45,6 @@ class GuruAbsensiIndexTest extends TestCase
 
         $response = $this->actingAs($user)->get('/absensi');
 
-        $response->assertOk();
-        $response->assertSee('+ Tambah Absensi');
+        $response->assertRedirect('/absensi/pelajaran');
     }
 }
