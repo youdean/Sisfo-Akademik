@@ -34,6 +34,7 @@
         <a class="btn btn-success" href="{{ route('absensi.rekap.export', request()->query()) }}">Download Excel</a>
     </div>
 </form>
+<div class="table-responsive">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -60,4 +61,5 @@
         @endforeach
     </tbody>
 </table>
+</div>
 @endsection

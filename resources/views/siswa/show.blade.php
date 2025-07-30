@@ -4,6 +4,7 @@
 
 @section('content')
 <h1 class="mb-3">Data Diri</h1>
+<div class="table-responsive">
 <table class="table table-bordered w-50">
     <tr><th>Nama</th><td>{{ $siswa->nama }}</td></tr>
     <tr><th>NISN</th><td>{{ $siswa->nisn }}</td></tr>
@@ -14,4 +15,5 @@
     <tr><th>Jenis Kelamin</th><td>{{ $siswa->jenis_kelamin }}</td></tr>
     <tr><th>Tanggal Lahir</th><td>{{ $siswa->tanggal_lahir }}</td></tr>
 </table>
+</div>
 @endsection

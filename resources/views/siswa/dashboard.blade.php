@@ -10,7 +10,8 @@
     @if($jadwalHariIni->isEmpty())
         <p>Tidak ada jadwal hari ini.</p>
     @else
-        <table class="table table-bordered">
+        <div class="table-responsive">
+<table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Jam</th>
@@ -28,17 +29,20 @@
             @endforeach
             </tbody>
         </table>
+</div>
     @endif
 </div>
 
 <div class="mb-4">
     <h4>Ringkasan Kehadiran</h4>
-    <table class="table table-bordered w-50">
+    <div class="table-responsive">
+<table class="table table-bordered w-50">
         <tr><th>Hadir</th><td>{{ $absensiSummary['Hadir'] ?? 0 }}</td></tr>
         <tr><th>Izin</th><td>{{ $absensiSummary['Izin'] ?? 0 }}</td></tr>
         <tr><th>Sakit</th><td>{{ $absensiSummary['Sakit'] ?? 0 }}</td></tr>
         <tr><th>Alpha</th><td>{{ $absensiSummary['Alpha'] ?? 0 }}</td></tr>
     </table>
+</div>
 </div>
 
 <div class="mb-4">
@@ -46,7 +50,8 @@
     @if($nilaiTerbaru->isEmpty())
         <p>Belum ada nilai.</p>
     @else
-        <table class="table table-bordered">
+        <div class="table-responsive">
+<table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Mapel</th>
@@ -64,6 +69,7 @@
                 @endforeach
             </tbody>
         </table>
+</div>
     @endif
 </div>
 

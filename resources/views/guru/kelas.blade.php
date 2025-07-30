@@ -12,6 +12,7 @@
     </select>
     <noscript><button class="btn btn-primary">Lihat</button></noscript>
 </form>
+<div class="table-responsive">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -36,4 +37,5 @@
         @endforeach
     </tbody>
 </table>
+</div>
 @endsection

@@ -4,6 +4,7 @@
 
 @section('content')
 <h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }}</h1>
+<div class="table-responsive">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -20,5 +21,6 @@
         @endforeach
     </tbody>
 </table>
+</div>
 <a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas]) }}" class="btn btn-secondary mt-3">Kembali</a>
 @endsection

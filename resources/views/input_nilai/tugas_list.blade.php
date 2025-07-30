@@ -9,7 +9,8 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 @if($namaTugas->count())
-    <table class="table table-bordered">
+    <div class="table-responsive">
+<table class="table table-bordered">
         <thead>
             <tr>
                 <th>Nama Tugas</th>
@@ -28,6 +29,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
 
     @foreach($namaTugas as $index => $nama)
         <div class="modal fade" id="tugasModal{{ $namaTugas->firstItem() + $index }}" tabindex="-1" aria-labelledby="tugasModalLabel{{ $namaTugas->firstItem() + $index }}" aria-hidden="true">
@@ -38,7 +40,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-0">
-                        <table class="table table-bordered mb-0">
+                        <div class="table-responsive">
+<table class="table table-bordered mb-0">
                             <thead>
                                 <tr>
                                     <th>Nama Siswa</th>
@@ -54,6 +57,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+</div>
                     </div>
                 </div>
             </div>

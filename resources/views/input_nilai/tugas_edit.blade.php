@@ -20,7 +20,8 @@
         <label>Nama Tugas</label>
         <input type="text" name="nama" class="form-control" value="{{ $nama }}" readonly>
     </div>
-    <table class="table table-bordered">
+    <div class="table-responsive">
+<table class="table table-bordered">
         <thead>
             <tr>
                 <th>Nama Siswa</th>
@@ -36,6 +37,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('input-nilai.tugas.list', [$mapel->id, $kelas, $semester]) }}" class="btn btn-secondary">Batal</a>
 </form>

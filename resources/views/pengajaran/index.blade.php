@@ -14,6 +14,7 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
+<div class="table-responsive">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -42,5 +43,6 @@
         @endforeach
     </tbody>
 </table>
+</div>
 {{ $pengajaran->links('pagination::bootstrap-5') }}
 @endsection

@@ -5,6 +5,7 @@
 @section('content')
 <h1 class="mb-3">{{ $mapel->nama }} - Kelas {{ $kelas }} Semester {{ $semester }}</h1>
 <a href="{{ route('input-nilai.pat.edit', [$mapel->id, $kelas, $semester]) }}" class="btn btn-primary mb-3">Edit Nilai PAT</a>
+<div class="table-responsive">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -21,5 +22,6 @@
         @endforeach
     </tbody>
 </table>
+</div>
 <a href="{{ route('input-nilai.opsi', [$mapel->id, $kelas, 'semester' => $semester]) }}" class="btn btn-secondary mt-3">Kembali</a>
 @endsection

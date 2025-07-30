@@ -22,7 +22,8 @@
 @php $days = ['Senin','Selasa','Rabu','Kamis','Jumat']; @endphp
 @foreach($days as $day)
     <h4 class="mt-4">{{ $day }}</h4>
-    <table class="table table-bordered">
+    <div class="table-responsive">
+<table class="table table-bordered">
         <thead>
             <tr>
                 <th>Kelas</th>
@@ -52,5 +53,6 @@
             @endforelse
         </tbody>
     </table>
+</div>
 @endforeach
 @endsection

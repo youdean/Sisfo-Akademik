@@ -18,7 +18,8 @@
 @endif
 @if($riwayat->count())
     <h4 class="mt-4">Riwayat Absen</h4>
-    <table class="table table-bordered">
+    <div class="table-responsive">
+<table class="table table-bordered">
         <thead>
             <tr>
                 <th>Tanggal</th>
@@ -34,6 +35,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
 @endif
 <form action="{{ route('student.jadwal.absen', $jadwal->id) }}" method="POST">
     @csrf

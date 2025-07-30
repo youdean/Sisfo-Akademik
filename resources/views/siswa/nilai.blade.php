@@ -4,6 +4,7 @@
 
 @section('content')
 <h1 class="mb-3">Nilai Saya</h1>
+<div class="table-responsive">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -30,4 +31,5 @@
         @endforeach
     </tbody>
 </table>
+</div>
 @endsection
