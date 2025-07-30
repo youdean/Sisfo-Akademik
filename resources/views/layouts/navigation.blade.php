@@ -45,7 +45,7 @@
                                 <x-dropdown-link :href="route('input-nilai.index')">Input Nilai</x-dropdown-link>
                             @endif
                             <x-dropdown-link :href="route('penilaian.index')">Penilaian</x-dropdown-link>
-                            <x-dropdown-link :href="route('absensi.index')">Absensi Siswa</x-dropdown-link>
+                            <x-dropdown-link :href="route('absensi.pelajaran')">Absensi Siswa</x-dropdown-link>
                         @endif
                         @if(Auth::user()->role === 'siswa')
                             <x-dropdown-link :href="route('student.profile')">Data Diri</x-dropdown-link>

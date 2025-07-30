@@ -33,6 +33,10 @@ class AbsensiController extends Controller
 
     public function index(Request $request)
     {
+        if (Auth::user()?->role === 'guru') {
+            return redirect()->route('absensi.pelajaran');
+        }
+
         // Previously teachers were redirected to the input-per-mapel page.
         // The redirect is removed so that teachers can also view the absensi
         // index page like admins.
@@ -237,9 +241,7 @@ public function update(Request $request, Absensi $absensi)
             abort(403);
         }
 
-        $tanggal = Auth::user()?->role === 'guru'
-            ? date('Y-m-d')
-            : $request->input('tanggal', date('Y-m-d'));
+        $tanggal = $request->input('tanggal', date('Y-m-d'));
         $kelasNama = $jadwal->kelas->nama;
         $siswa = Siswa::where('kelas', $kelasNama)->get();
         $absen = Absensi::whereIn('siswa_id', $siswa->pluck('id'))
@@ -268,9 +270,7 @@ public function update(Request $request, Absensi $absensi)
             'status' => 'array',
         ]);
 
-        $tanggal = Auth::user()?->role === 'guru'
-            ? date('Y-m-d')
-            : $request->input('tanggal');
+        $tanggal = $request->input('tanggal', date('Y-m-d'));
         $siswaIds = Siswa::where('kelas', $jadwal->kelas->nama)->pluck('id');
         $statusData = $request->input('status', []);
         foreach ($siswaIds as $id) {
