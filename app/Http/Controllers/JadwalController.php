@@ -133,6 +133,69 @@ class JadwalController extends Controller
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diupdate');
     }
 
+    public function generate(Request $request)
+    {
+        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+        $slots = [
+            ['07:00', '08:00'],
+            ['08:00', '09:00'],
+            ['09:00', '10:00'],
+            ['10:00', '11:00'],
+            ['11:00', '12:00'],
+            ['12:00', '13:00'],
+            ['13:00', '14:00'],
+            ['14:00', '15:00'],
+        ];
+        $errors = [];
+
+        foreach (Kelas::all() as $kelas) {
+            Jadwal::where('kelas_id', $kelas->id)->delete();
+            $pengajarans = Pengajaran::where('kelas', $kelas->nama)->get();
+            foreach ($pengajarans as $pengajaran) {
+                $created = 0;
+                foreach ($days as $day) {
+                    foreach ($slots as $slot) {
+                        if ($created >= 4) {
+                            break 2;
+                        }
+                        $teacherConflict = Jadwal::where('guru_id', $pengajaran->guru_id)
+                            ->where('hari', $day)
+                            ->where('jam_mulai', $slot[0])
+                            ->exists();
+                        $classConflict = Jadwal::where('kelas_id', $kelas->id)
+                            ->where('hari', $day)
+                            ->where('jam_mulai', $slot[0])
+                            ->exists();
+                        if ($teacherConflict || $classConflict) {
+                            continue;
+                        }
+                        $data = [
+                            'kelas_id' => $kelas->id,
+                            'mapel_id' => $pengajaran->mapel_id,
+                            'guru_id' => $pengajaran->guru_id,
+                            'hari' => $day,
+                            'jam_mulai' => $slot[0],
+                            'jam_selesai' => $slot[1],
+                        ];
+                        Jadwal::create($data);
+                        $this->syncPengajaran($data);
+                        $created++;
+                    }
+                }
+                if ($created < 4) {
+                    $mapelName = MataPelajaran::find($pengajaran->mapel_id)->nama ?? 'Mapel';
+                    $errors[] = "Slot tidak cukup untuk {$kelas->nama} - {$mapelName}";
+                }
+            }
+        }
+
+        if ($errors) {
+            return redirect()->route('jadwal.index')->with('error', implode(', ', $errors));
+        }
+
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil digenerate');
+    }
+
     public function destroy(Jadwal $jadwal)
     {
         $jadwal->delete();
