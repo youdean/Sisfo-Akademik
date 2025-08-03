@@ -25,8 +25,10 @@ class PenilaianController extends Controller
         if (!$guru) {
             return [];
         }
+        $pengajaranKelas = Pengajaran::where('guru_id', $guru->id)->pluck('kelas');
+        $waliKelas = Kelas::where('guru_id', $guru->id)->pluck('nama');
 
-        return Pengajaran::where('guru_id', $guru->id)->pluck('kelas')->toArray();
+        return $pengajaranKelas->merge($waliKelas)->unique()->toArray();
     }
 
     public function index(Request $request)
