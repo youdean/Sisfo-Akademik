@@ -22,24 +22,24 @@ class InputNilaiController extends Controller
     public function index()
     {
         $guru = $this->guru();
+        $kelasList = Pengajaran::where('guru_id', $guru->id)
+            ->pluck('kelas')
+            ->unique();
+        return view('input_nilai.index', ['kelasList' => $kelasList]);
+    }
+
+    public function mapel($kelas)
+    {
+        $guru = $this->guru();
         $mapelList = Pengajaran::where('guru_id', $guru->id)
+            ->where('kelas', $kelas)
             ->with('mapel')
             ->get()
             ->pluck('mapel')
             ->unique('id');
-        return view('input_nilai.index', ['mapelList' => $mapelList]);
-    }
-
-    public function kelas(MataPelajaran $mapel)
-    {
-        $guru = $this->guru();
-        $kelasList = Pengajaran::where('guru_id', $guru->id)
-            ->where('mapel_id', $mapel->id)
-            ->pluck('kelas')
-            ->unique();
-        return view('input_nilai.kelas', [
-            'mapel' => $mapel,
-            'kelasList' => $kelasList,
+        return view('input_nilai.mapel', [
+            'kelas' => $kelas,
+            'mapelList' => $mapelList,
         ]);
     }
 

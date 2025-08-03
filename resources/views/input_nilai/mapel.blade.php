@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Pilih Kelas')
+@section('title', 'Pilih Mata Pelajaran')
 
 @section('content')
-<h1 class="mb-3">{{ $mapel->nama }} - Pilih Kelas</h1>
+<h1 class="mb-3">{{ $kelas }} - Pilih Mata Pelajaran</h1>
 <ul class="list-group">
-    @foreach($kelasList as $k)
+    @foreach($mapelList as $m)
         <li class="list-group-item">
-            <a href="{{ route('input-nilai.opsi', [$mapel->id, $k]) }}">{{ $k }}</a>
+            <a href="{{ route('input-nilai.opsi', [$m->id, $kelas]) }}">{{ $m->nama }}</a>
         </li>
     @endforeach
 </ul>
