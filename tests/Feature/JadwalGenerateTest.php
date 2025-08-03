@@ -59,6 +59,19 @@ class JadwalGenerateTest extends TestCase
 
         $times = Jadwal::where('guru_id', $teacher->id)->get()->map(fn($j) => $j->hari . ' ' . $j->jam_mulai);
         $this->assertEquals($times->count(), $times->unique()->count());
+
+        foreach ([$kelasA, $kelasB] as $kelas) {
+            $schedule = Jadwal::where('kelas_id', $kelas->id)
+                ->where('mapel_id', $mapel->id)
+                ->get();
+            $grouped = $schedule->groupBy('hari');
+
+            foreach ($grouped as $entries) {
+                $this->assertLessThanOrEqual(2, $entries->count());
+            }
+
+            $this->assertGreaterThanOrEqual(2, $grouped->count());
+        }
     }
 
     public function test_non_admin_cannot_access_generate_schedule_endpoint(): void
