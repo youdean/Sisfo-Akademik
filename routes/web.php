@@ -35,6 +35,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('kelas', KelasController::class)->except('show');
     Route::resource('users', UserController::class)->except('show');
     Route::resource('pengajaran', PengajaranController::class)->except('show');
+    Route::post('/jadwal/generate', [JadwalController::class, 'generate'])->name('jadwal.generate');
     Route::resource('jadwal', JadwalController::class)->except('show');
     Route::get('/siswa-export', [SiswaController::class, 'export'])->name('siswa.export');
 });
