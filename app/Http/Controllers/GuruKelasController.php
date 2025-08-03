@@ -15,7 +15,9 @@ class GuruKelasController extends Controller
     public function index()
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-        $kelasList = Pengajaran::where('guru_id', $guru->id)->pluck('kelas')->unique();
+        $kelasPengajaran = Pengajaran::where('guru_id', $guru->id)->pluck('kelas');
+        $kelasWali = Kelas::where('guru_id', $guru->id)->pluck('nama');
+        $kelasList = $kelasPengajaran->merge($kelasWali)->unique();
         $selected = request('kelas', $kelasList->first());
         $siswa = Siswa::where('kelas', $selected)->get();
 
