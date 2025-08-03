@@ -53,6 +53,7 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
 // Halaman guru untuk melihat siswa di kelasnya
 Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/kelas-saya', [GuruKelasController::class, 'index'])->name('guru.kelas');
+    Route::get('/nilai-kelas', [GuruKelasController::class, 'nilaiKelas'])->name('guru.nilai-kelas');
     Route::get('/input-nilai', [\App\Http\Controllers\InputNilaiController::class, 'index'])->name('input-nilai.index');
     Route::get('/input-nilai/{mapel}', [\App\Http\Controllers\InputNilaiController::class, 'kelas'])->name('input-nilai.kelas');
     Route::get('/input-nilai/{mapel}/{kelas}', [\App\Http\Controllers\InputNilaiController::class, 'opsi'])->name('input-nilai.opsi');
