@@ -148,9 +148,18 @@ class JadwalController extends Controller
         ];
         $errors = [];
 
+        if (Pengajaran::count() === 0) {
+            return redirect()->route('jadwal.index')->with('error', 'Tidak ada data pengajaran');
+        }
+
         foreach (Kelas::all() as $kelas) {
-            Jadwal::where('kelas_id', $kelas->id)->delete();
             $pengajarans = Pengajaran::where('kelas', $kelas->nama)->get();
+          
+            if ($pengajarans->isEmpty()) {
+                continue;
+            }
+
+            Jadwal::where('kelas_id', $kelas->id)->delete();
             $globalDayUsage = array_fill_keys($days, 0);
 
             foreach ($pengajarans as $pengajaran) {
@@ -165,7 +174,6 @@ class JadwalController extends Controller
                     $created = 0;
                     $dayCounts = array_fill_keys($days, 0);
                     $daySlots = array_fill_keys($days, []);
-
                     $dayOrder = $days;
                     usort($dayOrder, function ($a, $b) use ($globalDayUsage) {
                         $cmp = $globalDayUsage[$a] <=> $globalDayUsage[$b];
