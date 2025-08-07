@@ -17,7 +17,7 @@
                 <div class="col-md-6">
                     <div class="text-center mb-4">
                         <a href="/">
-                            <img src="https://smasmuhammadiyah.sch.id/wp-content/uploads/2024/10/logo-smasmuhammadiyah.png" alt="Logo" class="img-fluid" style="max-height: 80px;" />
+                            <img src="{{ asset('images/logo-smasmuhammadiyah.png') }}" alt="Logo" class="img-fluid" style="max-height: 80px;" />
                         </a>
                     </div>
                     <div class="card shadow-sm">
