@@ -86,4 +86,66 @@ class JadwalGenerateTest extends TestCase
         $user = User::factory()->create(['role' => 'guru']);
         $this->actingAs($user)->post('/jadwal/generate')->assertStatus(403);
     }
+
+    public function test_generate_schedule_for_all_classes_without_slot_errors(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $teacherA = Guru::create([
+            'nuptk' => '600',
+            'nama' => 'Guru A',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1985-01-01',
+        ]);
+        $teacherB = Guru::create([
+            'nuptk' => '601',
+            'nama' => 'Guru B',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1986-01-01',
+        ]);
+
+        $mapel1 = MataPelajaran::create(['nama' => 'Matematika']);
+        $mapel2 = MataPelajaran::create(['nama' => 'Bahasa']);
+
+        $waliA = Guru::create([
+            'nuptk' => '602',
+            'nama' => 'Wali A',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+        $waliB = Guru::create([
+            'nuptk' => '603',
+            'nama' => 'Wali B',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+        $ta = \App\Models\TahunAjaran::create([
+            'nama' => '2024/2025',
+            'start_date' => '2024-07-01',
+            'end_date' => '2025-06-30',
+        ]);
+        $kelasA = Kelas::create(['nama' => 'A', 'guru_id' => $waliA->id, 'tahun_ajaran_id' => $ta->id]);
+        $kelasB = Kelas::create(['nama' => 'B', 'guru_id' => $waliB->id, 'tahun_ajaran_id' => $ta->id]);
+
+        Pengajaran::create(['guru_id' => $teacherA->id, 'mapel_id' => $mapel1->id, 'kelas' => $kelasA->nama]);
+        Pengajaran::create(['guru_id' => $teacherB->id, 'mapel_id' => $mapel2->id, 'kelas' => $kelasA->nama]);
+        Pengajaran::create(['guru_id' => $teacherA->id, 'mapel_id' => $mapel1->id, 'kelas' => $kelasB->nama]);
+        Pengajaran::create(['guru_id' => $teacherB->id, 'mapel_id' => $mapel2->id, 'kelas' => $kelasB->nama]);
+
+        $response = $this->actingAs($admin)->post('/jadwal/generate');
+        $response->assertRedirect('/jadwal');
+        $response->assertSessionMissing('error');
+
+        $this->assertEquals(16, Jadwal::count());
+
+        foreach ([$kelasA, $kelasB] as $kelas) {
+            foreach ([$mapel1, $mapel2] as $mapel) {
+                $this->assertEquals(4, Jadwal::where('kelas_id', $kelas->id)->where('mapel_id', $mapel->id)->count());
+            }
+        }
+    }
 }
