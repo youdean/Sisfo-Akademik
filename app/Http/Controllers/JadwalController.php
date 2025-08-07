@@ -145,8 +145,8 @@ class JadwalController extends Controller
 
     public function generate(Request $request)
     {
-        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
-        $slots = [
+        $days = config('jadwal.days', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat']);
+        $slots = config('jadwal.slots', [
             ['07:00', '08:00'],
             ['08:00', '09:00'],
             ['09:00', '10:00'],
@@ -155,7 +155,7 @@ class JadwalController extends Controller
             ['12:00', '13:00'],
             ['13:00', '14:00'],
             ['14:00', '15:00'],
-        ];
+        ]);
         $slotPairs = [];
         for ($i = 0; $i < count($slots) - 1; $i++) {
             $slotPairs[] = [$slots[$i], $slots[$i + 1]];
