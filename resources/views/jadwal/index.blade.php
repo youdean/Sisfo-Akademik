@@ -3,7 +3,7 @@
 @section('title', 'Jadwal Pelajaran')
 
 @section('content')
-<div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex flex-column justify-content-center align-items-center" style="display:none; z-index:1050;">
+<div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 flex-column justify-content-center align-items-center" style="display:none; z-index:1050;">
     <div class="progress w-50" style="max-width:300px;">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
     </div>
