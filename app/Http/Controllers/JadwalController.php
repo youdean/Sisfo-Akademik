@@ -155,56 +155,55 @@ class JadwalController extends Controller
                 $created = 0;
                 $dayCounts = array_fill_keys($days, 0);
                 $daySlots = array_fill_keys($days, []);
-                $attempts = 0;
-                while ($created < 4 && $attempts < 10) {
-                    $attempts++;
-                    $shuffledDays = $days;
-                    shuffle($shuffledDays);
-                    foreach ($shuffledDays as $day) {
+
+                foreach ($days as $day) {
+                    foreach ($slots as $slot) {
+                        if ($created >= 4) {
+                            break 2;
+                        }
+
                         if ($dayCounts[$day] >= 2) {
                             continue;
                         }
-                        $shuffledSlots = $slots;
-                        shuffle($shuffledSlots);
-                        foreach ($shuffledSlots as $slot) {
-                            if ($dayCounts[$day] >= 2 || $created >= 4) {
-                                break;
-                            }
-                            $teacherConflict = Jadwal::where('guru_id', $pengajaran->guru_id)
-                                ->where('hari', $day)
-                                ->where('jam_mulai', $slot[0])
-                                ->exists();
-                            $classConflict = Jadwal::where('kelas_id', $kelas->id)
-                                ->where('hari', $day)
-                                ->where('jam_mulai', $slot[0])
-                                ->exists();
-                            if ($teacherConflict || $classConflict) {
-                                continue;
-                            }
-                            $prevSlot = date('H:i', strtotime($slot[0] . ' -1 hour'));
-                            $nextSlot = date('H:i', strtotime($slot[0] . ' +1 hour'));
-                            if ($dayCounts[$day] == 1 && !in_array($prevSlot, $daySlots[$day]) && !in_array($nextSlot, $daySlots[$day])) {
-                                continue;
-                            }
-                            $data = [
-                                'kelas_id' => $kelas->id,
-                                'mapel_id' => $pengajaran->mapel_id,
-                                'guru_id' => $pengajaran->guru_id,
-                                'hari' => $day,
-                                'jam_mulai' => $slot[0],
-                                'jam_selesai' => $slot[1],
-                            ];
-                            Jadwal::create($data);
-                            $this->syncPengajaran($data);
-                            $created++;
-                            $dayCounts[$day]++;
-                            $daySlots[$day][] = $slot[0];
+
+                        $teacherConflict = Jadwal::where('guru_id', $pengajaran->guru_id)
+                            ->where('hari', $day)
+                            ->where('jam_mulai', '<', $slot[1])
+                            ->where('jam_selesai', '>', $slot[0])
+                            ->exists();
+
+                        $classConflict = Jadwal::where('kelas_id', $kelas->id)
+                            ->where('hari', $day)
+                            ->where('jam_mulai', '<', $slot[1])
+                            ->where('jam_selesai', '>', $slot[0])
+                            ->exists();
+
+                        if ($teacherConflict || $classConflict) {
+                            continue;
                         }
-                        if ($created >= 4) {
-                            break;
+
+                        $prevSlot = date('H:i', strtotime($slot[0] . ' -1 hour'));
+                        $nextSlot = date('H:i', strtotime($slot[0] . ' +1 hour'));
+                        if ($dayCounts[$day] == 1 && !in_array($prevSlot, $daySlots[$day]) && !in_array($nextSlot, $daySlots[$day])) {
+                            continue;
                         }
+
+                        $data = [
+                            'kelas_id' => $kelas->id,
+                            'mapel_id' => $pengajaran->mapel_id,
+                            'guru_id' => $pengajaran->guru_id,
+                            'hari' => $day,
+                            'jam_mulai' => $slot[0],
+                            'jam_selesai' => $slot[1],
+                        ];
+                        Jadwal::create($data);
+                        $this->syncPengajaran($data);
+                        $created++;
+                        $dayCounts[$day]++;
+                        $daySlots[$day][] = $slot[0];
                     }
                 }
+
                 if ($created < 4) {
                     $mapelName = MataPelajaran::find($pengajaran->mapel_id)->nama ?? 'Mapel';
                     $errors[] = "Slot tidak cukup untuk {$kelas->nama} - {$mapelName}";
