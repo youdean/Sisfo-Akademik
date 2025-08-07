@@ -141,6 +141,62 @@ class JadwalGenerateTest extends TestCase
             }
         }
     }
+
+    public function test_generated_schedule_has_contiguous_subject_blocks(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $guruFisika = Guru::create([
+            'nuptk' => '900',
+            'nama' => 'Guru Fisika',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1980-01-01',
+        ]);
+        $guruBiologi = Guru::create([
+            'nuptk' => '901',
+            'nama' => 'Guru Biologi',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1981-01-01',
+        ]);
+
+        $fisika = MataPelajaran::create(['nama' => 'Fisika']);
+        $biologi = MataPelajaran::create(['nama' => 'Biologi']);
+
+        $wali = Guru::create([
+            'nuptk' => '902',
+            'nama' => 'Wali F',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+
+        $ta = \App\Models\TahunAjaran::create([
+            'nama' => '2024/2025',
+            'start_date' => '2024-07-01',
+            'end_date' => '2025-06-30',
+        ]);
+        $kelas = Kelas::create(['nama' => 'F', 'guru_id' => $wali->id, 'tahun_ajaran_id' => $ta->id]);
+
+        Pengajaran::create(['guru_id' => $guruFisika->id, 'mapel_id' => $fisika->id, 'kelas' => $kelas->nama]);
+        Pengajaran::create(['guru_id' => $guruBiologi->id, 'mapel_id' => $biologi->id, 'kelas' => $kelas->nama]);
+
+        $this->actingAs($admin)->post('/jadwal/generate')->assertRedirect('/jadwal');
+
+        $schedule = Jadwal::where('kelas_id', $kelas->id)->get()->groupBy('hari');
+
+        foreach ($schedule as $day => $entries) {
+            $subjects = $entries->sortBy('jam_mulai')->pluck('mapel_id')->toArray();
+            $sequence = [];
+            foreach ($subjects as $s) {
+                if (empty($sequence) || end($sequence) !== $s) {
+                    $sequence[] = $s;
+                }
+            }
+            $this->assertEquals(count($sequence), count(array_unique($sequence)), 'Subject split detected on ' . $day);
+        }
+    }
   
     public function test_generate_schedule_skips_classes_without_pengajaran(): void
     {
