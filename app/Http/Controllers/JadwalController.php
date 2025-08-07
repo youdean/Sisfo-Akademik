@@ -149,7 +149,23 @@ class JadwalController extends Controller
         $errors = [];
 
         if (Pengajaran::count() === 0) {
-            return redirect()->route('jadwal.index')->with('error', 'Tidak ada data pengajaran');
+            $guruIds = Guru::pluck('id')->values();
+            $mapelList = MataPelajaran::all();
+            if ($guruIds->isEmpty() || $mapelList->isEmpty()) {
+                return redirect()->route('jadwal.index')->with('error', 'Tidak ada data pengajaran');
+            }
+            foreach (Kelas::all() as $kelasAuto) {
+                $index = 0;
+                foreach ($mapelList as $mapelAuto) {
+                    $guruId = $guruIds[$index % $guruIds->count()];
+                    Pengajaran::create([
+                        'guru_id' => $guruId,
+                        'mapel_id' => $mapelAuto->id,
+                        'kelas' => $kelasAuto->nama,
+                    ]);
+                    $index++;
+                }
+            }
         }
 
         foreach (Kelas::all() as $kelas) {
