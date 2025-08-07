@@ -37,7 +37,7 @@ class JadwalController extends Controller
             $query->where('kelas_id', $kelasId);
         }
 
-        $jadwal = $query->get()->groupBy('hari');
+        $jadwal = $query->orderBy('jam_mulai')->get()->groupBy('hari');
 
         return view('jadwal.index', [
             'jadwal' => $jadwal,
