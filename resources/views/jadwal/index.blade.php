@@ -3,10 +3,17 @@
 @section('title', 'Jadwal Pelajaran')
 
 @section('content')
+<div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex flex-column justify-content-center align-items-center" style="display:none; z-index:1050;">
+    <div class="progress w-50" style="max-width:300px;">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+    </div>
+    <div class="mt-2">Sedang menggenerasi jadwal...</div>
+</div>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Jadwal Pelajaran</h1>
     <div class="d-flex gap-2">
-        <form action="{{ route('jadwal.generate') }}" method="POST">
+        <form id="generate-form" action="{{ route('jadwal.generate') }}" method="POST">
             @csrf
             <button class="btn btn-success">Generate Jadwal</button>
         </form>
@@ -64,4 +71,12 @@
     </table>
 </div>
 @endforeach
+@endsection
+
+@section('scripts')
+<script>
+    document.getElementById('generate-form').addEventListener('submit', function () {
+        document.getElementById('loading-overlay').style.display = 'flex';
+    });
+</script>
 @endsection
