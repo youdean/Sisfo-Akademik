@@ -191,4 +191,45 @@ class JadwalGenerateTest extends TestCase
         $this->assertEquals(4, Jadwal::where('kelas_id', $kelasA->id)->count());
         $this->assertEquals(0, Jadwal::where('kelas_id', $kelasB->id)->count());
     }
+
+    public function test_generate_schedule_creates_pengajaran_when_missing(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $teacher = Guru::create([
+            'nuptk' => '800',
+            'nama' => 'Guru E',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1988-01-01',
+        ]);
+
+        $mapel = MataPelajaran::create(['nama' => 'Sejarah']);
+
+        $wali = Guru::create([
+            'nuptk' => '801',
+            'nama' => 'Wali E',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1992-01-01',
+        ]);
+
+        $ta = \App\Models\TahunAjaran::create([
+            'nama' => '2024/2025',
+            'start_date' => '2024-07-01',
+            'end_date' => '2025-06-30',
+        ]);
+
+        $kelas = Kelas::create(['nama' => 'E', 'guru_id' => $wali->id, 'tahun_ajaran_id' => $ta->id]);
+
+        $this->actingAs($admin)->post('/jadwal/generate')->assertRedirect('/jadwal');
+
+        $this->assertEquals(1, Pengajaran::count());
+        $this->assertEquals(4, Jadwal::count());
+
+        $pengajaran = Pengajaran::first();
+        $this->assertEquals($mapel->id, $pengajaran->mapel_id);
+        $this->assertEquals($kelas->nama, $pengajaran->kelas);
+        $this->assertTrue(Guru::pluck('id')->contains($pengajaran->guru_id));
+    }
 }
