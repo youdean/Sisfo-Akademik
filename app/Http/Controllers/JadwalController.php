@@ -154,6 +154,7 @@ class JadwalController extends Controller
 
         foreach (Kelas::all() as $kelas) {
             $pengajarans = Pengajaran::where('kelas', $kelas->nama)->get();
+          
             if ($pengajarans->isEmpty()) {
                 continue;
             }
@@ -173,7 +174,6 @@ class JadwalController extends Controller
                     $created = 0;
                     $dayCounts = array_fill_keys($days, 0);
                     $daySlots = array_fill_keys($days, []);
-
                     $dayOrder = $days;
                     usort($dayOrder, function ($a, $b) use ($globalDayUsage) {
                         $cmp = $globalDayUsage[$a] <=> $globalDayUsage[$b];

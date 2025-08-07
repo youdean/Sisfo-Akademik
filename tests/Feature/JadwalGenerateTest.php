@@ -148,7 +148,7 @@ class JadwalGenerateTest extends TestCase
             }
         }
     }
-
+  
     public function test_generate_schedule_skips_classes_without_pengajaran(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);
