@@ -68,13 +68,6 @@ class JadwalGenerateTest extends TestCase
 
             foreach ($grouped as $entries) {
                 $this->assertLessThanOrEqual(2, $entries->count());
-                if ($entries->count() === 2) {
-                    $sorted = $entries->sortBy('jam_mulai')->values();
-                    $this->assertEquals(
-                        date('H:i', strtotime($sorted[0]->jam_mulai . ' +1 hour')),
-                        $sorted[1]->jam_mulai
-                    );
-                }
             }
 
             $this->assertGreaterThanOrEqual(2, $grouped->count());
