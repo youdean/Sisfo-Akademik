@@ -183,7 +183,7 @@ class JadwalController extends Controller
                             }
                             $prevSlot = date('H:i', strtotime($slot[0] . ' -1 hour'));
                             $nextSlot = date('H:i', strtotime($slot[0] . ' +1 hour'));
-                            if (in_array($prevSlot, $daySlots[$day]) && in_array($nextSlot, $daySlots[$day])) {
+                            if ($dayCounts[$day] == 1 && !in_array($prevSlot, $daySlots[$day]) && !in_array($nextSlot, $daySlots[$day])) {
                                 continue;
                             }
                             $data = [
