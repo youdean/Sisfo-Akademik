@@ -156,6 +156,10 @@ class JadwalController extends Controller
             ['13:00', '14:00'],
             ['14:00', '15:00'],
         ];
+        $slotPairs = [];
+        for ($i = 0; $i < count($slots) - 1; $i++) {
+            $slotPairs[] = [$slots[$i], $slots[$i + 1]];
+        }
         $errors = [];
         $requiredSlots = 4;
 
@@ -206,9 +210,9 @@ class JadwalController extends Controller
                     });
 
                     foreach ($dayOrder as $day) {
-                        $slotOrder = $slots;
-                        shuffle($slotOrder);
-                        foreach ($slotOrder as $slot) {
+                        $pairOrder = $slotPairs;
+                        shuffle($pairOrder);
+                        foreach ($pairOrder as $pair) {
                             if (count($created) >= $requiredSlots) {
                                 break 2;
                             }
@@ -217,11 +221,15 @@ class JadwalController extends Controller
                                 continue;
                             }
 
-                            if ($this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot)) {
+                            [$slot1, $slot2] = $pair;
+
+                            if ($this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot1) ||
+                                $this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot2)) {
                                 continue;
                             }
 
-                            if ($this->hasConflict($classSchedules[$kelas->id][$day], $slot)) {
+                            if ($this->hasConflict($classSchedules[$kelas->id][$day], $slot1) ||
+                                $this->hasConflict($classSchedules[$kelas->id][$day], $slot2)) {
                                 continue;
                             }
 
@@ -230,10 +238,18 @@ class JadwalController extends Controller
                                 'mapel_id' => $pengajaran->mapel_id,
                                 'guru_id' => $pengajaran->guru_id,
                                 'hari' => $day,
-                                'jam_mulai' => $slot[0],
-                                'jam_selesai' => $slot[1],
+                                'jam_mulai' => $slot1[0],
+                                'jam_selesai' => $slot1[1],
                             ];
-                            $dayCounts[$day]++;
+                            $created[] = [
+                                'kelas_id' => $kelas->id,
+                                'mapel_id' => $pengajaran->mapel_id,
+                                'guru_id' => $pengajaran->guru_id,
+                                'hari' => $day,
+                                'jam_mulai' => $slot2[0],
+                                'jam_selesai' => $slot2[1],
+                            ];
+                            $dayCounts[$day] += 2;
                         }
                     }
 
