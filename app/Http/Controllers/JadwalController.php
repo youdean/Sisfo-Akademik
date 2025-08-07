@@ -27,6 +27,16 @@ class JadwalController extends Controller
             ]
         );
     }
+
+    private function hasConflict(array $entries, array $slot): bool
+    {
+        foreach ($entries as $entry) {
+            if ($entry[0] < $slot[1] && $entry[1] > $slot[0]) {
+                return true;
+            }
+        }
+        return false;
+    }
     public function index(Request $request)
     {
         $kelasId = $request->query('kelas');
@@ -168,26 +178,25 @@ class JadwalController extends Controller
             }
         }
 
+        $teacherSchedules = [];
+        $classSchedules = [];
+        Jadwal::query()->delete();
+
         foreach (Kelas::all() as $kelas) {
             $pengajarans = Pengajaran::where('kelas', $kelas->nama)->get();
-          
             if ($pengajarans->isEmpty()) {
                 continue;
             }
 
-            Jadwal::where('kelas_id', $kelas->id)->delete();
+            $classSchedules[$kelas->id] = array_fill_keys($days, []);
             $globalDayUsage = array_fill_keys($days, 0);
 
             foreach ($pengajarans as $pengajaran) {
+                $teacherSchedules[$pengajaran->guru_id] = $teacherSchedules[$pengajaran->guru_id] ?? array_fill_keys($days, []);
                 $success = false;
 
                 for ($attempt = 0; $attempt < 20 && !$success; $attempt++) {
-                    Jadwal::where('kelas_id', $kelas->id)
-                        ->where('mapel_id', $pengajaran->mapel_id)
-                        ->where('guru_id', $pengajaran->guru_id)
-                        ->delete();
-
-                    $created = 0;
+                    $created = [];
                     $dayCounts = array_fill_keys($days, 0);
                     $daySlots = array_fill_keys($days, []);
                     $dayOrder = $days;
@@ -200,7 +209,7 @@ class JadwalController extends Controller
                         $slotOrder = $slots;
                         shuffle($slotOrder);
                         foreach ($slotOrder as $slot) {
-                            if ($created >= 4) {
+                            if (count($created) >= 4) {
                                 break 2;
                             }
 
@@ -208,19 +217,11 @@ class JadwalController extends Controller
                                 continue;
                             }
 
-                            $teacherConflict = Jadwal::where('guru_id', $pengajaran->guru_id)
-                                ->where('hari', $day)
-                                ->where('jam_mulai', '<', $slot[1])
-                                ->where('jam_selesai', '>', $slot[0])
-                                ->exists();
+                            if ($this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot)) {
+                                continue;
+                            }
 
-                            $classConflict = Jadwal::where('kelas_id', $kelas->id)
-                                ->where('hari', $day)
-                                ->where('jam_mulai', '<', $slot[1])
-                                ->where('jam_selesai', '>', $slot[0])
-                                ->exists();
-
-                            if ($teacherConflict || $classConflict) {
+                            if ($this->hasConflict($classSchedules[$kelas->id][$day], $slot)) {
                                 continue;
                             }
 
@@ -230,7 +231,7 @@ class JadwalController extends Controller
                                 continue;
                             }
 
-                            $data = [
+                            $created[] = [
                                 'kelas_id' => $kelas->id,
                                 'mapel_id' => $pengajaran->mapel_id,
                                 'guru_id' => $pengajaran->guru_id,
@@ -238,15 +239,18 @@ class JadwalController extends Controller
                                 'jam_mulai' => $slot[0],
                                 'jam_selesai' => $slot[1],
                             ];
-                            Jadwal::create($data);
-                            $this->syncPengajaran($data);
-                            $created++;
                             $dayCounts[$day]++;
                             $daySlots[$day][] = $slot[0];
                         }
                     }
 
-                    if ($created >= 4) {
+                    if (count($created) >= 4) {
+                        foreach ($created as $data) {
+                            Jadwal::create($data);
+                            $this->syncPengajaran($data);
+                            $teacherSchedules[$data['guru_id']][$data['hari']][] = [$data['jam_mulai'], $data['jam_selesai']];
+                            $classSchedules[$data['kelas_id']][$data['hari']][] = [$data['jam_mulai'], $data['jam_selesai']];
+                        }
                         foreach ($dayCounts as $d => $count) {
                             $globalDayUsage[$d] += $count;
                         }
