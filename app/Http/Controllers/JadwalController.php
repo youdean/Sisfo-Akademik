@@ -157,6 +157,7 @@ class JadwalController extends Controller
             ['14:00', '15:00'],
         ];
         $errors = [];
+        $requiredSlots = 4;
 
         if (Pengajaran::count() === 0) {
             $guruIds = Guru::pluck('id')->values();
@@ -198,7 +199,6 @@ class JadwalController extends Controller
                 for ($attempt = 0; $attempt < 20 && !$success; $attempt++) {
                     $created = [];
                     $dayCounts = array_fill_keys($days, 0);
-                    $daySlots = array_fill_keys($days, []);
                     $dayOrder = $days;
                     usort($dayOrder, function ($a, $b) use ($globalDayUsage) {
                         $cmp = $globalDayUsage[$a] <=> $globalDayUsage[$b];
@@ -209,7 +209,7 @@ class JadwalController extends Controller
                         $slotOrder = $slots;
                         shuffle($slotOrder);
                         foreach ($slotOrder as $slot) {
-                            if (count($created) >= 4) {
+                            if (count($created) >= $requiredSlots) {
                                 break 2;
                             }
 
@@ -225,12 +225,6 @@ class JadwalController extends Controller
                                 continue;
                             }
 
-                            $prevSlot = date('H:i', strtotime($slot[0] . ' -1 hour'));
-                            $nextSlot = date('H:i', strtotime($slot[0] . ' +1 hour'));
-                            if ($dayCounts[$day] == 1 && !in_array($prevSlot, $daySlots[$day]) && !in_array($nextSlot, $daySlots[$day])) {
-                                continue;
-                            }
-
                             $created[] = [
                                 'kelas_id' => $kelas->id,
                                 'mapel_id' => $pengajaran->mapel_id,
@@ -240,11 +234,10 @@ class JadwalController extends Controller
                                 'jam_selesai' => $slot[1],
                             ];
                             $dayCounts[$day]++;
-                            $daySlots[$day][] = $slot[0];
                         }
                     }
 
-                    if (count($created) >= 4) {
+                    if (count($created) >= $requiredSlots) {
                         foreach ($created as $data) {
                             Jadwal::create($data);
                             $this->syncPengajaran($data);
