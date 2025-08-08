@@ -7,6 +7,9 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 @if($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
@@ -48,12 +51,16 @@
             <option value="Sakit">Sakit</option>
             <option value="Alpha">Alpha</option>
         </select>
-        <x-input-error :messages="$errors->get('status')" class="mt-1" />
+        @error('status')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
     <div class="mb-3">
         <label>Password Sesi</label>
         <input type="text" name="password" class="form-control" required>
-        <x-input-error :messages="$errors->get('password')" class="mt-1" />
+        @error('password')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('student.jadwal') }}" class="btn btn-secondary">Kembali</a>
