@@ -4,6 +4,21 @@
 
 @section('content')
 <h1>Data Penilaian</h1>
+<form method="GET" action="{{ route('penilaian.index') }}" class="row g-2 mb-3">
+    <div class="col-md-3">
+        <input type="text" name="nama" value="{{ request('nama') }}" class="form-control" placeholder="Nama Siswa">
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="kelas" value="{{ request('kelas') }}" class="form-control" placeholder="Kelas">
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="mapel" value="{{ request('mapel') }}" class="form-control" placeholder="Mata Pelajaran">
+    </div>
+    <div class="col-md-3 d-flex">
+        <button type="submit" class="btn btn-primary me-2">Cari</button>
+        <a href="{{ route('penilaian.index') }}" class="btn btn-secondary">Reset</a>
+    </div>
+</form>
 <a href="{{ route('penilaian.create') }}" class="btn btn-primary mb-3">Tambah</a>
 <div class="table-responsive">
 <table class="table table-bordered">
