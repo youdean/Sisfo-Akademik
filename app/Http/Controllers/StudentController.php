@@ -57,6 +57,7 @@ class StudentController extends Controller
         if ($kelas) {
             $jadwal = Jadwal::with(['mapel', 'guru'])
                 ->where('kelas_id', $kelas->id)
+                ->orderBy('jam_mulai')
                 ->get()
                 ->groupBy('hari');
         } else {

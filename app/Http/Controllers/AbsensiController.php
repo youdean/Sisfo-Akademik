@@ -199,7 +199,7 @@ public function update(Request $request, Absensi $absensi)
                 $jadwalQuery->where('mapel_id', $request->mapel_id);
             }
 
-            $jadwal = $jadwalQuery->get();
+            $jadwal = $jadwalQuery->orderBy('jam_mulai')->get();
             $kelasOptions = Kelas::all();
             $mapelOptions = MataPelajaran::all();
             $hariOptions = array_values($hariMap);
