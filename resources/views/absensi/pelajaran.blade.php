@@ -46,7 +46,7 @@
 @endif
 
 @if(Auth::user()->role === 'admin')
-@php $isFuture = \Carbon\Carbon::parse($tanggal)->isFuture(); @endphp
+@php $isFuture = \Carbon\Carbon::parse($tanggal)->isAfter(\Carbon\Carbon::today()); @endphp
 <ul class="list-group">
     @forelse($jadwal as $j)
         <li class="list-group-item d-flex justify-content-between align-items-center">
