@@ -203,7 +203,7 @@ class AbsensiController extends Controller
                 $jadwalQuery->where('mapel_id', $request->mapel_id);
             }
 
-            $jadwal = $this->mergeConsecutiveJadwal(
+            $jadwal = Jadwal::mergeConsecutive(
                 $jadwalQuery->orderBy('jam_mulai')->get()
             );
             $kelasOptions = Kelas::all();
@@ -230,7 +230,7 @@ class AbsensiController extends Controller
                 ->orderBy('jam_mulai')
                 ->get()
                 ->groupBy('hari')
-                ->map(fn ($items) => $this->mergeConsecutiveJadwal($items));
+                ->map(fn ($items) => Jadwal::mergeConsecutive($items));
         }
 
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
