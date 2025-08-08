@@ -47,7 +47,7 @@
                             <x-dropdown-link :href="route('penilaian.index')">Penilaian</x-dropdown-link>
                             <x-dropdown-link :href="route('absensi.pelajaran')">Absensi Siswa</x-dropdown-link>
                         @endif
-                        @if(Auth::user()->role === 'siswa')
+                        @if(in_array(Auth::user()->role, ['siswa','guru','admin']))
                             <x-dropdown-link :href="route('student.profile')">Data Diri</x-dropdown-link>
                             <x-dropdown-link :href="route('student.nilai')">Nilai Saya</x-dropdown-link>
                             <x-dropdown-link :href="route('rapor.cetak')">Cetak Raport</x-dropdown-link>
