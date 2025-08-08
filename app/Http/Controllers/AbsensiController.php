@@ -189,7 +189,10 @@ class AbsensiController extends Controller
             'Sunday' => 'Minggu',
         ];
 
-        $tanggal = $request->input('tanggal', date('Y-m-d'));
+        $tanggal = $request->input('tanggal', Carbon::now()->toDateString());
+        if (Carbon::parse($tanggal)->isFuture()) {
+            abort(403);
+        }
         $hari = $request->input('hari', $hariMap[date('l', strtotime($tanggal))]);
 
         if (Auth::user()->role === 'admin') {
@@ -275,7 +278,10 @@ class AbsensiController extends Controller
             abort(403);
         }
 
-        $tanggal = $request->input('tanggal', date('Y-m-d'));
+        $tanggal = $request->input('tanggal', Carbon::now()->toDateString());
+        if (Carbon::parse($tanggal)->isFuture()) {
+            abort(403);
+        }
         $kelasNama = $jadwal->kelas->nama;
         $siswa = Siswa::where('kelas', $kelasNama)->get();
         $absen = Absensi::whereIn('siswa_id', $siswa->pluck('id'))
@@ -300,11 +306,11 @@ class AbsensiController extends Controller
         }
 
         $request->validate([
-            'tanggal' => 'required|date',
+            'tanggal' => 'required|date|before_or_equal:today',
             'status' => 'array',
         ]);
 
-        $tanggal = $request->input('tanggal', date('Y-m-d'));
+        $tanggal = $request->input('tanggal', Carbon::now()->toDateString());
         $siswaIds = Siswa::where('kelas', $jadwal->kelas->nama)->pluck('id');
         $statusData = $request->input('status', []);
         foreach ($siswaIds as $id) {
