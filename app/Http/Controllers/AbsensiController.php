@@ -14,6 +14,7 @@ use App\Exports\RekapAbsensiExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class AbsensiController extends Controller
 {
@@ -227,10 +228,16 @@ public function update(Request $request, Absensi $absensi)
         }
 
         $days = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $dates = [];
+        foreach ($days as $index => $day) {
+            $dates[$day] = $startOfWeek->copy()->addDays($index)->format('Y-m-d');
+        }
 
         return view('absensi.pelajaran', [
             'jadwal' => $jadwal,
             'days' => $days,
+            'dates' => $dates,
         ]);
     }
 

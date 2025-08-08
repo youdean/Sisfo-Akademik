@@ -50,7 +50,7 @@
     @forelse($jadwal as $j)
         <li class="list-group-item d-flex justify-content-between align-items-center">
             <span>{{ $j->kelas->nama }} - {{ $j->mapel->nama }} ({{ $j->jam_mulai }} - {{ $j->jam_selesai }})</span>
-            <a href="{{ route('absensi.pelajaran.form', $j->id) }}" class="btn btn-sm btn-primary">Isi Absen</a>
+            <a href="{{ route('absensi.pelajaran.form', ['jadwal' => $j->id, 'tanggal' => $tanggal]) }}" class="btn btn-sm btn-primary">Isi Absen</a>
         </li>
     @empty
         <li class="list-group-item text-center">Tidak ada jadwal</li>
@@ -63,7 +63,7 @@
             @forelse($jadwal->get($day, collect()) as $j)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $j->kelas->nama }} - {{ $j->mapel->nama }} ({{ $j->jam_mulai }} - {{ $j->jam_selesai }})</span>
-                    <a href="{{ route('absensi.pelajaran.form', $j->id) }}" class="btn btn-sm btn-primary">Isi Absen</a>
+                    <a href="{{ route('absensi.pelajaran.form', ['jadwal' => $j->id, 'tanggal' => $dates[$day]]) }}" class="btn btn-sm btn-primary">Isi Absen</a>
                 </li>
             @empty
                 <li class="list-group-item text-center">Tidak ada jadwal</li>
