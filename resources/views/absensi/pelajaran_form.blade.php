@@ -18,7 +18,7 @@
 @endif
 <form method="GET" class="row g-2 mb-3">
     <div class="col-auto">
-        <input type="date" name="tanggal" value="{{ $tanggal }}" class="form-control" onchange="this.form.submit()">
+        <input type="date" name="tanggal" value="{{ $tanggal }}" class="form-control" max="{{ now()->toDateString() }}" onchange="this.form.submit()">
     </div>
     <noscript class="col-auto"><button class="btn btn-primary">Tampilkan</button></noscript>
 </form>
@@ -49,6 +49,6 @@
         </tbody>
     </table>
 </div>
-    <button class="btn btn-success">Simpan</button>
+    <button class="btn btn-success" @if($isFuture) disabled @endif>Simpan</button>
 </form>
 @endsection
