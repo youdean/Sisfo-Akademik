@@ -89,6 +89,6 @@ class GuruAbsensiFutureDateTest extends TestCase
             ->get('/absensi/pelajaran/'.$jadwal->id.'?tanggal=2024-07-02')
             ->assertStatus(200);
 
-        $response->assertSee('<button class="btn btn-success"  disabled', false);
+        $response->assertSee('<button class="btn btn-success" disabled', false);
     }
 }
