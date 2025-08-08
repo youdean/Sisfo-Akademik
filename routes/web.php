@@ -15,6 +15,7 @@ use App\Http\Controllers\GuruKelasController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PengajaranController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\RaporController;
 
 // Landing page - redirect to login
 Route::get('/', function () {
@@ -82,6 +83,7 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
 
 // Profile dapat diakses oleh semua user yang login
 Route::middleware('auth')->group(function () {
+    Route::get('/rapor/cetak', [RaporController::class, 'cetak'])->name('rapor.cetak');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
