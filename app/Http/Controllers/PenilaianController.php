@@ -33,19 +33,33 @@ class PenilaianController extends Controller
 
     public function index(Request $request)
     {
-        $query = Penilaian::with('siswa')->whereHas('siswa', function ($q) {
+        $query = Penilaian::with(['siswa', 'mapel'])->whereHas('siswa', function ($q) {
             $q->whereIn('kelas', $this->kelasGuru());
         });
 
-        $search = $request->input('search');
-        if ($search) {
-            $query->whereHas('siswa', function ($s) use ($search) {
-                $s->where('nama', 'like', "%{$search}%");
+        $nama = $request->input('nama');
+        if ($nama) {
+            $query->whereHas('siswa', function ($s) use ($nama) {
+                $s->where('nama', 'like', "%{$nama}%");
+            });
+        }
+
+        $kelas = $request->input('kelas');
+        if ($kelas) {
+            $query->whereHas('siswa', function ($s) use ($kelas) {
+                $s->where('kelas', 'like', "%{$kelas}%");
+            });
+        }
+
+        $mapel = $request->input('mapel');
+        if ($mapel) {
+            $query->whereHas('mapel', function ($m) use ($mapel) {
+                $m->where('nama', 'like', "%{$mapel}%");
             });
         }
 
         $penilaian = $query->paginate(10)->withQueryString();
-        return view('penilaian.index', compact('penilaian', 'search'));
+        return view('penilaian.index', compact('penilaian', 'nama', 'kelas', 'mapel'));
     }
 
     public function create()
