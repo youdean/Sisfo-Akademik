@@ -86,10 +86,13 @@
                     <li><a href="{{ route('penilaian.index') }}" class="nav-link {{ request()->routeIs('penilaian.*') ? 'active' : '' }}"><i class="bi bi-list-check me-2"></i>Penilaian</a></li>
                     <li><a href="{{ route('absensi.pelajaran') }}" class="nav-link {{ request()->routeIs('absensi.*') ? 'active' : '' }}"><i class="bi bi-person-check me-2"></i>Absensi Siswa</a></li>
                 @endif
-                @if(Auth::user()->role === 'siswa')
+                @if(in_array(Auth::user()->role, ['siswa','guru','admin']))
                     <li><a href="{{ route('student.profile') }}" class="nav-link {{ request()->routeIs('student.profile') ? 'active' : '' }}"><i class="bi bi-person me-2"></i>Data Diri</a></li>
                     <li><a href="{{ route('student.nilai') }}" class="nav-link {{ request()->routeIs('student.nilai') ? 'active' : '' }}"><i class="bi bi-clipboard-data me-2"></i>Nilai Saya</a></li>
-                    <li><a href="{{ route('student.jadwal') }}" class="nav-link {{ request()->routeIs('student.jadwal') ? 'active' : '' }}"><i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran</a></li>
+                    @if(Auth::user()->role === 'siswa')
+                        <li><a href="{{ route('student.jadwal') }}" class="nav-link {{ request()->routeIs('student.jadwal') ? 'active' : '' }}"><i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran</a></li>
+                    @endif
+                    <li><a href="{{ route('rapor.cetak') }}" class="nav-link {{ request()->routeIs('rapor.cetak') ? 'active' : '' }}"><i class="bi bi-printer me-2"></i>Cetak Rapor</a></li>
                 @endif
             </ul>
             <hr>
@@ -142,10 +145,13 @@
                     <li><a href="{{ route('penilaian.index') }}" class="nav-link {{ request()->routeIs('penilaian.*') ? 'active' : '' }}"><i class="bi bi-list-check me-2"></i>Penilaian</a></li>
                     <li><a href="{{ route('absensi.pelajaran') }}" class="nav-link {{ request()->routeIs('absensi.*') ? 'active' : '' }}"><i class="bi bi-person-check me-2"></i>Absensi Siswa</a></li>
                 @endif
-                @if(Auth::user()->role === 'siswa')
+                @if(in_array(Auth::user()->role, ['siswa','guru','admin']))
                     <li><a href="{{ route('student.profile') }}" class="nav-link {{ request()->routeIs('student.profile') ? 'active' : '' }}"><i class="bi bi-person me-2"></i>Data Diri</a></li>
                     <li><a href="{{ route('student.nilai') }}" class="nav-link {{ request()->routeIs('student.nilai') ? 'active' : '' }}"><i class="bi bi-clipboard-data me-2"></i>Nilai Saya</a></li>
-                    <li><a href="{{ route('student.jadwal') }}" class="nav-link {{ request()->routeIs('student.jadwal') ? 'active' : '' }}"><i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran</a></li>
+                    @if(Auth::user()->role === 'siswa')
+                        <li><a href="{{ route('student.jadwal') }}" class="nav-link {{ request()->routeIs('student.jadwal') ? 'active' : '' }}"><i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran</a></li>
+                    @endif
+                    <li><a href="{{ route('rapor.cetak') }}" class="nav-link {{ request()->routeIs('rapor.cetak') ? 'active' : '' }}"><i class="bi bi-printer me-2"></i>Cetak Rapor</a></li>
                 @endif
             </ul>
             <hr>
