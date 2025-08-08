@@ -10,6 +10,7 @@ use App\Models\AttendanceSession;
 use App\Models\Penilaian;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 class StudentController extends Controller
@@ -88,7 +89,7 @@ class StudentController extends Controller
         $time = $now->format('H:i');
 
         if ($hari !== $jadwal->hari || $time < $jadwal->jam_mulai || $time > $jadwal->jam_selesai) {
-            abort(403);
+            return back()->with('error', 'Waktu absen tidak valid');
         }
 
         $session = AttendanceSession::where('jadwal_id', $jadwal->id)
@@ -96,7 +97,7 @@ class StudentController extends Controller
             ->whereNull('closed_at')
             ->first();
         if (! $session) {
-            abort(403);
+            return back()->with('error', 'Sesi belum dibuka');
         }
 
         $riwayat = Absensi::where('siswa_id', $siswa->id)
@@ -123,7 +124,7 @@ class StudentController extends Controller
         $time = $now->format('H:i');
 
         if ($hari !== $jadwal->hari || $time < $jadwal->jam_mulai || $time > $jadwal->jam_selesai) {
-            abort(403);
+            return back()->with('error', 'Waktu absen tidak valid')->withInput();
         }
 
         $session = AttendanceSession::where('jadwal_id', $jadwal->id)
@@ -131,16 +132,22 @@ class StudentController extends Controller
             ->whereNull('closed_at')
             ->first();
         if (! $session) {
-            abort(403);
+            return back()->with('error', 'Sesi belum dibuka')->withInput();
         }
 
-        $data = $request->validate([
+        $validator = Validator::make($request->all(), [
             'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
             'password' => 'required',
         ]);
 
-        if ($data['password'] !== $session->password) {
-            abort(403);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $data = $validator->validated();
+
+        if ($request->password !== $session->password) {
+            return back()->withErrors(['password' => 'Password salah'])->withInput();
         }
 
         Absensi::updateOrCreate(
