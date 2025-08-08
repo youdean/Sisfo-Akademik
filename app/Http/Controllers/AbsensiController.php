@@ -321,14 +321,14 @@ class AbsensiController extends Controller
             ->whereNull('closed_at')
             ->first();
 
-        return view('absensi.pelajaran_form', [
-            'jadwal' => $jadwal,
-            'tanggal' => $tanggal,
-            'siswa' => $siswa,
-            'absen' => $absen,
-            'isFuture' => $isFuture,
-            'activeSession' => $activeSession,
-        ]);
+        return view('absensi.pelajaran_form', compact(
+            'jadwal',
+            'tanggal',
+            'siswa',
+            'absen',
+            'isFuture',
+            'activeSession'
+        ));
     }
 
     public function pelajaranStore(Request $request, Jadwal $jadwal)
