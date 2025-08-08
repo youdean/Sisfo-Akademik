@@ -42,13 +42,21 @@ class PenilaianController extends Controller
         if ($user && $user->role === 'guru') {
             $guru = Guru::where('user_id', $user->id)->first();
             if ($guru) {
-                $query->whereExists(function ($sub) use ($guru) {
-                    $sub->select(DB::raw(1))
-                        ->from('pengajaran')
-                        ->join('siswa', 'pengajaran.kelas', '=', 'siswa.kelas')
-                        ->whereColumn('siswa.id', 'penilaian.siswa_id')
-                        ->whereColumn('pengajaran.mapel_id', 'penilaian.mapel_id')
-                        ->where('pengajaran.guru_id', $guru->id);
+                $query->where(function ($q) use ($guru) {
+                    $q->whereExists(function ($sub) use ($guru) {
+                        $sub->select(DB::raw(1))
+                            ->from('pengajaran')
+                            ->join('siswa', 'pengajaran.kelas', '=', 'siswa.kelas')
+                            ->whereColumn('siswa.id', 'penilaian.siswa_id')
+                            ->whereColumn('pengajaran.mapel_id', 'penilaian.mapel_id')
+                            ->where('pengajaran.guru_id', $guru->id);
+                    })->orWhereExists(function ($sub) use ($guru) {
+                        $sub->select(DB::raw(1))
+                            ->from('kelas')
+                            ->join('siswa as s', 'kelas.nama', '=', 's.kelas')
+                            ->whereColumn('s.id', 'penilaian.siswa_id')
+                            ->where('kelas.guru_id', $guru->id);
+                    });
                 });
             }
         }
