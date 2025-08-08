@@ -260,7 +260,8 @@ class AbsensiController extends Controller
             'opened_at' => now(),
         ]);
 
-        return back()->with('session_password', $password);
+        return redirect()->route('absensi.pelajaran.form', ['jadwal' => $jadwal->id, 'tanggal' => $tanggal])
+            ->with('session_password', $password);
     }
 
     public function closeSession(Request $request, Jadwal $jadwal)
@@ -275,7 +276,8 @@ class AbsensiController extends Controller
             $session->update(['closed_at' => now()]);
         }
 
-        return back()->with('success', 'Sesi ditutup');
+        return redirect()->route('absensi.pelajaran.form', ['jadwal' => $jadwal->id, 'tanggal' => $tanggal])
+            ->with('success', 'Sesi ditutup');
     }
 
     private function mergeConsecutiveJadwal($jadwal)
