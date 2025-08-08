@@ -190,9 +190,6 @@ class AbsensiController extends Controller
         ];
 
         $tanggal = $request->input('tanggal', Carbon::now()->toDateString());
-        if (Carbon::parse($tanggal)->isFuture()) {
-            abort(403);
-        }
         $hari = $request->input('hari', $hariMap[date('l', strtotime($tanggal))]);
 
         if (Auth::user()->role === 'admin') {
@@ -279,9 +276,7 @@ class AbsensiController extends Controller
         }
 
         $tanggal = $request->input('tanggal', Carbon::now()->toDateString());
-        if (Carbon::parse($tanggal)->isFuture()) {
-            abort(403);
-        }
+        $isFuture = Carbon::parse($tanggal)->isFuture();
         $kelasNama = $jadwal->kelas->nama;
         $siswa = Siswa::where('kelas', $kelasNama)->get();
         $absen = Absensi::whereIn('siswa_id', $siswa->pluck('id'))
@@ -295,6 +290,7 @@ class AbsensiController extends Controller
             'tanggal' => $tanggal,
             'siswa' => $siswa,
             'absen' => $absen,
+            'isFuture' => $isFuture,
         ]);
     }
 

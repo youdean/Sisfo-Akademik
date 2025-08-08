@@ -49,6 +49,6 @@
         </tbody>
     </table>
 </div>
-    <button class="btn btn-success">Simpan</button>
+    <button class="btn btn-success" @if($isFuture) disabled @endif>Simpan</button>
 </form>
 @endsection

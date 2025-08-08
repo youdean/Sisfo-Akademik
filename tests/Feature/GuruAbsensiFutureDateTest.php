@@ -78,4 +78,17 @@ class GuruAbsensiFutureDateTest extends TestCase
             'tanggal' => '2024-07-02',
         ]);
     }
+
+    public function test_future_date_form_shows_disabled_button(): void
+    {
+        Carbon::setTestNow('2024-07-01 08:00:00');
+
+        [$user, $siswa, $jadwal] = $this->setupData();
+
+        $response = $this->actingAs($user)
+            ->get('/absensi/pelajaran/'.$jadwal->id.'?tanggal=2024-07-02')
+            ->assertStatus(200);
+
+        $response->assertSee('<button class="btn btn-success"  disabled', false);
+    }
 }
