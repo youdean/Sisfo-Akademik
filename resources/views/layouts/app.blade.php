@@ -88,6 +88,7 @@
                 @endif
                 @if(in_array(Auth::user()->role, ['siswa','guru','admin']))
                     <li><a href="{{ route('student.profile') }}" class="nav-link {{ request()->routeIs('student.profile') ? 'active' : '' }}"><i class="bi bi-person me-2"></i>Data Diri</a></li>
+                    <li><a href="{{ route('password.edit') }}" class="nav-link {{ request()->routeIs('password.edit') ? 'active' : '' }}"><i class="bi bi-key me-2"></i>Ubah Password</a></li>
                     <li><a href="{{ route('student.nilai') }}" class="nav-link {{ request()->routeIs('student.nilai') ? 'active' : '' }}"><i class="bi bi-clipboard-data me-2"></i>Nilai Saya</a></li>
                     @if(Auth::user()->role === 'siswa')
                         <li><a href="{{ route('student.jadwal') }}" class="nav-link {{ request()->routeIs('student.jadwal') ? 'active' : '' }}"><i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran</a></li>
@@ -147,6 +148,7 @@
                 @endif
                 @if(in_array(Auth::user()->role, ['siswa','guru','admin']))
                     <li><a href="{{ route('student.profile') }}" class="nav-link {{ request()->routeIs('student.profile') ? 'active' : '' }}"><i class="bi bi-person me-2"></i>Data Diri</a></li>
+                    <li><a href="{{ route('password.edit') }}" class="nav-link {{ request()->routeIs('password.edit') ? 'active' : '' }}"><i class="bi bi-key me-2"></i>Ubah Password</a></li>
                     <li><a href="{{ route('student.nilai') }}" class="nav-link {{ request()->routeIs('student.nilai') ? 'active' : '' }}"><i class="bi bi-clipboard-data me-2"></i>Nilai Saya</a></li>
                     @if(Auth::user()->role === 'siswa')
                         <li><a href="{{ route('student.jadwal') }}" class="nav-link {{ request()->routeIs('student.jadwal') ? 'active' : '' }}"><i class="bi bi-calendar-week me-2"></i>Jadwal Pelajaran</a></li>
