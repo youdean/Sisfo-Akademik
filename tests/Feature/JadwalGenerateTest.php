@@ -281,4 +281,47 @@ class JadwalGenerateTest extends TestCase
         $this->assertEquals($kelas->nama, $pengajaran->kelas);
         $this->assertTrue(Guru::pluck('id')->contains($pengajaran->guru_id));
     }
+
+    public function test_single_slot_filled_when_only_option_available(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $teacher = Guru::create([
+            'nuptk' => '1000',
+            'nama' => 'Guru Single',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1980-01-01',
+        ]);
+
+        $mapel = MataPelajaran::create(['nama' => 'Kimia']);
+
+        $wali = Guru::create([
+            'nuptk' => '1001',
+            'nama' => 'Wali Single',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1990-01-01',
+        ]);
+
+        $ta = \App\Models\TahunAjaran::create([
+            'nama' => '2024/2025',
+            'start_date' => '2024-07-01',
+            'end_date' => '2025-06-30',
+        ]);
+
+        $kelas = Kelas::create(['nama' => 'Single', 'guru_id' => $wali->id, 'tahun_ajaran_id' => $ta->id]);
+
+        Pengajaran::create(['guru_id' => $teacher->id, 'mapel_id' => $mapel->id, 'kelas' => $kelas->nama]);
+
+        config()->set('jadwal.days', ['Senin']);
+        config()->set('jadwal.slots', [['09:00', '10:00']]);
+
+        $this->actingAs($admin)->post('/jadwal/generate')->assertRedirect('/jadwal');
+
+        $this->assertEquals(1, Jadwal::count());
+        $this->assertTrue(
+            Jadwal::where('jam_mulai', '09:00')->where('jam_selesai', '10:00')->exists()
+        );
+    }
 }
