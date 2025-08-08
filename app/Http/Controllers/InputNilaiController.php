@@ -86,6 +86,28 @@ class InputNilaiController extends Controller
             $a = $counts['Alpha'] ?? 0;
             $total = $h + $i + $sakit + $a;
             $nilaiAbsensi[$s->id] = $total ? ($h / $total) * 100 : 0;
+
+            $penilaianQuery = Penilaian::where('siswa_id', $s->id)
+                ->where('mapel_id', $mapel->id);
+
+            if ($penilaianQuery->exists()) {
+                $penilaianQuery->update([
+                    'hadir' => $h,
+                    'sakit' => $sakit,
+                    'izin' => $i,
+                    'alpha' => $a,
+                ]);
+            } else {
+                Penilaian::create([
+                    'siswa_id' => $s->id,
+                    'mapel_id' => $mapel->id,
+                    'semester' => 1,
+                    'hadir' => $h,
+                    'sakit' => $sakit,
+                    'izin' => $i,
+                    'alpha' => $a,
+                ]);
+            }
         }
 
         return view('input_nilai.nilai', [
