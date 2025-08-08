@@ -50,6 +50,11 @@
         </select>
         <x-input-error :messages="$errors->get('status')" class="mt-1" />
     </div>
+    <div class="mb-3">
+        <label>Password Sesi</label>
+        <input type="text" name="password" class="form-control" required>
+        <x-input-error :messages="$errors->get('password')" class="mt-1" />
+    </div>
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('student.jadwal') }}" class="btn btn-secondary">Kembali</a>
 </form>

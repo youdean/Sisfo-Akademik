@@ -11,6 +11,7 @@ use App\Models\Jadwal;
 use App\Models\TahunAjaran;
 use Carbon\Carbon;
 use App\Models\Absensi;
+use App\Models\AttendanceSession;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -60,17 +61,24 @@ class StudentScheduleAbsensiListTest extends TestCase
             'jam_selesai' => '08:00',
         ]);
 
+        AttendanceSession::create([
+            'jadwal_id' => $jadwal->id,
+            'tanggal' => now()->toDateString(),
+            'password' => '123456',
+            'opened_at' => now(),
+        ]);
+
         Absensi::create([
             'siswa_id' => $siswa->id,
             'mapel_id' => $mapel->id,
-            'tanggal' => date('Y-m-d', strtotime('-1 day')),
+            'tanggal' => now()->subDay()->toDateString(),
             'status' => 'Hadir',
         ]);
 
         $response = $this->actingAs($user)->get('/saya/jadwal/'.$jadwal->id.'/absen');
 
         $response->assertOk();
-        $response->assertSee(date('Y-m-d', strtotime('-1 day')));
+        $response->assertSee(now()->subDay()->toDateString());
         $response->assertSee('Hadir');
     }
 }

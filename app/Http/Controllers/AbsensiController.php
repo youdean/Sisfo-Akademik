@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\RekapAbsensiExport;
 use App\Models\Absensi;
+use App\Models\AttendanceSession;
 use App\Models\Guru;
 use App\Models\Jadwal;
 use App\Models\Kelas;
@@ -247,6 +248,36 @@ class AbsensiController extends Controller
         ]);
     }
 
+    public function openSession(Request $request, Jadwal $jadwal)
+    {
+        $tanggal = $request->input('tanggal', now()->toDateString());
+        $password = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        AttendanceSession::create([
+            'jadwal_id' => $jadwal->id,
+            'tanggal' => $tanggal,
+            'password' => $password,
+            'opened_at' => now(),
+        ]);
+
+        return back()->with('session_password', $password);
+    }
+
+    public function closeSession(Request $request, Jadwal $jadwal)
+    {
+        $tanggal = $request->input('tanggal', now()->toDateString());
+        $session = AttendanceSession::where('jadwal_id', $jadwal->id)
+            ->where('tanggal', $tanggal)
+            ->whereNull('closed_at')
+            ->first();
+
+        if ($session) {
+            $session->update(['closed_at' => now()]);
+        }
+
+        return back()->with('success', 'Sesi ditutup');
+    }
+
     private function mergeConsecutiveJadwal($jadwal)
     {
         $merged = collect();
@@ -285,12 +316,18 @@ class AbsensiController extends Controller
             ->get()
             ->pluck('status', 'siswa_id');
 
+        $activeSession = AttendanceSession::where('jadwal_id', $jadwal->id)
+            ->where('tanggal', $tanggal)
+            ->whereNull('closed_at')
+            ->first();
+
         return view('absensi.pelajaran_form', [
             'jadwal' => $jadwal,
             'tanggal' => $tanggal,
             'siswa' => $siswa,
             'absen' => $absen,
             'isFuture' => $isFuture,
+            'activeSession' => $activeSession,
         ]);
     }
 
