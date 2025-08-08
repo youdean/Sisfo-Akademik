@@ -22,6 +22,24 @@
     </div>
     <noscript class="col-auto"><button class="btn btn-primary">Tampilkan</button></noscript>
 </form>
+@if($activeSession)
+<div class="mb-3">
+    <div class="alert alert-info">Password Sesi: {{ $activeSession->password }}</div>
+    <form action="{{ route('absensi.pelajaran.close', $jadwal->id) }}" method="POST" class="d-inline">
+        @csrf
+        <input type="hidden" name="tanggal" value="{{ $tanggal }}">
+        <button class="btn btn-warning">Tutup Sesi</button>
+    </form>
+</div>
+@else
+<div class="mb-3">
+    <form action="{{ route('absensi.pelajaran.open', $jadwal->id) }}" method="POST" class="d-inline">
+        @csrf
+        <input type="hidden" name="tanggal" value="{{ $tanggal }}">
+        <button class="btn btn-primary">Buka Sesi</button>
+    </form>
+</div>
+@endif
 <form action="{{ route('absensi.pelajaran.store', $jadwal->id) }}" method="POST">
     @csrf
     <input type="hidden" name="tanggal" value="{{ $tanggal }}">

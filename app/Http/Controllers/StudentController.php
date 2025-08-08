@@ -6,6 +6,7 @@ use App\Models\Siswa;
 use App\Models\Absensi;
 use App\Models\Jadwal;
 use App\Models\Kelas;
+use App\Models\AttendanceSession;
 use App\Models\Penilaian;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -90,6 +91,14 @@ class StudentController extends Controller
             abort(403);
         }
 
+        $session = AttendanceSession::where('jadwal_id', $jadwal->id)
+            ->where('tanggal', now()->toDateString())
+            ->whereNull('closed_at')
+            ->first();
+        if (! $session) {
+            abort(403);
+        }
+
         $riwayat = Absensi::where('siswa_id', $siswa->id)
             ->where('mapel_id', $jadwal->mapel_id)
             ->orderBy('tanggal', 'desc')
@@ -117,12 +126,25 @@ class StudentController extends Controller
             abort(403);
         }
 
+        $session = AttendanceSession::where('jadwal_id', $jadwal->id)
+            ->where('tanggal', now()->toDateString())
+            ->whereNull('closed_at')
+            ->first();
+        if (! $session) {
+            abort(403);
+        }
+
         $data = $request->validate([
             'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
+            'password' => 'required',
         ]);
 
+        if ($data['password'] !== $session->password) {
+            abort(403);
+        }
+
         Absensi::updateOrCreate(
-            ['siswa_id' => $siswa->id, 'mapel_id' => $jadwal->mapel_id, 'tanggal' => date('Y-m-d')],
+            ['siswa_id' => $siswa->id, 'mapel_id' => $jadwal->mapel_id, 'tanggal' => now()->toDateString()],
             ['status' => $data['status']]
         );
 

@@ -48,6 +48,8 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::get('/absensi/pelajaran', [AbsensiController::class, 'pelajaran'])->name('absensi.pelajaran');
     Route::get('/absensi/pelajaran/{jadwal}', [AbsensiController::class, 'pelajaranForm'])->name('absensi.pelajaran.form');
     Route::post('/absensi/pelajaran/{jadwal}', [AbsensiController::class, 'pelajaranStore'])->name('absensi.pelajaran.store');
+    Route::post('/absensi/pelajaran/{jadwal}/open', [AbsensiController::class, 'openSession'])->name('absensi.pelajaran.open');
+    Route::post('/absensi/pelajaran/{jadwal}/close', [AbsensiController::class, 'closeSession'])->name('absensi.pelajaran.close');
     Route::get('/absensi/rekap', [AbsensiController::class, 'rekap'])->name('absensi.rekap');
     Route::get('/absensi/rekap/export', [AbsensiController::class, 'exportRekap'])->name('absensi.rekap.export');
 });
