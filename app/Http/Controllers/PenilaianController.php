@@ -10,6 +10,7 @@ use App\Models\Pengajaran;
 use App\Models\MataPelajaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class PenilaianController extends Controller
@@ -36,6 +37,21 @@ class PenilaianController extends Controller
         $query = Penilaian::with(['siswa', 'mapel'])->whereHas('siswa', function ($q) {
             $q->whereIn('kelas', $this->kelasGuru());
         });
+
+        $user = Auth::user();
+        if ($user && $user->role === 'guru') {
+            $guru = Guru::where('user_id', $user->id)->first();
+            if ($guru) {
+                $query->whereExists(function ($sub) use ($guru) {
+                    $sub->select(DB::raw(1))
+                        ->from('pengajaran')
+                        ->join('siswa', 'pengajaran.kelas', '=', 'siswa.kelas')
+                        ->whereColumn('siswa.id', 'penilaian.siswa_id')
+                        ->whereColumn('pengajaran.mapel_id', 'penilaian.mapel_id')
+                        ->where('pengajaran.guru_id', $guru->id);
+                });
+            }
+        }
 
         $nama = $request->input('nama');
         if ($nama) {
@@ -65,7 +81,16 @@ class PenilaianController extends Controller
     public function create()
     {
         $siswa = Siswa::whereIn('kelas', $this->kelasGuru())->get();
-        $mapel = MataPelajaran::all();
+
+        $user = Auth::user();
+        if ($user && $user->role === 'guru') {
+            $guru = Guru::where('user_id', $user->id)->first();
+            $mapelIds = Pengajaran::where('guru_id', $guru?->id)->pluck('mapel_id')->unique();
+            $mapel = MataPelajaran::whereIn('id', $mapelIds)->get();
+        } else {
+            $mapel = MataPelajaran::all();
+        }
+
         return view('penilaian.create', compact('siswa', 'mapel'));
     }
 
@@ -82,6 +107,19 @@ class PenilaianController extends Controller
             'pts' => 'nullable|integer|min:0|max:100',
             'pat' => 'nullable|integer|min:0|max:100',
         ]);
+
+        $user = Auth::user();
+        if ($user && $user->role === 'guru') {
+            $guru = Guru::where('user_id', $user->id)->first();
+            $kelas = Siswa::where('id', $data['siswa_id'])->value('kelas');
+            $allowed = Pengajaran::where('guru_id', $guru?->id)
+                ->where('mapel_id', $data['mapel_id'])
+                ->where('kelas', $kelas)
+                ->exists();
+            if (!$allowed) {
+                abort(403);
+            }
+        }
 
         Penilaian::create($data);
 
