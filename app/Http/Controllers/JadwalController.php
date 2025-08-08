@@ -253,7 +253,38 @@ class JadwalController extends Controller
                         }
                     }
 
-                    if (count($created) >= $requiredSlots) {
+                    if (count($created) < $requiredSlots) {
+                        foreach ($dayOrder as $day) {
+                            $slotOrder = $slots;
+                            shuffle($slotOrder);
+                            foreach ($slotOrder as $slot) {
+                                if (count($created) >= $requiredSlots) {
+                                    break 2;
+                                }
+
+                                if ($dayCounts[$day] >= 2) {
+                                    continue;
+                                }
+
+                                if ($this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot) ||
+                                    $this->hasConflict($classSchedules[$kelas->id][$day], $slot)) {
+                                    continue;
+                                }
+
+                                $created[] = [
+                                    'kelas_id' => $kelas->id,
+                                    'mapel_id' => $pengajaran->mapel_id,
+                                    'guru_id' => $pengajaran->guru_id,
+                                    'hari' => $day,
+                                    'jam_mulai' => $slot[0],
+                                    'jam_selesai' => $slot[1],
+                                ];
+                                $dayCounts[$day] += 1;
+                            }
+                        }
+                    }
+
+                    if (count($created) > 0) {
                         foreach ($created as $data) {
                             Jadwal::create($data);
                             $this->syncPengajaran($data);
