@@ -59,7 +59,8 @@ class StudentController extends Controller
                 ->where('kelas_id', $kelas->id)
                 ->orderBy('jam_mulai')
                 ->get()
-                ->groupBy('hari');
+                ->groupBy('hari')
+                ->map(fn ($items) => Jadwal::mergeConsecutive($items));
         } else {
             $jadwal = collect();
         }
