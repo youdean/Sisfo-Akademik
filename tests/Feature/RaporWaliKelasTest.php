@@ -61,7 +61,7 @@ class RaporWaliKelasTest extends TestCase
             'pat' => 0,
         ]);
 
-        $response = $this->actingAs($waliUser)->get('/rapor/cetak/' . $siswa->id);
+        $response = $this->actingAs($waliUser)->get(route('rapor.cetak', $siswa->id));
 
         $response->assertOk();
     }
@@ -109,7 +109,7 @@ class RaporWaliKelasTest extends TestCase
             'user_id' => $studentUser->id,
         ]);
 
-        $response = $this->actingAs($otherUser)->get('/rapor/cetak/' . $siswa->id);
+        $response = $this->actingAs($otherUser)->get(route('rapor.cetak', $siswa->id));
 
         $response->assertStatus(403);
     }

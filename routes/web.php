@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Cetak rapor dapat diakses oleh siswa, wali kelas, dan admin
-Route::middleware(['auth', 'role:siswa,admin,guru'])->get('/rapor/cetak/{siswa?}', [RaporController::class, 'cetak'])->name('rapor.cetak');
+Route::middleware(['auth', 'role:admin,guru,siswa'])->get('/rapor/cetak/{siswa?}', [RaporController::class, 'cetak'])->name('rapor.cetak');
 
 // Routes khusus siswa untuk melihat data sendiri
 Route::middleware(['auth', 'role:siswa'])->group(function () {

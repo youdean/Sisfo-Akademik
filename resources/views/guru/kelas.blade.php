@@ -33,7 +33,7 @@
             <td>{{ $s->jenis_kelamin }}</td>
             <td>{{ $s->tanggal_lahir }}</td>
             <td>
-                <a href="{{ route('rapor.cetak', $s->id) }}" class="btn btn-sm btn-info">Cetak Rapor</a>
+                <a href="{{ route('rapor.cetak', $s->id) }}" class="btn btn-sm btn-info" target="_blank" rel="noopener">Cetak Rapor</a>
             </td>
         </tr>
         @endforeach

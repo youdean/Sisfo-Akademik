@@ -21,7 +21,7 @@ class RaporController extends Controller
         $role = Auth::user()->role;
 
         if (in_array($role, ['admin', 'guru'])) {
-            $siswa = $siswa ?? abort(404);
+            abort_unless($siswa, 404);
         } else {
             $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         }
@@ -40,14 +40,15 @@ class RaporController extends Controller
 
         $kelas = Kelas::with('waliKelas')
             ->where('nama', $siswa->kelas)
+            ->where('tahun_ajaran_id', $siswa->tahun_ajaran_id)
             ->first();
 
         if ($role === 'guru') {
-            $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-            abort_if(!$kelas || $kelas->guru_id !== $guru->id, 403);
+            $guruId = Guru::where('user_id', Auth::id())->value('id');
+            abort_unless($kelas && $kelas->guru_id === $guruId, 403);
         }
 
-        $waliKelas = $kelas->waliKelas ?? null;
+        $waliKelas = $kelas?->waliKelas;
 
         $kepalaSekolah = Guru::whereHas('user', function ($query) {
             $query->where('role', 'kepala_sekolah');
