@@ -19,7 +19,6 @@
         <a href="{{ route('penilaian.index') }}" class="btn btn-secondary">Reset</a>
     </div>
 </form>
-<a href="{{ route('penilaian.create') }}" class="btn btn-primary mb-3">Tambah</a>
 <div class="table-responsive">
 <table class="table table-bordered">
     <thead>
