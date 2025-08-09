@@ -82,9 +82,9 @@
             <td style="padding-top:60px;text-align:center">__________________<br>{{ $waliKelas }}<br>NUPTK: {{ $waliKelasNuptk }}</td>
             <td style="padding-top:60px;text-align:center">__________________<br>
                 @if($kepalaSekolah)
-                    {{ $kepalaSekolah->nama }}<br>NIP: {{ $kepalaSekolah->nuptk }}
+                    {{ $kepalaSekolah->nama }}<br>NUPTK: {{ $kepalaSekolah->nuptk }}
                 @else
-                    Nama Kepala Sekolah<br>NIP: -
+                    Nama Kepala Sekolah<br>NUPTK: -
                 @endif
             </td>
         </tr>
