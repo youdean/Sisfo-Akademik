@@ -8,6 +8,9 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 @if($session && $session->status_sesi === 'open')
+    @if(session('password'))
+        <div class="alert alert-info">Password Sesi: <strong>{{ session('password') }}</strong></div>
+    @endif
     <form action="{{ route('absensi.session.end', $jadwal->id) }}" method="POST">
         @csrf
         <button class="btn btn-danger">Tutup Sesi</button>
@@ -15,13 +18,6 @@
 @else
     <form action="{{ route('absensi.session.start', $jadwal->id) }}" method="POST">
         @csrf
-        @if(! $session)
-            <div class="mb-3">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
-                <x-input-error :messages="$errors->get('password')" class="mt-1" />
-            </div>
-        @endif
         <button class="btn btn-primary" {{ $canStart ? '' : 'disabled' }}>Mulai Sesi</button>
     </form>
 @endif
