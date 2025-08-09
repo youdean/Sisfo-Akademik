@@ -306,86 +306,57 @@ class AbsensiController extends Controller
 
     public function session(Jadwal $jadwal)
     {
-        $session = AbsensiSession::where('jadwal_id', $jadwal->id)
+        $base = $jadwal->baseSlot();
+        $session = AbsensiSession::where('jadwal_id', $base->id)
             ->where('tanggal', Carbon::now()->toDateString())
             ->orderByDesc('id')
             ->first();
 
         $now = Carbon::now();
-        $start = $now->copy()->setTimeFromTimeString($jadwal->jam_mulai);
-        $end = $now->copy()->setTimeFromTimeString($this->extendedEndTime($jadwal));
-        $canStart =
-            $now->between($start, $end)
-            && $now->locale('id')->isoFormat('dddd') === $jadwal->hari
-            && ! $this->hasPrecedingSlot($jadwal);
+        $hari = $now->locale('id')->isoFormat('dddd');
+        $time = Carbon::parse($now->format('H:i'));
+        $start = Carbon::parse($base->jam_mulai);
+        $end = Carbon::parse($base->extendedEndTime());
 
-        return view('absensi.session', compact('jadwal', 'session', 'canStart'));
+        $canStart = $hari === $base->hari && $time->betweenIncluded($start, $end);
+
+        return view('absensi.session', [
+            'jadwal' => $base,
+            'session' => $session,
+            'canStart' => $canStart,
+        ]);
     }
 
     public function startSession(Jadwal $jadwal)
     {
+        $base = $jadwal->baseSlot();
         $now = Carbon::now();
-        $currentDay = $now->locale('id')->isoFormat('dddd');
-        $startTime = $now->copy()->setTimeFromTimeString($jadwal->jam_mulai);
-        $endTime = $now->copy()->setTimeFromTimeString($this->extendedEndTime($jadwal));
+        $hari = $now->locale('id')->isoFormat('dddd');
+        $time = Carbon::parse($now->format('H:i'));
+        $start = Carbon::parse($base->jam_mulai);
+        $end = Carbon::parse($base->extendedEndTime());
 
-        if (
-            $currentDay !== $jadwal->hari ||
-            $now->lt($startTime) ||
-            $now->gt($endTime) ||
-            $this->hasPrecedingSlot($jadwal)
-        ) {
+        if ($hari !== $base->hari || $time->lt($start) || $time->gt($end)) {
             abort(403, 'Sesi absensi hanya bisa dibuka sesuai jadwal');
         }
 
         $tanggal = $now->toDateString();
         AbsensiSession::create([
-            'jadwal_id' => $jadwal->id,
+            'jadwal_id' => $base->id,
             'tanggal' => $tanggal,
             'opened_by' => Auth::id(),
             'status_sesi' => 'open',
         ]);
 
-        $siswaIds = Siswa::where('kelas', $jadwal->kelas->nama)->pluck('id');
+        $siswaIds = Siswa::where('kelas', $base->kelas->nama)->pluck('id');
         foreach ($siswaIds as $id) {
             Absensi::updateOrCreate(
-                ['siswa_id' => $id, 'mapel_id' => $jadwal->mapel_id, 'tanggal' => $tanggal],
+                ['siswa_id' => $id, 'mapel_id' => $base->mapel_id, 'tanggal' => $tanggal],
                 ['status' => 'Alpha']
             );
         }
 
-        return redirect()->route('absensi.session', $jadwal->id)->with('success', 'Sesi absensi dibuka');
-    }
-
-    private function extendedEndTime(Jadwal $jadwal): string
-    {
-        $end = $jadwal->jam_selesai;
-        $current = $jadwal;
-        while (true) {
-            $next = Jadwal::where('kelas_id', $current->kelas_id)
-                ->where('mapel_id', $current->mapel_id)
-                ->where('guru_id', $current->guru_id)
-                ->where('hari', $current->hari)
-                ->where('jam_mulai', $end)
-                ->first();
-            if (! $next) {
-                break;
-            }
-            $end = $next->jam_selesai;
-            $current = $next;
-        }
-
-        return $end;
-    }
-
-    private function hasPrecedingSlot(Jadwal $jadwal): bool
-    {
-        return Jadwal::where('kelas_id', $jadwal->kelas_id)
-            ->where('mapel_id', $jadwal->mapel_id)
-            ->where('guru_id', $jadwal->guru_id)
-            ->where('hari', $jadwal->hari)
-            ->where('jam_selesai', $jadwal->jam_mulai)
-            ->exists();
+        return redirect()->route('absensi.session', $base->id)->with('success', 'Sesi absensi dibuka');
     }
 
     public function endSession(Jadwal $jadwal)

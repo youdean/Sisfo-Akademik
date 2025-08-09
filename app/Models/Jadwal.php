@@ -55,4 +55,59 @@ class Jadwal extends Model
 
         return $merged;
     }
+
+    /**
+     * Determine the end time of a block of consecutive schedules that belong to
+     * the same class, subject and teacher.
+     */
+    public function extendedEndTime(): string
+    {
+        $end = $this->jam_selesai;
+        $current = $this;
+
+        while (true) {
+            $next = self::where('kelas_id', $current->kelas_id)
+                ->where('mapel_id', $current->mapel_id)
+                ->where('guru_id', $current->guru_id)
+                ->where('hari', $current->hari)
+                ->where('jam_mulai', $end)
+                ->first();
+
+            if (! $next) {
+                break;
+            }
+
+            $end = $next->jam_selesai;
+            $current = $next;
+        }
+
+        return $end;
+    }
+
+    /**
+     * Retrieve the first schedule in a consecutive block.
+     */
+    public function baseSlot(): self
+    {
+        $current = $this;
+        $start = $this->jam_mulai;
+
+        while (true) {
+            $prev = self::where('kelas_id', $current->kelas_id)
+                ->where('mapel_id', $current->mapel_id)
+                ->where('guru_id', $current->guru_id)
+                ->where('hari', $current->hari)
+                ->where('jam_selesai', $start)
+                ->first();
+
+            if (! $prev) {
+                break;
+            }
+
+            $start = $prev->jam_mulai;
+            $current = $prev;
+        }
+
+        return $current;
+    }
 }
