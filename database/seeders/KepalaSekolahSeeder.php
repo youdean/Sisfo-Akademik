@@ -16,7 +16,7 @@ class KepalaSekolahSeeder extends Seeder
             [
                 'name' => 'Kepala Sekolah',
                 'password' => Hash::make('password'),
-                'role' => 'kepala_sekolah',
+                'role' => 'guru',
             ]
         );
 
