@@ -8,6 +8,7 @@ use App\Models\Guru;
 use App\Models\Jadwal;
 use App\Models\Kelas;
 use App\Models\MataPelajaran;
+use App\Models\AbsensiSession;
 use App\Models\Pengajaran;
 use App\Models\Siswa;
 use Carbon\Carbon;
@@ -77,6 +78,8 @@ class AbsensiController extends Controller
             'mapel_id' => 'required|exists:mata_pelajaran,id',
             'tanggal' => 'required|date',
             'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
+            'check_in_at' => 'nullable|date',
+            'check_out_at' => 'nullable|date',
         ]);
         Absensi::create($data);
 
@@ -104,6 +107,8 @@ class AbsensiController extends Controller
             'mapel_id' => 'required|exists:mata_pelajaran,id',
             'tanggal' => 'required|date',
             'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
+            'check_in_at' => 'nullable|date',
+            'check_out_at' => 'nullable|date',
         ]);
         $absensi->update($data);
 
@@ -318,5 +323,44 @@ class AbsensiController extends Controller
 
         return redirect()->route('absensi.pelajaran.form', [$jadwal->id, 'tanggal' => $tanggal])
             ->with('success', 'Absensi berhasil disimpan');
+    }
+
+    public function session(Jadwal $jadwal)
+    {
+        $session = AbsensiSession::where('jadwal_id', $jadwal->id)
+            ->where('tanggal', Carbon::now()->toDateString())
+            ->first();
+
+        return view('absensi.session', compact('jadwal', 'session'));
+    }
+
+    public function startSession(Jadwal $jadwal)
+    {
+        $tanggal = Carbon::now()->toDateString();
+        AbsensiSession::create([
+            'jadwal_id' => $jadwal->id,
+            'tanggal' => $tanggal,
+            'opened_by' => Auth::id(),
+            'status_sesi' => 'open',
+        ]);
+
+        $siswaIds = Siswa::where('kelas', $jadwal->kelas->nama)->pluck('id');
+        foreach ($siswaIds as $id) {
+            Absensi::updateOrCreate(
+                ['siswa_id' => $id, 'mapel_id' => $jadwal->mapel_id, 'tanggal' => $tanggal],
+                ['status' => 'Alpha']
+            );
+        }
+
+        return redirect()->route('absensi.session', $jadwal->id)->with('success', 'Sesi absensi dibuka');
+    }
+
+    public function endSession(Jadwal $jadwal)
+    {
+        AbsensiSession::where('jadwal_id', $jadwal->id)
+            ->where('tanggal', Carbon::now()->toDateString())
+            ->update(['status_sesi' => 'closed']);
+
+        return redirect()->route('absensi.session', $jadwal->id)->with('success', 'Sesi absensi ditutup');
     }
 }
