@@ -24,6 +24,7 @@
             <tr>
                 <th>Tanggal</th>
                 <th>Status</th>
+                <th>Check-in</th>
             </tr>
         </thead>
         <tbody>
@@ -31,26 +32,19 @@
             <tr>
                 <td>{{ $r->tanggal }}</td>
                 <td>{{ $r->status }}</td>
+                <td>{{ $r->check_in_at }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
 @endif
-<form action="{{ route('student.jadwal.absen', $jadwal->id) }}" method="POST">
+@if($today && $today->check_in_at)
+    <div class="alert alert-info">Check-in pada: {{ $today->check_in_at }}</div>
+@endif
+<form action="{{ route('student.absensi.checkin') }}" method="POST">
     @csrf
-    <div class="mb-3">
-        <label>Status</label>
-        <select name="status" class="form-control" required>
-            <option value="">-- Pilih Status --</option>
-            <option value="Hadir">Hadir</option>
-            <option value="Izin">Izin</option>
-            <option value="Sakit">Sakit</option>
-            <option value="Alpha">Alpha</option>
-        </select>
-        <x-input-error :messages="$errors->get('status')" class="mt-1" />
-    </div>
-    <button class="btn btn-success">Simpan</button>
+    <button class="btn btn-success">Check In</button>
     <a href="{{ route('student.jadwal') }}" class="btn btn-secondary">Kembali</a>
 </form>
 @endsection

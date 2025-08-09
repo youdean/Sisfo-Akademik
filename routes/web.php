@@ -50,6 +50,9 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::post('/absensi/pelajaran/{jadwal}', [AbsensiController::class, 'pelajaranStore'])->name('absensi.pelajaran.store');
     Route::get('/absensi/rekap', [AbsensiController::class, 'rekap'])->name('absensi.rekap');
     Route::get('/absensi/rekap/export', [AbsensiController::class, 'exportRekap'])->name('absensi.rekap.export');
+    Route::get('/absensi/session/{jadwal}', [AbsensiController::class, 'session'])->name('absensi.session');
+    Route::post('/absensi/session/{jadwal}/start', [AbsensiController::class, 'startSession'])->name('absensi.session.start');
+    Route::post('/absensi/session/{jadwal}/end', [AbsensiController::class, 'endSession'])->name('absensi.session.end');
 });
 
 // Halaman guru untuk melihat siswa di kelasnya
@@ -99,6 +102,7 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/saya/jadwal', [StudentController::class, 'jadwal'])->name('student.jadwal');
     Route::get('/saya/jadwal/{jadwal}/absen', [StudentController::class, 'jadwalAbsenForm'])->name('student.jadwal.absen.form');
     Route::post('/saya/jadwal/{jadwal}/absen', [StudentController::class, 'jadwalAbsen'])->name('student.jadwal.absen');
+    Route::post('/saya/absensi/check-in', [StudentController::class, 'sessionCheckIn'])->name('student.absensi.checkin');
 });
 
 require __DIR__.'/auth.php';
