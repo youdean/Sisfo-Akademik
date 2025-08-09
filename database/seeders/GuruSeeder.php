@@ -17,7 +17,7 @@ class GuruSeeder extends Seeder
 
         for ($i = 1; $i <= 20; $i++) {
             $data[] = [
-                'nuptk' => str_pad($i, 18, '0', STR_PAD_LEFT),
+                'nuptk' => $faker->unique()->numerify('################'),
                 'nama' => $i === 1 ? 'Guru' : $faker->unique()->name,
                 'email' => $i === 1 ? 'guru@demo.com' : $faker->unique()->safeEmail(),
                 'tempat_lahir' => $faker->city,
