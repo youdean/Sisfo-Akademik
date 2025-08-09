@@ -23,7 +23,7 @@
         </tr>
         <tr>
             <td>NISN</td><td>: {{ $siswa->nisn }}</td>
-            <td></td><td></td>
+            <td>Semester</td><td>: {{ $semester }}</td>
         </tr>
     </table>
 
