@@ -250,27 +250,6 @@ class AbsensiController extends Controller
         ]);
     }
 
-    private function mergeConsecutiveJadwal($jadwal)
-    {
-        $merged = collect();
-        foreach ($jadwal as $item) {
-            if ($merged->isNotEmpty()) {
-                $last = $merged->last();
-                if ($last->kelas_id === $item->kelas_id &&
-                    $last->mapel_id === $item->mapel_id &&
-                    $last->guru_id === $item->guru_id &&
-                    $last->jam_selesai === $item->jam_mulai) {
-                    $last->jam_selesai = $item->jam_selesai;
-
-                    continue;
-                }
-            }
-            $merged->push(clone $item);
-        }
-
-        return $merged;
-    }
-
     public function pelajaranForm(Request $request, Jadwal $jadwal)
     {
         $guru = Guru::where('user_id', Auth::id())->first();

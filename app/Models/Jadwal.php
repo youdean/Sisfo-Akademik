@@ -27,6 +27,13 @@ class Jadwal extends Model
         return $this->belongsTo(Guru::class);
     }
 
+    /**
+     * Merge consecutive schedule entries belonging to the same class, subject,
+     * and teacher. Entries must be ordered by start time.
+     *
+     * @param \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection $jadwal
+     * @return \Illuminate\Support\Collection
+     */
     public static function mergeConsecutive($jadwal)
     {
         $merged = collect();
