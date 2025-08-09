@@ -336,7 +336,29 @@ class AbsensiController extends Controller
 
     public function startSession(Jadwal $jadwal)
     {
-        $tanggal = Carbon::now()->toDateString();
+        $now = Carbon::now();
+        $dayMap = [
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+            'Sunday' => 'Minggu',
+        ];
+
+        $currentDay = $dayMap[$now->format('l')] ?? '';
+        $currentTime = $now->format('H:i');
+
+        if (
+            $currentDay !== $jadwal->hari ||
+            $currentTime < $jadwal->jam_mulai ||
+            $currentTime > $jadwal->jam_selesai
+        ) {
+            abort(403, 'Sesi absensi hanya bisa dibuka sesuai jadwal');
+        }
+
+        $tanggal = $now->toDateString();
         AbsensiSession::create([
             'jadwal_id' => $jadwal->id,
             'tanggal' => $tanggal,
