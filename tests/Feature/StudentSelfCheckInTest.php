@@ -96,6 +96,78 @@ class StudentSelfCheckInTest extends TestCase
         $this->assertNotNull(Absensi::first()->check_in_at);
     }
 
+    public function test_student_can_check_in_during_extended_schedule(): void
+    {
+        Carbon::setTestNow('2024-07-01 08:30:00');
+        [$guruUser, $siswaUser, $siswa, $jadwal, $mapel] = $this->setupData();
+        $jadwal->update(['jam_selesai' => '09:00']);
+        AbsensiSession::create([
+            'jadwal_id' => $jadwal->id,
+            'tanggal' => '2024-07-01',
+            'opened_by' => $guruUser->id,
+            'status_sesi' => 'open',
+        ]);
+        Absensi::create([
+            'siswa_id' => $siswa->id,
+            'mapel_id' => $mapel->id,
+            'tanggal' => '2024-07-01',
+            'status' => 'Alpha',
+        ]);
+
+        $this->actingAs($siswaUser)
+            ->from('/saya/jadwal/'.$jadwal->id.'/absen')
+            ->post('/saya/absensi/check-in')
+            ->assertRedirect('/saya/jadwal/'.$jadwal->id.'/absen');
+
+        $this->assertDatabaseHas('absensi', [
+            'siswa_id' => $siswa->id,
+            'mapel_id' => $mapel->id,
+            'status' => 'Hadir',
+            'tanggal' => '2024-07-01',
+        ]);
+        $this->assertNotNull(Absensi::first()->check_in_at);
+    }
+
+    public function test_student_can_check_in_during_multi_hour_session(): void
+    {
+        Carbon::setTestNow('2024-07-01 08:30:00');
+        [$guruUser, $siswaUser, $siswa, $jadwal1, $mapel] = $this->setupData();
+        $jadwal2 = Jadwal::create([
+            'kelas_id' => $jadwal1->kelas_id,
+            'mapel_id' => $mapel->id,
+            'guru_id' => $jadwal1->guru_id,
+            'hari' => 'Senin',
+            'jam_mulai' => '08:00',
+            'jam_selesai' => '09:00',
+        ]);
+
+        AbsensiSession::create([
+            'jadwal_id' => $jadwal1->id,
+            'tanggal' => '2024-07-01',
+            'opened_by' => $guruUser->id,
+            'status_sesi' => 'open',
+        ]);
+        Absensi::create([
+            'siswa_id' => $siswa->id,
+            'mapel_id' => $mapel->id,
+            'tanggal' => '2024-07-01',
+            'status' => 'Alpha',
+        ]);
+
+        $this->actingAs($siswaUser)
+            ->from('/saya/jadwal/'.$jadwal1->id.'/absen')
+            ->post('/saya/absensi/check-in')
+            ->assertRedirect('/saya/jadwal/'.$jadwal1->id.'/absen');
+
+        $this->assertDatabaseHas('absensi', [
+            'siswa_id' => $siswa->id,
+            'mapel_id' => $mapel->id,
+            'status' => 'Hadir',
+            'tanggal' => '2024-07-01',
+        ]);
+        $this->assertNotNull(Absensi::first()->check_in_at);
+    }
+
     public function test_student_cannot_check_in_outside_time(): void
     {
         Carbon::setTestNow('2024-07-01 08:30:00');

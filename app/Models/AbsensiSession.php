@@ -10,4 +10,9 @@ class AbsensiSession extends Model
     use HasFactory;
 
     protected $fillable = ['jadwal_id', 'tanggal', 'opened_by', 'status_sesi'];
+
+    public function jadwal()
+    {
+        return $this->belongsTo(Jadwal::class);
+    }
 }
