@@ -50,7 +50,7 @@ class FutureAttendanceAccessTest extends TestCase
             'jam_selesai' => '10:00',
         ]);
 
-        $response = $this->actingAs($admin)->get('/absensi/pelajaran?tanggal=2024-07-02&hari=Selasa');
+        $response = $this->actingAs($admin)->get('/absensi/pelajaran?tanggal=2024-07-02');
 
         $response->assertOk();
         $response->assertSee('<button class="btn btn-sm btn-primary" disabled>Isi Absen</button>', false);

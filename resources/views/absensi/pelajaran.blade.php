@@ -17,13 +17,6 @@
         <input type="date" name="tanggal" value="{{ $tanggal }}" class="form-control">
     </div>
     <div class="col-auto">
-        <select name="hari" class="form-control">
-            @foreach($hariOptions as $h)
-                <option value="{{ $h }}" {{ $hari == $h ? 'selected' : '' }}>{{ $h }}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="col-auto">
         <select name="kelas_id" class="form-control">
             <option value="">-- Semua Kelas --</option>
             @foreach($kelasOptions as $k)

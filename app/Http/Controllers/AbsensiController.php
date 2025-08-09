@@ -190,7 +190,7 @@ class AbsensiController extends Controller
         ];
 
         $tanggal = $request->input('tanggal', Carbon::now()->toDateString());
-        $hari = $request->input('hari', $hariMap[date('l', strtotime($tanggal))]);
+        $hari = $hariMap[date('l', strtotime($tanggal))];
 
         if (Auth::user()->role === 'admin') {
             $jadwalQuery = Jadwal::with(['mapel', 'kelas'])->where('hari', $hari);
@@ -208,15 +208,13 @@ class AbsensiController extends Controller
             );
             $kelasOptions = Kelas::all();
             $mapelOptions = MataPelajaran::all();
-            $hariOptions = array_values($hariMap);
 
             return view('absensi.pelajaran', compact(
                 'jadwal',
                 'hari',
                 'tanggal',
                 'kelasOptions',
-                'mapelOptions',
-                'hariOptions'
+                'mapelOptions'
             ));
         }
 
