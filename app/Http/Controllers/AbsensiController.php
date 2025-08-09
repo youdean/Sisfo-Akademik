@@ -313,28 +313,30 @@ class AbsensiController extends Controller
             ->first();
 
         $now = Carbon::now();
-        $start = $now->copy()->setTimeFromTimeString($base->jam_mulai);
-        $end = $now->copy()->setTimeFromTimeString($base->extendedEndTime());
-        $canStart =
-            $now->between($start, $end)
-            && $now->locale('id')->isoFormat('dddd') === $base->hari;
+        $hari = $now->locale('id')->isoFormat('dddd');
+        $time = Carbon::parse($now->format('H:i'));
+        $start = Carbon::parse($base->jam_mulai);
+        $end = Carbon::parse($base->extendedEndTime());
 
-        return view('absensi.session', ['jadwal' => $base, 'session' => $session, 'canStart' => $canStart]);
+        $canStart = $hari === $base->hari && $time->betweenIncluded($start, $end);
+
+        return view('absensi.session', [
+            'jadwal' => $base,
+            'session' => $session,
+            'canStart' => $canStart,
+        ]);
     }
 
     public function startSession(Jadwal $jadwal)
     {
         $base = $jadwal->baseSlot();
         $now = Carbon::now();
-        $currentDay = $now->locale('id')->isoFormat('dddd');
-        $startTime = $now->copy()->setTimeFromTimeString($base->jam_mulai);
-        $endTime = $now->copy()->setTimeFromTimeString($base->extendedEndTime());
+        $hari = $now->locale('id')->isoFormat('dddd');
+        $time = Carbon::parse($now->format('H:i'));
+        $start = Carbon::parse($base->jam_mulai);
+        $end = Carbon::parse($base->extendedEndTime());
 
-        if (
-            $currentDay !== $base->hari ||
-            $now->lt($startTime) ||
-            $now->gt($endTime)
-        ) {
+        if ($hari !== $base->hari || $time->lt($start) || $time->gt($end)) {
             abort(403, 'Sesi absensi hanya bisa dibuka sesuai jadwal');
         }
 
