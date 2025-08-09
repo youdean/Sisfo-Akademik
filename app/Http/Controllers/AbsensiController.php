@@ -327,8 +327,8 @@ class AbsensiController extends Controller
         ];
 
         $currentDay = $dayMap[$now->format('l')] ?? '';
-        $startTime = Carbon::createFromFormat('H:i', $jadwal->jam_mulai);
-        $endTime = Carbon::createFromFormat('H:i', $jadwal->jam_selesai);
+        $startTime = Carbon::parse($jadwal->jam_mulai);
+        $endTime = Carbon::parse($jadwal->jam_selesai);
 
         if (
             $currentDay !== $jadwal->hari ||

@@ -19,8 +19,8 @@
     ];
     $now = \Carbon\Carbon::now();
     $currentDay = $dayMap[$now->format('l')] ?? '';
-    $start = \Carbon\Carbon::createFromFormat('H:i', $jadwal->jam_mulai);
-    $end = \Carbon\Carbon::createFromFormat('H:i', $jadwal->jam_selesai);
+    $start = \Carbon\Carbon::parse($jadwal->jam_mulai);
+    $end = \Carbon\Carbon::parse($jadwal->jam_selesai);
     $canStart = $currentDay === $jadwal->hari && $now->between($start, $end);
 @endphp
 
