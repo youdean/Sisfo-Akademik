@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Penilaian;
+use App\Models\Absensi;
 
 class RaporController extends Controller
 {
@@ -24,10 +25,16 @@ class RaporController extends Controller
             ->where('semester', $semester)
             ->get();
 
+        $ketidakhadiran = Absensi::where('siswa_id', $siswa->id)
+            ->selectRaw('status, COUNT(*) as jumlah')
+            ->groupBy('status')
+            ->pluck('jumlah', 'status');
+
         $pdf = Pdf::loadView('rapor', [
             'siswa' => $siswa,
             'penilaian' => $penilaian,
             'semester' => $semester,
+            'ketidakhadiran' => $ketidakhadiran,
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download('rapor.pdf');
