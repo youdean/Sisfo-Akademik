@@ -40,6 +40,13 @@
     </style>
 </head>
 <body class="bg-light" style="background: linear-gradient(to right, #f8f9fa, #e2e2f2);">
+    @php
+        $isWaliKelas = false;
+        if (Auth::check() && Auth::user()->role === 'guru') {
+            $guruId = \App\Models\Guru::where('user_id', Auth::id())->value('id');
+            $isWaliKelas = \App\Models\Kelas::where('guru_id', $guruId)->exists();
+        }
+    @endphp
 
     <!-- Navbar Mobile Only -->
     <nav class="navbar navbar-dark bg-primary d-lg-none">
@@ -81,7 +88,9 @@
                 @endif
                 @if(in_array(Auth::user()->role, ['admin', 'guru']))
                     @if(Auth::user()->role === 'guru')
-                        <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
+                        @if($isWaliKelas)
+                            <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
+                        @endif
                         <li><a href="{{ route('input-nilai.index') }}" class="nav-link {{ request()->routeIs('input-nilai.*') ? 'active' : '' }}"><i class="bi bi-pencil-square me-2"></i>Input Nilai</a></li>
                     @endif
                     <li><a href="{{ route('penilaian.index') }}" class="nav-link {{ request()->routeIs('penilaian.*') ? 'active' : '' }}"><i class="bi bi-list-check me-2"></i>Penilaian</a></li>
@@ -142,7 +151,9 @@
                 @endif
                 @if(in_array(Auth::user()->role, ['admin', 'guru']))
                     @if(Auth::user()->role === 'guru')
-                        <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
+                        @if($isWaliKelas)
+                            <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
+                        @endif
                         <li><a href="{{ route('input-nilai.index') }}" class="nav-link {{ request()->routeIs('input-nilai.*') ? 'active' : '' }}"><i class="bi bi-pencil-square me-2"></i>Input Nilai</a></li>
                     @endif
                     <li><a href="{{ route('penilaian.index') }}" class="nav-link {{ request()->routeIs('penilaian.*') ? 'active' : '' }}"><i class="bi bi-list-check me-2"></i>Penilaian</a></li>
