@@ -50,9 +50,7 @@ class RaporController extends Controller
 
         $waliKelas = $kelas?->waliKelas;
 
-        $kepalaSekolah = Guru::whereHas('user', function ($query) {
-            $query->where('role', 'kepala_sekolah');
-        })->first();
+        $kepalaSekolah = Guru::where('jabatan', 'Kepala Sekolah')->first();
 
         $pdf = Pdf::loadView('rapor', [
             'siswa' => $siswa,
