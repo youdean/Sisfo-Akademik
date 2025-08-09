@@ -81,6 +81,7 @@
                 @endif
                 @if(in_array(Auth::user()->role, ['admin', 'guru']))
                     @if(Auth::user()->role === 'guru')
+                        <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
                         <li><a href="{{ route('input-nilai.index') }}" class="nav-link {{ request()->routeIs('input-nilai.*') ? 'active' : '' }}"><i class="bi bi-pencil-square me-2"></i>Input Nilai</a></li>
                     @endif
                     <li><a href="{{ route('penilaian.index') }}" class="nav-link {{ request()->routeIs('penilaian.*') ? 'active' : '' }}"><i class="bi bi-list-check me-2"></i>Penilaian</a></li>
@@ -141,6 +142,7 @@
                 @endif
                 @if(in_array(Auth::user()->role, ['admin', 'guru']))
                     @if(Auth::user()->role === 'guru')
+                        <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
                         <li><a href="{{ route('input-nilai.index') }}" class="nav-link {{ request()->routeIs('input-nilai.*') ? 'active' : '' }}"><i class="bi bi-pencil-square me-2"></i>Input Nilai</a></li>
                     @endif
                     <li><a href="{{ route('penilaian.index') }}" class="nav-link {{ request()->routeIs('penilaian.*') ? 'active' : '' }}"><i class="bi bi-list-check me-2"></i>Penilaian</a></li>
