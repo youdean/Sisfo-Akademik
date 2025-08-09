@@ -8,6 +8,7 @@
 <table class="table table-bordered w-50">
     <tr><th>Nama</th><td>{{ $siswa->nama }}</td></tr>
     <tr><th>NISN</th><td>{{ $siswa->nisn }}</td></tr>
+    <tr><th>Nama Orang Tua</th><td>{{ $siswa->nama_ortu }}</td></tr>
     <tr><th>Email</th><td>{{ $siswa->user?->email ?? '-' }}</td></tr>
     <tr><th>Kelas</th><td>{{ $siswa->kelas }}</td></tr>
     <tr><th>Tahun Ajaran</th><td>{{ $siswa->tahunAjaran?->nama }}</td></tr>

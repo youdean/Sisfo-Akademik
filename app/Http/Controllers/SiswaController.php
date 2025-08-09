@@ -44,14 +44,15 @@ public function create()
 
 public function store(Request $request)
 {
-    Siswa::create($request->validate([
-        'nama' => 'required',
-        'nisn' => 'required|unique:siswa,nisn',
-        'kelas' => 'required',
-        'tempat_lahir' => 'required',
-        'jenis_kelamin' => 'required',
-        'tanggal_lahir' => 'required|date',
-        'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id'
+        Siswa::create($request->validate([
+            'nama' => 'required',
+            'nisn' => 'required|unique:siswa,nisn',
+            'nama_ortu' => 'required',
+            'kelas' => 'required',
+            'tempat_lahir' => 'required',
+            'jenis_kelamin' => 'required',
+            'tanggal_lahir' => 'required|date',
+            'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id'
     ]));
 
     return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambahkan');
@@ -66,15 +67,16 @@ public function edit(Siswa $siswa)
 
 public function update(Request $request, Siswa $siswa)
 {
-    $siswa->update($request->validate([
-        'nama' => 'required',
-        'nisn' => 'required|unique:siswa,nisn,' . $siswa->id,
-        'kelas' => 'required',
-        'tempat_lahir' => 'required',
-        'jenis_kelamin' => 'required',
-        'tanggal_lahir' => 'required|date',
-        'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id'
-    ]));
+        $siswa->update($request->validate([
+            'nama' => 'required',
+            'nisn' => 'required|unique:siswa,nisn,' . $siswa->id,
+            'nama_ortu' => 'required',
+            'kelas' => 'required',
+            'tempat_lahir' => 'required',
+            'jenis_kelamin' => 'required',
+            'tanggal_lahir' => 'required|date',
+            'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id'
+        ]));
 
     return redirect()->route('siswa.index')->with('success', 'Siswa berhasil diupdate');
 }

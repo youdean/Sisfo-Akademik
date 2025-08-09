@@ -35,6 +35,7 @@ class PtsPatSemesterTest extends TestCase
         $siswa = Siswa::create([
             'nama' => 'Siswa',
             'nisn' => '1',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => '1A',
             'tahun_ajaran_id' => $ta->id,
             'tempat_lahir' => 'Kota',

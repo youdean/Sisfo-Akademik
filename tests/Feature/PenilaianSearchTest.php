@@ -45,6 +45,7 @@ class PenilaianSearchTest extends TestCase
         $siswa1 = Siswa::create([
             'nama' => 'Budi',
             'nisn' => '111',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => 'X',
             'tahun_ajaran_id' => $ta->id,
             'tempat_lahir' => 'Kota',
@@ -54,6 +55,7 @@ class PenilaianSearchTest extends TestCase
         $siswa2 = Siswa::create([
             'nama' => 'Andi',
             'nisn' => '222',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => 'XI',
             'tahun_ajaran_id' => $ta->id,
             'tempat_lahir' => 'Kota',

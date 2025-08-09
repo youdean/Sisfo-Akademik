@@ -39,6 +39,7 @@ class TugasPaginationTest extends TestCase
             $siswa[] = Siswa::create([
                 'nama' => 'Siswa '.$i,
                 'nisn' => str_pad((string)$i, 10, '0', STR_PAD_LEFT),
+                'nama_ortu' => 'Orang Tua',
                 'kelas' => '1A',
                 'tahun_ajaran_id' => $ta->id,
                 'tempat_lahir' => 'Kota',

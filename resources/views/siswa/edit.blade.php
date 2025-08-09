@@ -26,6 +26,11 @@
         <x-input-error :messages="$errors->get('nisn')" class="mt-1" />
     </div>
     <div class="mb-3">
+        <label>Nama Orang Tua</label>
+        <input type="text" name="nama_ortu" class="form-control" value="{{ $siswa->nama_ortu }}" required>
+        <x-input-error :messages="$errors->get('nama_ortu')" class="mt-1" />
+    </div>
+    <div class="mb-3">
         <label>Kelas</label>
         <select name="kelas" class="form-control" required>
             <option value="">-- Pilih Kelas --</option>
