@@ -9,7 +9,7 @@ class AbsensiSession extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['jadwal_id', 'tanggal', 'opened_by', 'status_sesi'];
+    protected $fillable = ['jadwal_id', 'tanggal', 'opened_by', 'status_sesi', 'password'];
 
     public function jadwal()
     {
