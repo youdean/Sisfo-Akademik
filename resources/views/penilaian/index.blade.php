@@ -32,7 +32,6 @@
             <th>PTS</th>
             <th>PAT</th>
             <th>Nilai Raport</th>
-            <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
@@ -47,12 +46,6 @@
             <td>{{ $p->pts }}</td>
             <td>{{ $p->pat }}</td>
             <td>{{ number_format($p->nilai_raport, 2) }}</td>
-            <td>
-                <form action="{{ route('penilaian.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Hapus data?')">
-                    @csrf @method('DELETE')
-                    <button class="btn btn-danger btn-sm">Hapus</button>
-                </form>
-            </td>
         </tr>
         @endforeach
     </tbody>
