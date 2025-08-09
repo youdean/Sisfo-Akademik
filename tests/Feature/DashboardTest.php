@@ -24,6 +24,7 @@ class DashboardTest extends TestCase
         Siswa::create([
             'nama' => 'Test1',
             'nisn' => '0000000001',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => 'X',
             'tahun_ajaran_id' => $ta->id,
             'tempat_lahir' => 'Bandung',
@@ -33,6 +34,7 @@ class DashboardTest extends TestCase
         Siswa::create([
             'nama' => 'Test2',
             'nisn' => '0000000002',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => 'XI IPA',
             'tahun_ajaran_id' => $ta->id,
             'tempat_lahir' => 'Jakarta',

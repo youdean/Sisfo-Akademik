@@ -23,6 +23,7 @@ class StudentProfileTest extends TestCase
         Siswa::create([
             'nama' => 'Siswa',
             'nisn' => '1234567890',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => 'X',
             'tahun_ajaran_id' => $ta->id,
             'tempat_lahir' => 'Kota',

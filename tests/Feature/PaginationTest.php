@@ -25,6 +25,7 @@ class PaginationTest extends TestCase
             Siswa::create([
                 'nama' => 'Siswa '.$i,
                 'nisn' => str_pad((string)$i, 10, '0', STR_PAD_LEFT),
+                'nama_ortu' => 'Orang Tua',
                 'kelas' => 'X',
                 'tahun_ajaran_id' => $ta->id,
                 'tempat_lahir' => 'Test',

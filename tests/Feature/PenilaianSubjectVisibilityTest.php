@@ -54,6 +54,7 @@ class PenilaianSubjectVisibilityTest extends TestCase
         $siswa = Siswa::create([
             'nama' => 'Siswa',
             'nisn' => '123',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => $kelas->nama,
             'tempat_lahir' => 'Kota',
             'jenis_kelamin' => 'L',
@@ -131,6 +132,7 @@ class PenilaianSubjectVisibilityTest extends TestCase
         $siswa = Siswa::create([
             'nama' => 'Siswa',
             'nisn' => '123',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => $kelas->nama,
             'tempat_lahir' => 'Kota',
             'jenis_kelamin' => 'L',

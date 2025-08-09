@@ -42,6 +42,7 @@ class GuruAbsensiFutureDateTest extends TestCase
         $siswa = Siswa::create([
             'nama' => 'Siswa 1',
             'nisn' => '123',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => $kelas->nama,
             'tahun_ajaran_id' => $ta->id,
             'tempat_lahir' => 'Kota',

@@ -42,6 +42,7 @@ class StudentDashboardTest extends TestCase
         $siswa = Siswa::create([
             'nama' => 'Siswa',
             'nisn' => '123',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => $kelas->nama,
             'tahun_ajaran_id' => $ta->id,
             'tempat_lahir' => 'Kota',

@@ -68,6 +68,7 @@ class AdminPelajaranAbsensiTest extends TestCase
         $siswa = Siswa::create([
             'nama' => 'Siswa 1',
             'nisn' => '1',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => $kelas->nama,
             'tahun_ajaran_id' => $kelas->tahun_ajaran_id,
             'tempat_lahir' => 'Kota',

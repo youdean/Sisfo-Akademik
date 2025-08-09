@@ -25,6 +25,7 @@ class SiswaSeeder extends Seeder
             $data[] = [
                 'nama' => $i === 1 ? 'Siswa' : $faker->unique()->name,
                 'nisn' => $faker->unique()->numerify('############'),
+                'nama_ortu' => $faker->name,
                 'kelas' => $faker->randomElement($kelasList),
                 'tempat_lahir' => $faker->city,
                 'jenis_kelamin' => $faker->randomElement(['L', 'P']),

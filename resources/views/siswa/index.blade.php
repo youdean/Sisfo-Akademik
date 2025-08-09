@@ -32,6 +32,7 @@
             <th>ID</th>
             <th>Nama</th>
             <th>NISN</th>
+            <th>Nama Orang Tua</th>
             <th>Kelas</th>
             <th>Tahun Ajaran</th>
             <th>Tempat Lahir</th>
@@ -46,6 +47,7 @@
             <td>{{ $s->id }}</td>
             <td>{{ $s->nama }}</td>
             <td>{{ $s->nisn }}</td>
+            <td>{{ $s->nama_ortu }}</td>
             <td>{{ $s->kelas }}</td>
             <td>{{ $s->tahunAjaran?->nama }}</td>
             <td>{{ $s->tempat_lahir }}</td>

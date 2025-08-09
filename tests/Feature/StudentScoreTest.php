@@ -26,6 +26,7 @@ class StudentScoreTest extends TestCase
         $siswa = Siswa::create([
             'nama' => 'Siswa',
             'nisn' => '123',
+            'nama_ortu' => 'Orang Tua',
             'kelas' => 'X',
             'tahun_ajaran_id' => $ta->id,
             'tempat_lahir' => 'Kota',
