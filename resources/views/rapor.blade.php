@@ -71,5 +71,16 @@
             </tr>
         </tbody>
     </table>
+    <table class="no-border" style="margin-top:40px">
+        <tr>
+            <td style="text-align:center">Orang Tua/Wali</td>
+            <td style="text-align:center">Wali Kelas</td>
+        </tr>
+        <tr>
+            <td style="padding-top:60px;text-align:center">__________________</td>
+            <td style="padding-top:60px;text-align:center">__________________</td>
+        </tr>
+    </table>
+
 </body>
 </html>
