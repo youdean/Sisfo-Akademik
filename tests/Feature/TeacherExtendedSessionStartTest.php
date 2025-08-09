@@ -70,7 +70,7 @@ class TeacherExtendedSessionStartTest extends TestCase
         ]);
 
         $this->actingAs($teacherUser)
-            ->post(route('absensi.session.start', $second->id))
+            ->post(route('absensi.session.start', $second->id), ['password' => 'secret123'])
             ->assertRedirect(route('absensi.session', $first->id));
 
         $this->assertDatabaseHas('absensi_sessions', [
