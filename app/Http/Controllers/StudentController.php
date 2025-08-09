@@ -96,7 +96,9 @@ class StudentController extends Controller
         $hari = $now->locale('id')->isoFormat('dddd');
         $time = $now->format('H:i');
 
-        if ($hari !== $jadwal->hari || $time < $jadwal->jam_mulai || $time > $jadwal->jam_selesai) {
+        $endTime = $jadwal->extendedEndTime();
+
+        if ($hari !== $jadwal->hari || $time < $jadwal->jam_mulai || $time > $endTime) {
             abort(403);
         }
 
@@ -127,7 +129,9 @@ class StudentController extends Controller
         $hari = $now->locale('id')->isoFormat('dddd');
         $time = $now->format('H:i');
 
-        if ($hari !== $jadwal->hari || $time < $jadwal->jam_mulai || $time > $jadwal->jam_selesai) {
+        $endTime = $jadwal->extendedEndTime();
+
+        if ($hari !== $jadwal->hari || $time < $jadwal->jam_mulai || $time > $endTime) {
             abort(403);
         }
 
@@ -168,21 +172,7 @@ class StudentController extends Controller
         }
 
         $baseJadwal = $session->jadwal;
-        $endTime = $baseJadwal->jam_selesai;
-        $current = $baseJadwal;
-        while (true) {
-            $next = Jadwal::where('kelas_id', $current->kelas_id)
-                ->where('mapel_id', $current->mapel_id)
-                ->where('guru_id', $current->guru_id)
-                ->where('hari', $current->hari)
-                ->where('jam_mulai', $endTime)
-                ->first();
-            if (! $next) {
-                break;
-            }
-            $endTime = $next->jam_selesai;
-            $current = $next;
-        }
+        $endTime = $baseJadwal->extendedEndTime();
 
         if ($time > $endTime) {
             abort(403);
