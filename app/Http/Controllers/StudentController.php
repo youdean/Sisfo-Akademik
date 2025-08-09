@@ -9,6 +9,7 @@ use App\Models\Kelas;
 use App\Models\Penilaian;
 use App\Models\AbsensiSession;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -147,8 +148,12 @@ class StudentController extends Controller
         return redirect()->route('student.jadwal')->with('success', 'Absensi berhasil dicatat');
     }
 
-    public function sessionCheckIn()
+    public function sessionCheckIn(Request $request)
     {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $kelas = Kelas::where('nama', $siswa->kelas)->first();
         if (! $kelas) {
@@ -168,6 +173,10 @@ class StudentController extends Controller
             })
             ->first();
         if (! $session) {
+            abort(403);
+        }
+
+        if (! Hash::check($request->password, $session->password)) {
             abort(403);
         }
 
