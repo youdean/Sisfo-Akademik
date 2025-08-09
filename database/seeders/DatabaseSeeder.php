@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             MataPelajaranSeeder::class,
             AbsensiSeeder::class,
             KelasSeeder::class,
+            PengajaranSeeder::class,
         ]);
     }
 }
