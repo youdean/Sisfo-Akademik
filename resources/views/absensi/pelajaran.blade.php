@@ -44,11 +44,16 @@
     @forelse($jadwal as $j)
         <li class="list-group-item d-flex justify-content-between align-items-center">
             <span>{{ $j->kelas->nama }} - {{ $j->mapel->nama }} ({{ $j->jam_mulai }} - {{ $j->jam_selesai }})</span>
-            @if($isFuture)
-                <button class="btn btn-sm btn-primary" disabled>Isi Absen</button>
-            @else
-                <a href="{{ route('absensi.pelajaran.form', ['jadwal' => $j->id, 'tanggal' => $tanggal]) }}" class="btn btn-sm btn-primary">Isi Absen</a>
-            @endif
+            <div class="d-flex gap-2">
+                @if(in_array(Auth::user()->role, ['admin','guru']))
+                    <a href="{{ route('absensi.session', $j->id) }}" class="btn btn-sm btn-secondary">Kelola Sesi</a>
+                @endif
+                @if($isFuture)
+                    <button class="btn btn-sm btn-primary" disabled>Isi Absen</button>
+                @else
+                    <a href="{{ route('absensi.pelajaran.form', ['jadwal' => $j->id, 'tanggal' => $tanggal]) }}" class="btn btn-sm btn-primary">Isi Absen</a>
+                @endif
+            </div>
         </li>
     @empty
         <li class="list-group-item text-center">Tidak ada jadwal</li>
@@ -66,11 +71,16 @@
                 @endphp
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $j->kelas->nama }} - {{ $j->mapel->nama }} ({{ $j->jam_mulai }} - {{ $j->jam_selesai }})</span>
-                    @if($now->between($start, $end))
-                        <a href="{{ route('absensi.pelajaran.form', ['jadwal' => $j->id, 'tanggal' => $dates[$day]]) }}" class="btn btn-sm btn-primary">Isi Absen</a>
-                    @else
-                        <button class="btn btn-sm btn-primary" disabled>Isi Absen</button>
-                    @endif
+                    <div class="d-flex gap-2">
+                        @if(in_array(Auth::user()->role, ['admin','guru']))
+                            <a href="{{ route('absensi.session', $j->id) }}" class="btn btn-sm btn-secondary">Kelola Sesi</a>
+                        @endif
+                        @if($now->between($start, $end))
+                            <a href="{{ route('absensi.pelajaran.form', ['jadwal' => $j->id, 'tanggal' => $dates[$day]]) }}" class="btn btn-sm btn-primary">Isi Absen</a>
+                        @else
+                            <button class="btn btn-sm btn-primary" disabled>Isi Absen</button>
+                        @endif
+                    </div>
                 </li>
             @empty
                 <li class="list-group-item text-center">Tidak ada jadwal</li>
