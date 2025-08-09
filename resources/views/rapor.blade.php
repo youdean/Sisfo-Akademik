@@ -33,6 +33,8 @@
                 <th>No</th>
                 <th>Mata Pelajaran</th>
                 <th>Nilai Rapor</th>
+                <th>KKM</th>
+                <th>Predikat</th>
             </tr>
         </thead>
         <tbody>
@@ -41,6 +43,8 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $p->mapel->nama }}</td>
                 <td>{{ number_format($p->nilai_raport, 2) }}</td>
+                <td>{{ \App\Models\Penilaian::KKM }}</td>
+                <td>{{ $p->predikat }}</td>
             </tr>
             @endforeach
         </tbody>
