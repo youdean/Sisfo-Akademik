@@ -9,6 +9,7 @@ use App\Models\Siswa;
 use App\Models\Penilaian;
 use App\Models\Absensi;
 use App\Models\Kelas;
+use App\Models\Guru;
 
 class RaporController extends Controller
 {
@@ -36,6 +37,11 @@ class RaporController extends Controller
             ->first();
         $waliKelas = $kelas->waliKelas ?? null;
 
+        $kepalaSekolah = Guru::where('role', 'kepala_sekolah')->first();
+        if ($kepalaSekolah === null) {
+            $kepalaSekolah = null;
+        }
+
         $pdf = Pdf::loadView('rapor', [
             'siswa' => $siswa,
             'penilaian' => $penilaian,
@@ -43,6 +49,7 @@ class RaporController extends Controller
             'ketidakhadiran' => $ketidakhadiran,
             'waliKelas' => $waliKelas->nama ?? '',
             'waliKelasNuptk' => $waliKelas->nuptk ?? '',
+            'kepalaSekolah' => $kepalaSekolah,
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download('rapor.pdf');

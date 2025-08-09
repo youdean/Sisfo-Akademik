@@ -75,10 +75,18 @@
         <tr>
             <td style="text-align:center">Orang Tua/Wali</td>
             <td style="text-align:center">Wali Kelas</td>
+            <td style="text-align:center">Kepala Sekolah</td>
         </tr>
         <tr>
             <td style="padding-top:60px;text-align:center">__________________<br>{{ $siswa->nama_ortu }}</td>
             <td style="padding-top:60px;text-align:center">__________________<br>{{ $waliKelas }}<br>NUPTK: {{ $waliKelasNuptk }}</td>
+            <td style="padding-top:60px;text-align:center">__________________<br>
+                @if($kepalaSekolah)
+                    {{ $kepalaSekolah->nama }}<br>NIP: {{ $kepalaSekolah->nuptk }}
+                @else
+                    Nama Kepala Sekolah<br>NIP: -
+                @endif
+            </td>
         </tr>
     </table>
 
