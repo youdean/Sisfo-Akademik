@@ -14,6 +14,7 @@ use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -350,17 +351,14 @@ class AbsensiController extends Controller
             abort(403, 'Sesi absensi hanya bisa dibuka sesuai jadwal');
         }
 
-        $validated = $request->validate([
-            'password' => 'required|min:4',
-        ]);
-
+        $password = Str::random(6);
         $tanggal = $now->toDateString();
         AbsensiSession::create([
             'jadwal_id' => $base->id,
             'tanggal' => $tanggal,
             'opened_by' => Auth::id(),
             'status_sesi' => 'open',
-            'password' => bcrypt($validated['password']),
+            'password' => bcrypt($password),
         ]);
 
         $siswaIds = Siswa::where('kelas', $base->kelas->nama)->pluck('id');
@@ -371,7 +369,10 @@ class AbsensiController extends Controller
             );
         }
 
-        return redirect()->route('absensi.session', $base->id)->with('success', 'Sesi absensi dibuka');
+        return redirect()->route('absensi.session', $base->id)->with([
+            'success' => 'Sesi absensi dibuka',
+            'password' => $password,
+        ]);
     }
 
     public function endSession(Jadwal $jadwal)
