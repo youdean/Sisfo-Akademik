@@ -41,10 +41,11 @@
 @endif
 @if($today && $today->check_in_at)
     <div class="alert alert-info">Check-in pada: {{ $today->check_in_at }}</div>
-@endif
+@else
 <form action="{{ route('student.absensi.checkin') }}" method="POST">
     @csrf
     <button class="btn btn-success">Check In</button>
     <a href="{{ route('student.jadwal') }}" class="btn btn-secondary">Kembali</a>
 </form>
+@endif
 @endsection

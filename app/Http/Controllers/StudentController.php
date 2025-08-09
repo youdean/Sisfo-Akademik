@@ -188,6 +188,17 @@ class StudentController extends Controller
             abort(403);
         }
 
+        $existing = Absensi::where('siswa_id', $siswa->id)
+            ->where('mapel_id', $baseJadwal->mapel_id)
+            ->where('tanggal', $now->toDateString())
+            ->first();
+
+        if ($existing && $existing->check_in_at) {
+            return redirect()->back()
+                ->withErrors(['check_in' => 'Anda sudah melakukan check-in'])
+                ->with('check_in_at', $existing->check_in_at);
+        }
+
         $absen = Absensi::updateOrCreate(
             ['siswa_id' => $siswa->id, 'mapel_id' => $baseJadwal->mapel_id, 'tanggal' => $now->toDateString()],
             ['status' => 'Hadir', 'check_in_at' => $now]

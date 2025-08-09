@@ -189,4 +189,35 @@ class StudentSelfCheckInTest extends TestCase
             ->post('/saya/absensi/check-in')
             ->assertForbidden();
     }
+
+    public function test_student_cannot_check_in_twice(): void
+    {
+        Carbon::setTestNow('2024-07-01 07:30:00');
+        [$guruUser, $siswaUser, $siswa, $jadwal, $mapel] = $this->setupData();
+        AbsensiSession::create([
+            'jadwal_id' => $jadwal->id,
+            'tanggal' => '2024-07-01',
+            'opened_by' => $guruUser->id,
+            'status_sesi' => 'open',
+        ]);
+        Absensi::create([
+            'siswa_id' => $siswa->id,
+            'mapel_id' => $mapel->id,
+            'tanggal' => '2024-07-01',
+            'status' => 'Alpha',
+        ]);
+
+        $this->actingAs($siswaUser)
+            ->from('/saya/jadwal/'.$jadwal->id.'/absen')
+            ->post('/saya/absensi/check-in')
+            ->assertRedirect('/saya/jadwal/'.$jadwal->id.'/absen');
+
+        $this->actingAs($siswaUser)
+            ->from('/saya/jadwal/'.$jadwal->id.'/absen')
+            ->post('/saya/absensi/check-in')
+            ->assertRedirect('/saya/jadwal/'.$jadwal->id.'/absen')
+            ->assertSessionHasErrors('check_in');
+
+        $this->assertEquals(1, Absensi::count());
+    }
 }
