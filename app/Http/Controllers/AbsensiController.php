@@ -313,7 +313,7 @@ class AbsensiController extends Controller
 
         $now = Carbon::now();
         $start = $now->copy()->setTimeFromTimeString($jadwal->jam_mulai);
-        $end = $now->copy()->setTimeFromTimeString($this->extendedEndTime($jadwal));
+        $end = $now->copy()->setTimeFromTimeString($jadwal->extendedEndTime());
         $canStart =
             $now->between($start, $end)
             && $now->locale('id')->isoFormat('dddd') === $jadwal->hari
@@ -327,7 +327,7 @@ class AbsensiController extends Controller
         $now = Carbon::now();
         $currentDay = $now->locale('id')->isoFormat('dddd');
         $startTime = $now->copy()->setTimeFromTimeString($jadwal->jam_mulai);
-        $endTime = $now->copy()->setTimeFromTimeString($this->extendedEndTime($jadwal));
+        $endTime = $now->copy()->setTimeFromTimeString($jadwal->extendedEndTime());
 
         if (
             $currentDay !== $jadwal->hari ||
@@ -355,27 +355,6 @@ class AbsensiController extends Controller
         }
 
         return redirect()->route('absensi.session', $jadwal->id)->with('success', 'Sesi absensi dibuka');
-    }
-
-    private function extendedEndTime(Jadwal $jadwal): string
-    {
-        $end = $jadwal->jam_selesai;
-        $current = $jadwal;
-        while (true) {
-            $next = Jadwal::where('kelas_id', $current->kelas_id)
-                ->where('mapel_id', $current->mapel_id)
-                ->where('guru_id', $current->guru_id)
-                ->where('hari', $current->hari)
-                ->where('jam_mulai', $end)
-                ->first();
-            if (! $next) {
-                break;
-            }
-            $end = $next->jam_selesai;
-            $current = $next;
-        }
-
-        return $end;
     }
 
     private function hasPrecedingSlot(Jadwal $jadwal): bool
