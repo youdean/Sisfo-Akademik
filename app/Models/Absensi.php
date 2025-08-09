@@ -13,6 +13,11 @@ class Absensi extends Model
     protected $table = 'absensi';
     protected $fillable = ['siswa_id', 'mapel_id', 'tanggal', 'status', 'check_in_at', 'check_out_at'];
 
+    protected $casts = [
+        'check_in_at' => 'datetime',
+        'check_out_at' => 'datetime',
+    ];
+
     public function siswa()
     {
         return $this->belongsTo(Siswa::class);
