@@ -24,6 +24,7 @@ class KepalaSekolahSeeder extends Seeder
             ['nuptk' => '1234567890123456'],
             [
                 'nama' => 'Kepala Sekolah',
+                'jabatan' => 'Kepala Sekolah',
                 'email' => 'kepsek@demo.com',
                 'tempat_lahir' => 'Jakarta',
                 'jenis_kelamin' => 'L',

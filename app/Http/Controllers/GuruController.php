@@ -16,6 +16,7 @@ class GuruController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
                     ->orWhere('nuptk', 'like', "%{$search}%")
+                    ->orWhere('jabatan', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
             });
         }
@@ -35,6 +36,7 @@ public function store(Request $request)
     Guru::create($request->validate([
         'nuptk' => 'required|unique:guru',
         'nama' => 'required',
+        'jabatan' => 'nullable',
         'email' => 'nullable|email|unique:guru',
         'tempat_lahir' => 'required',
         'jenis_kelamin' => 'required',
@@ -54,6 +56,7 @@ public function update(Request $request, Guru $guru)
     $guru->update($request->validate([
         'nuptk' => 'required|unique:guru,nuptk,' . $guru->id,
         'nama' => 'required',
+        'jabatan' => 'nullable',
         'email' => 'nullable|email|unique:guru,email,' . $guru->id,
         'tempat_lahir' => 'required',
         'jenis_kelamin' => 'required',
