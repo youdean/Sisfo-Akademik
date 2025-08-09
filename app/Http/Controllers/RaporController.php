@@ -16,9 +16,13 @@ class RaporController extends Controller
     /**
      * Generate report card PDF using database values.
      */
-    public function cetak(Request $request)
+    public function cetak(Request $request, ?Siswa $siswa = null)
     {
-        $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
+        if (Auth::user()->role === 'admin') {
+            $siswa = $siswa ?? abort(404);
+        } else {
+            $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
+        }
 
         $semester = (int) $request->query('semester', 1);
 

@@ -54,6 +54,7 @@
             <td>{{ $s->jenis_kelamin }}</td>
             <td>{{ $s->tanggal_lahir }}</td>
             <td>
+                <a href="{{ route('rapor.cetak', $s->id) }}" class="btn btn-sm btn-info">Cetak Rapor</a>
                 <a href="{{ route('siswa.edit', $s->id) }}" class="btn btn-sm btn-warning">Edit</a>
                 <form action="{{ route('siswa.destroy', $s->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">
                     @csrf @method('DELETE')
