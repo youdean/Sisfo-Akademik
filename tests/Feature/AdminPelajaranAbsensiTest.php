@@ -54,7 +54,7 @@ class AdminPelajaranAbsensiTest extends TestCase
         [$admin, , $kelas, $mapel, $jadwal] = $this->createData();
 
         $response = $this->actingAs($admin)
-            ->get('/absensi/pelajaran?hari=Senin&kelas_id='.$kelas->id.'&mapel_id='.$mapel->id);
+            ->get('/absensi/pelajaran?tanggal=2024-07-01&kelas_id='.$kelas->id.'&mapel_id='.$mapel->id);
 
         $response->assertOk();
         $response->assertSee($mapel->nama);
