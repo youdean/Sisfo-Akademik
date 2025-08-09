@@ -37,10 +37,9 @@ class RaporController extends Controller
             ->first();
         $waliKelas = $kelas->waliKelas ?? null;
 
-        $kepalaSekolah = Guru::where('role', 'kepala_sekolah')->first();
-        if ($kepalaSekolah === null) {
-            $kepalaSekolah = null;
-        }
+        $kepalaSekolah = Guru::whereHas('user', function ($query) {
+            $query->where('role', 'kepala_sekolah');
+        })->first();
 
         $pdf = Pdf::loadView('rapor', [
             'siswa' => $siswa,
