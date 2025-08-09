@@ -30,13 +30,14 @@
                 $isActive = $jadwalIndex == $currentDayIndex &&
                            $currentTime >= $j->jam_mulai &&
                            $currentTime <= $j->jam_selesai;
+                $sessionOpen = in_array($j->id, $openSessions);
             @endphp
             <tr>
                 <td>{{ $j->mapel->nama }}</td>
                 <td>{{ $j->guru->nama }}</td>
                 <td>{{ $j->jam_mulai }} - {{ $j->jam_selesai }}</td>
                 <td>
-                    @if($isActive)
+                    @if($isActive && $sessionOpen)
                         <a href="{{ route('student.jadwal.absen.form', $j->id) }}" class="btn btn-sm btn-primary">Ambil Absen</a>
                     @else
                         <button class="btn btn-sm btn-primary" disabled>Ambil Absen</button>

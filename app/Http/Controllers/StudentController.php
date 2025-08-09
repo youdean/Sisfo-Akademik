@@ -62,13 +62,22 @@ class StudentController extends Controller
                 ->get()
                 ->groupBy('hari')
                 ->map(fn ($items) => Jadwal::mergeConsecutive($items));
+
+            $jadwalIds = $jadwal->flatten()->pluck('id');
+            $openSessions = AbsensiSession::whereIn('jadwal_id', $jadwalIds)
+                ->where('tanggal', Carbon::now()->toDateString())
+                ->where('status_sesi', 'open')
+                ->pluck('jadwal_id')
+                ->toArray();
         } else {
             $jadwal = collect();
+            $openSessions = [];
         }
 
         return view('siswa.jadwal', [
             'siswa' => $siswa,
             'jadwal' => $jadwal,
+            'openSessions' => $openSessions,
         ]);
     }
 
