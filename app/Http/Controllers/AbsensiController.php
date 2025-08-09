@@ -310,25 +310,20 @@ class AbsensiController extends Controller
             ->where('tanggal', Carbon::now()->toDateString())
             ->first();
 
-        return view('absensi.session', compact('jadwal', 'session'));
+        $now = Carbon::now();
+        $start = $now->copy()->setTimeFromTimeString($jadwal->jam_mulai);
+        $end = $now->copy()->setTimeFromTimeString($this->extendedEndTime($jadwal));
+        $canStart = $now->between($start, $end) && $now->locale('id')->isoFormat('dddd') === $jadwal->hari;
+
+        return view('absensi.session', compact('jadwal', 'session', 'canStart'));
     }
 
     public function startSession(Jadwal $jadwal)
     {
         $now = Carbon::now();
-        $dayMap = [
-            'Monday' => 'Senin',
-            'Tuesday' => 'Selasa',
-            'Wednesday' => 'Rabu',
-            'Thursday' => 'Kamis',
-            'Friday' => 'Jumat',
-            'Saturday' => 'Sabtu',
-            'Sunday' => 'Minggu',
-        ];
-
-        $currentDay = $dayMap[$now->format('l')] ?? '';
+        $currentDay = $now->locale('id')->isoFormat('dddd');
         $startTime = $now->copy()->setTimeFromTimeString($jadwal->jam_mulai);
-        $endTime = $now->copy()->setTimeFromTimeString($jadwal->jam_selesai);
+        $endTime = $now->copy()->setTimeFromTimeString($this->extendedEndTime($jadwal));
 
         if (
             $currentDay !== $jadwal->hari ||
@@ -355,6 +350,27 @@ class AbsensiController extends Controller
         }
 
         return redirect()->route('absensi.session', $jadwal->id)->with('success', 'Sesi absensi dibuka');
+    }
+
+    private function extendedEndTime(Jadwal $jadwal): string
+    {
+        $end = $jadwal->jam_selesai;
+        $current = $jadwal;
+        while (true) {
+            $next = Jadwal::where('kelas_id', $current->kelas_id)
+                ->where('mapel_id', $current->mapel_id)
+                ->where('guru_id', $current->guru_id)
+                ->where('hari', $current->hari)
+                ->where('jam_mulai', $end)
+                ->first();
+            if (! $next) {
+                break;
+            }
+            $end = $next->jam_selesai;
+            $current = $next;
+        }
+
+        return $end;
     }
 
     public function endSession(Jadwal $jadwal)
