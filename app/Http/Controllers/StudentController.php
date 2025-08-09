@@ -11,6 +11,7 @@ use App\Models\AbsensiSession;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -147,13 +148,17 @@ class StudentController extends Controller
         return redirect()->route('student.jadwal')->with('success', 'Absensi berhasil dicatat');
     }
 
-    public function sessionCheckIn()
+    public function sessionCheckIn(Request $request)
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $kelas = Kelas::where('nama', $siswa->kelas)->first();
         if (! $kelas) {
             abort(403);
         }
+
+        $validated = $request->validate([
+            'password' => 'required',
+        ]);
 
         $now = Carbon::now();
         $hari = $now->locale('id')->isoFormat('dddd');
@@ -167,7 +172,7 @@ class StudentController extends Controller
                     ->where('jam_mulai', '<=', $time);
             })
             ->first();
-        if (! $session) {
+        if (! $session || ! Hash::check($validated['password'], $session->password)) {
             abort(403);
         }
 

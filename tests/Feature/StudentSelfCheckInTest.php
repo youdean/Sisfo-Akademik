@@ -65,7 +65,7 @@ class StudentSelfCheckInTest extends TestCase
         return [$guruUser, $siswaUser, $siswa, $jadwal, $mapel];
     }
 
-    public function test_student_can_check_in_during_active_session(): void
+    public function test_student_can_check_in_with_correct_password(): void
     {
         Carbon::setTestNow('2024-07-01 07:30:00');
         [$guruUser, $siswaUser, $siswa, $jadwal, $mapel] = $this->setupData();
@@ -74,6 +74,7 @@ class StudentSelfCheckInTest extends TestCase
             'tanggal' => '2024-07-01',
             'opened_by' => $guruUser->id,
             'status_sesi' => 'open',
+            'password' => bcrypt('secret123'),
         ]);
         Absensi::create([
             'siswa_id' => $siswa->id,
@@ -84,7 +85,7 @@ class StudentSelfCheckInTest extends TestCase
 
         $this->actingAs($siswaUser)
             ->from('/saya/jadwal/'.$jadwal->id.'/absen')
-            ->post('/saya/absensi/check-in')
+            ->post('/saya/absensi/check-in', ['password' => 'secret123'])
             ->assertRedirect('/saya/jadwal/'.$jadwal->id.'/absen');
 
         $this->assertDatabaseHas('absensi', [
@@ -94,6 +95,29 @@ class StudentSelfCheckInTest extends TestCase
             'tanggal' => '2024-07-01',
         ]);
         $this->assertNotNull(Absensi::first()->check_in_at);
+    }
+
+    public function test_student_cannot_check_in_with_wrong_password(): void
+    {
+        Carbon::setTestNow('2024-07-01 07:30:00');
+        [$guruUser, $siswaUser, $siswa, $jadwal, $mapel] = $this->setupData();
+        AbsensiSession::create([
+            'jadwal_id' => $jadwal->id,
+            'tanggal' => '2024-07-01',
+            'opened_by' => $guruUser->id,
+            'status_sesi' => 'open',
+            'password' => bcrypt('secret123'),
+        ]);
+        Absensi::create([
+            'siswa_id' => $siswa->id,
+            'mapel_id' => $mapel->id,
+            'tanggal' => '2024-07-01',
+            'status' => 'Alpha',
+        ]);
+
+        $this->actingAs($siswaUser)
+            ->post('/saya/absensi/check-in', ['password' => 'wrong'])
+            ->assertForbidden();
     }
 
     public function test_student_can_check_in_during_extended_schedule(): void
@@ -106,6 +130,7 @@ class StudentSelfCheckInTest extends TestCase
             'tanggal' => '2024-07-01',
             'opened_by' => $guruUser->id,
             'status_sesi' => 'open',
+            'password' => bcrypt('secret123'),
         ]);
         Absensi::create([
             'siswa_id' => $siswa->id,
@@ -116,7 +141,7 @@ class StudentSelfCheckInTest extends TestCase
 
         $this->actingAs($siswaUser)
             ->from('/saya/jadwal/'.$jadwal->id.'/absen')
-            ->post('/saya/absensi/check-in')
+            ->post('/saya/absensi/check-in', ['password' => 'secret123'])
             ->assertRedirect('/saya/jadwal/'.$jadwal->id.'/absen');
 
         $this->assertDatabaseHas('absensi', [
@@ -146,6 +171,7 @@ class StudentSelfCheckInTest extends TestCase
             'tanggal' => '2024-07-01',
             'opened_by' => $guruUser->id,
             'status_sesi' => 'open',
+            'password' => bcrypt('secret123'),
         ]);
         Absensi::create([
             'siswa_id' => $siswa->id,
@@ -156,7 +182,7 @@ class StudentSelfCheckInTest extends TestCase
 
         $this->actingAs($siswaUser)
             ->from('/saya/jadwal/'.$jadwal1->id.'/absen')
-            ->post('/saya/absensi/check-in')
+            ->post('/saya/absensi/check-in', ['password' => 'secret123'])
             ->assertRedirect('/saya/jadwal/'.$jadwal1->id.'/absen');
 
         $this->assertDatabaseHas('absensi', [
@@ -177,6 +203,7 @@ class StudentSelfCheckInTest extends TestCase
             'tanggal' => '2024-07-01',
             'opened_by' => $guruUser->id,
             'status_sesi' => 'open',
+            'password' => bcrypt('secret123'),
         ]);
         Absensi::create([
             'siswa_id' => $siswa->id,
@@ -186,7 +213,7 @@ class StudentSelfCheckInTest extends TestCase
         ]);
 
         $this->actingAs($siswaUser)
-            ->post('/saya/absensi/check-in')
+            ->post('/saya/absensi/check-in', ['password' => 'secret123'])
             ->assertForbidden();
     }
 
@@ -199,6 +226,7 @@ class StudentSelfCheckInTest extends TestCase
             'tanggal' => '2024-07-01',
             'opened_by' => $guruUser->id,
             'status_sesi' => 'open',
+            'password' => bcrypt('secret123'),
         ]);
         Absensi::create([
             'siswa_id' => $siswa->id,
@@ -209,12 +237,12 @@ class StudentSelfCheckInTest extends TestCase
 
         $this->actingAs($siswaUser)
             ->from('/saya/jadwal/'.$jadwal->id.'/absen')
-            ->post('/saya/absensi/check-in')
+            ->post('/saya/absensi/check-in', ['password' => 'secret123'])
             ->assertRedirect('/saya/jadwal/'.$jadwal->id.'/absen');
 
         $this->actingAs($siswaUser)
             ->from('/saya/jadwal/'.$jadwal->id.'/absen')
-            ->post('/saya/absensi/check-in')
+            ->post('/saya/absensi/check-in', ['password' => 'secret123'])
             ->assertRedirect('/saya/jadwal/'.$jadwal->id.'/absen')
             ->assertSessionHasErrors('check_in');
 
