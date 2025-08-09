@@ -308,6 +308,7 @@ class AbsensiController extends Controller
     {
         $session = AbsensiSession::where('jadwal_id', $jadwal->id)
             ->where('tanggal', Carbon::now()->toDateString())
+            ->orderByDesc('id')
             ->first();
 
         $now = Carbon::now();
