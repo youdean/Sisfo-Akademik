@@ -32,7 +32,9 @@
             <td>{{ $s->tempat_lahir }}</td>
             <td>{{ $s->jenis_kelamin }}</td>
             <td>{{ $s->tanggal_lahir }}</td>
-            <td></td>
+            <td>
+                <a href="{{ route('rapor.cetak', $s->id) }}" class="btn btn-sm btn-info">Cetak Rapor</a>
+            </td>
         </tr>
         @endforeach
     </tbody>
