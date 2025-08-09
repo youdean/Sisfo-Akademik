@@ -33,7 +33,7 @@ public function create()
 
 public function store(Request $request)
 {
-    Guru::create($request->validate([
+    $data = $request->validate([
         'nuptk' => 'required|unique:guru',
         'nama' => 'required',
         'jabatan' => 'nullable',
@@ -41,7 +41,14 @@ public function store(Request $request)
         'tempat_lahir' => 'required',
         'jenis_kelamin' => 'required',
         'tanggal_lahir' => 'required|date'
-    ]));
+    ]);
+    if (empty($data['jabatan'])) {
+        $data['jabatan'] = 'Staff';
+    }
+    if (empty($data['email'])) {
+        $data['email'] = fake()->unique()->safeEmail();
+    }
+    Guru::create($data);
 
     return redirect()->route('guru.index')->with('success', 'Guru berhasil ditambahkan');
 }
@@ -53,7 +60,7 @@ public function edit(Guru $guru)
 
 public function update(Request $request, Guru $guru)
 {
-    $guru->update($request->validate([
+    $data = $request->validate([
         'nuptk' => 'required|unique:guru,nuptk,' . $guru->id,
         'nama' => 'required',
         'jabatan' => 'nullable',
@@ -61,7 +68,14 @@ public function update(Request $request, Guru $guru)
         'tempat_lahir' => 'required',
         'jenis_kelamin' => 'required',
         'tanggal_lahir' => 'required|date'
-    ]));
+    ]);
+    if (empty($data['jabatan'])) {
+        $data['jabatan'] = 'Staff';
+    }
+    if (empty($data['email'])) {
+        $data['email'] = fake()->unique()->safeEmail();
+    }
+    $guru->update($data);
 
     return redirect()->route('guru.index')->with('success', 'Guru berhasil diupdate');
 }
