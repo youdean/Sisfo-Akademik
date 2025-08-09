@@ -27,7 +27,10 @@
     </div>
     <div class="mb-3">
         <label>Jabatan</label>
-        <input type="text" name="jabatan" class="form-control" value="{{ $guru->jabatan }}">
+        <select name="jabatan" class="form-control">
+            <option value="Kepala Sekolah" {{ $guru->jabatan == 'Kepala Sekolah' ? 'selected' : '' }}>Kepala Sekolah</option>
+            <option value="Staff" {{ $guru->jabatan != 'Kepala Sekolah' ? 'selected' : '' }}>Staff</option>
+        </select>
         <x-input-error :messages="$errors->get('jabatan')" class="mt-1" />
     </div>
     <div class="mb-3">

@@ -25,6 +25,7 @@
         <select name="guru_id" class="form-control" required>
             <option value="">-- Pilih Guru --</option>
             @foreach($guru as $g)
+                @continue($g->jabatan == 'Kepala Sekolah')
                 <option value="{{ $g->id }}" {{ $kela->guru_id == $g->id ? 'selected' : '' }}>{{ $g->nama }}</option>
             @endforeach
         </select>
