@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Siswa;
 use App\Models\Absensi;
+use App\Models\AbsensiSession;
 use App\Models\Jadwal;
 use App\Models\Kelas;
 use App\Models\Penilaian;
-use App\Models\AbsensiSession;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Siswa;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -21,6 +21,7 @@ class StudentController extends Controller
     public function profil()
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
+
         return view('siswa.show', compact('siswa'));
     }
 
@@ -31,6 +32,7 @@ class StudentController extends Controller
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $absensi = $siswa->absensi()->with('mapel')->get();
+
         return view('siswa.absensi', compact('siswa', 'absensi'));
     }
 
@@ -46,7 +48,6 @@ class StudentController extends Controller
 
         return view('siswa.nilai', compact('siswa', 'penilaian'));
     }
-
 
     /**
      * Display schedule for the logged in student.
@@ -89,7 +90,7 @@ class StudentController extends Controller
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $kelas = Kelas::where('nama', $siswa->kelas)->first();
-        if (!$kelas || $jadwal->kelas_id !== $kelas->id) {
+        if (! $kelas || $jadwal->kelas_id !== $kelas->id) {
             abort(403);
         }
 
@@ -122,7 +123,7 @@ class StudentController extends Controller
     {
         $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         $kelas = Kelas::where('nama', $siswa->kelas)->first();
-        if (!$kelas || $jadwal->kelas_id !== $kelas->id) {
+        if (! $kelas || $jadwal->kelas_id !== $kelas->id) {
             abort(403);
         }
 
@@ -177,7 +178,7 @@ class StudentController extends Controller
         }
 
         if (! Hash::check($validated['password'], $session->password)) {
-            abort(403);
+            return redirect()->back()->withErrors(['password' => 'Password tidak sesuai']);
         }
 
         $baseJadwal = $session->jadwal;

@@ -2,15 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Guru;
-use App\Models\MataPelajaran;
-use App\Models\Kelas;
-use App\Models\Siswa;
-use App\Models\Jadwal;
-use App\Models\TahunAjaran;
-use App\Models\AbsensiSession;
 use App\Models\Absensi;
+use App\Models\AbsensiSession;
+use App\Models\Guru;
+use App\Models\Jadwal;
+use App\Models\Kelas;
+use App\Models\MataPelajaran;
+use App\Models\Siswa;
+use App\Models\TahunAjaran;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -250,7 +250,9 @@ class StudentSelfCheckInTest extends TestCase
         ]);
 
         $this->actingAs($siswaUser)
+            ->from('/saya/jadwal/'.$jadwal->id.'/absen')
             ->post('/saya/absensi/check-in', ['password' => 'wrong'])
-            ->assertForbidden();
+            ->assertRedirect('/saya/jadwal/'.$jadwal->id.'/absen')
+            ->assertSessionHasErrors(['password' => 'Password tidak sesuai']);
     }
 }
