@@ -11,6 +11,8 @@ class Penilaian extends Model
 {
     use HasFactory;
 
+    public const KKM = 75;
+
     protected $table = 'penilaian';
     protected $fillable = [
         'siswa_id', 'mapel_id', 'semester',
@@ -53,5 +55,28 @@ class Penilaian extends Model
     public function getNilaiRaportAttribute(): float
     {
         return ($this->nilai_harian * 0.3) + (($this->pts ?? 0) * 0.3) + (($this->pat ?? 0) * 0.4);
+    }
+
+    public function getPredikatAttribute(): string
+    {
+        $nilai = $this->nilai_raport;
+
+        if ($nilai >= 90) {
+            return 'A';
+        }
+
+        if ($nilai >= 80) {
+            return 'B';
+        }
+
+        if ($nilai >= 70) {
+            return 'C';
+        }
+
+        if ($nilai >= 60) {
+            return 'D';
+        }
+
+        return 'E';
     }
 }
