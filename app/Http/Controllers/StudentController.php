@@ -155,25 +155,41 @@ class StudentController extends Controller
         $hari = $now->locale('id')->isoFormat('dddd');
         $time = $now->format('H:i');
 
-        $jadwal = Jadwal::where('kelas_id', $kelas->id)
-            ->where('hari', $hari)
-            ->where('jam_mulai', '<=', $time)
-            ->where('jam_selesai', '>=', $time)
-            ->first();
-        if (! $jadwal) {
-            abort(403);
-        }
-
-        $session = AbsensiSession::where('jadwal_id', $jadwal->id)
-            ->where('tanggal', $now->toDateString())
+        $session = AbsensiSession::where('tanggal', $now->toDateString())
             ->where('status_sesi', 'open')
+            ->whereHas('jadwal', function ($q) use ($kelas, $hari, $time) {
+                $q->where('kelas_id', $kelas->id)
+                    ->where('hari', $hari)
+                    ->where('jam_mulai', '<=', $time);
+            })
             ->first();
         if (! $session) {
             abort(403);
         }
 
+        $baseJadwal = $session->jadwal;
+        $endTime = $baseJadwal->jam_selesai;
+        $current = $baseJadwal;
+        while (true) {
+            $next = Jadwal::where('kelas_id', $current->kelas_id)
+                ->where('mapel_id', $current->mapel_id)
+                ->where('guru_id', $current->guru_id)
+                ->where('hari', $current->hari)
+                ->where('jam_mulai', $endTime)
+                ->first();
+            if (! $next) {
+                break;
+            }
+            $endTime = $next->jam_selesai;
+            $current = $next;
+        }
+
+        if ($time > $endTime) {
+            abort(403);
+        }
+
         $absen = Absensi::updateOrCreate(
-            ['siswa_id' => $siswa->id, 'mapel_id' => $jadwal->mapel_id, 'tanggal' => $now->toDateString()],
+            ['siswa_id' => $siswa->id, 'mapel_id' => $baseJadwal->mapel_id, 'tanggal' => $now->toDateString()],
             ['status' => 'Hadir', 'check_in_at' => $now]
         );
 
