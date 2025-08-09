@@ -94,4 +94,30 @@ class StartSessionTest extends TestCase
         $response->assertSee('Tutup Sesi');
     }
 
+    public function test_second_consecutive_slot_cannot_start_session(): void
+    {
+        [$guruUser, $firstSchedule] = $this->setupData();
+        $secondSchedule = Jadwal::create([
+            'kelas_id' => $firstSchedule->kelas_id,
+            'mapel_id' => $firstSchedule->mapel_id,
+            'guru_id' => $firstSchedule->guru_id,
+            'hari' => $firstSchedule->hari,
+            'jam_mulai' => '08:00',
+            'jam_selesai' => '09:00',
+        ]);
+
+        Carbon::setTestNow('2024-07-01 08:30:00');
+
+        $this->actingAs($guruUser)
+            ->post(route('absensi.session.start', $secondSchedule->id))
+            ->assertForbidden();
+
+        $this->assertDatabaseMissing('absensi_sessions', [
+            'jadwal_id' => $secondSchedule->id,
+            'tanggal' => '2024-07-01',
+        ]);
+
+        $response = $this->actingAs($guruUser)->get(route('absensi.session', $secondSchedule->id));
+        $response->assertSee('<button class="btn btn-primary" disabled>Mulai Sesi</button>', false);
+    }
 }

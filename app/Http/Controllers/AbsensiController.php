@@ -316,7 +316,8 @@ class AbsensiController extends Controller
         $end = $now->copy()->setTimeFromTimeString($this->extendedEndTime($jadwal));
         $canStart =
             $now->between($start, $end)
-            && $now->locale('id')->isoFormat('dddd') === $jadwal->hari;
+            && $now->locale('id')->isoFormat('dddd') === $jadwal->hari
+            && ! $this->hasPrecedingSlot($jadwal);
 
         return view('absensi.session', compact('jadwal', 'session', 'canStart'));
     }
@@ -331,7 +332,8 @@ class AbsensiController extends Controller
         if (
             $currentDay !== $jadwal->hari ||
             $now->lt($startTime) ||
-            $now->gt($endTime)
+            $now->gt($endTime) ||
+            $this->hasPrecedingSlot($jadwal)
         ) {
             abort(403, 'Sesi absensi hanya bisa dibuka sesuai jadwal');
         }
@@ -374,6 +376,16 @@ class AbsensiController extends Controller
         }
 
         return $end;
+    }
+
+    private function hasPrecedingSlot(Jadwal $jadwal): bool
+    {
+        return Jadwal::where('kelas_id', $jadwal->kelas_id)
+            ->where('mapel_id', $jadwal->mapel_id)
+            ->where('guru_id', $jadwal->guru_id)
+            ->where('hari', $jadwal->hari)
+            ->where('jam_selesai', $jadwal->jam_mulai)
+            ->exists();
     }
 
     public function endSession(Jadwal $jadwal)
