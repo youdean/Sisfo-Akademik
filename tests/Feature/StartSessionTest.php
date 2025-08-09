@@ -120,5 +120,4 @@ class StartSessionTest extends TestCase
         $response = $this->actingAs($guruUser)->get(route('absensi.session', $secondSchedule->id));
         $response->assertSee('<button class="btn btn-primary" disabled>Mulai Sesi</button>', false);
     }
-
 }
