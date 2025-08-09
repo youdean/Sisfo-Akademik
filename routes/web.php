@@ -88,9 +88,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Cetak rapor dapat diakses oleh siswa dan admin
+Route::middleware(['auth', 'role:siswa,admin'])->get('/rapor/cetak/{siswa?}', [RaporController::class, 'cetak'])->name('rapor.cetak');
+
 // Routes khusus siswa untuk melihat data sendiri
 Route::middleware(['auth', 'role:siswa'])->group(function () {
-    Route::get('/rapor/cetak', [RaporController::class, 'cetak'])->name('rapor.cetak');
     Route::get('/saya', [StudentController::class, 'profil'])->name('student.profile');
     Route::get('/saya/absensi', [StudentController::class, 'absensi'])->name('student.absensi');
     Route::get('/saya/nilai', [StudentController::class, 'nilai'])->name('student.nilai');
