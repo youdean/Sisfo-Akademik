@@ -314,7 +314,9 @@ class AbsensiController extends Controller
         $now = Carbon::now();
         $start = $now->copy()->setTimeFromTimeString($jadwal->jam_mulai);
         $end = $now->copy()->setTimeFromTimeString($this->extendedEndTime($jadwal));
-        $canStart = $now->between($start, $end) && $now->locale('id')->isoFormat('dddd') === $jadwal->hari;
+        $canStart =
+            $now->between($start, $end)
+            && $now->locale('id')->isoFormat('dddd') === $jadwal->hari;
 
         return view('absensi.session', compact('jadwal', 'session', 'canStart'));
     }

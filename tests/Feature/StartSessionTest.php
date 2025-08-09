@@ -52,7 +52,7 @@ class StartSessionTest extends TestCase
             'tanggal_lahir' => '2000-01-01',
             'user_id' => $siswaUser->id,
         ]);
-        $jadwal1 = Jadwal::create([
+        $jadwal = Jadwal::create([
             'kelas_id' => $kelas->id,
             'mapel_id' => $mapel->id,
             'guru_id' => $guru->id,
@@ -60,21 +60,13 @@ class StartSessionTest extends TestCase
             'jam_mulai' => '07:00',
             'jam_selesai' => '08:00',
         ]);
-        Jadwal::create([
-            'kelas_id' => $kelas->id,
-            'mapel_id' => $mapel->id,
-            'guru_id' => $guru->id,
-            'hari' => 'Senin',
-            'jam_mulai' => '08:00',
-            'jam_selesai' => '09:00',
-        ]);
 
-        return [$guruUser, $jadwal1];
+        return [$guruUser, $jadwal];
     }
 
     public function test_teacher_can_start_session_midway(): void
     {
-        Carbon::setTestNow('2024-07-01 08:30:00');
+        Carbon::setTestNow('2024-07-01 07:30:00');
         [$guruUser, $jadwal] = $this->setupData();
 
         $this->actingAs($guruUser)
@@ -90,7 +82,7 @@ class StartSessionTest extends TestCase
 
     public function test_teacher_can_restart_session_after_closing(): void
     {
-        Carbon::setTestNow('2024-07-01 08:30:00');
+        Carbon::setTestNow('2024-07-01 07:30:00');
         [$guruUser, $jadwal] = $this->setupData();
 
         $this->actingAs($guruUser)->post(route('absensi.session.start', $jadwal->id));
@@ -101,4 +93,5 @@ class StartSessionTest extends TestCase
 
         $response->assertSee('Tutup Sesi');
     }
+
 }
