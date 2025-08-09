@@ -306,65 +306,55 @@ class AbsensiController extends Controller
 
     public function session(Jadwal $jadwal)
     {
-        $session = AbsensiSession::where('jadwal_id', $jadwal->id)
+        $base = $jadwal->baseSlot();
+        $session = AbsensiSession::where('jadwal_id', $base->id)
             ->where('tanggal', Carbon::now()->toDateString())
             ->orderByDesc('id')
             ->first();
 
         $now = Carbon::now();
-        $start = $now->copy()->setTimeFromTimeString($jadwal->jam_mulai);
-        $end = $now->copy()->setTimeFromTimeString($jadwal->extendedEndTime());
+        $start = $now->copy()->setTimeFromTimeString($base->jam_mulai);
+        $end = $now->copy()->setTimeFromTimeString($base->extendedEndTime());
         $canStart =
             $now->between($start, $end)
-            && $now->locale('id')->isoFormat('dddd') === $jadwal->hari
-            && ! $this->hasPrecedingSlot($jadwal);
+            && $now->locale('id')->isoFormat('dddd') === $base->hari;
 
-        return view('absensi.session', compact('jadwal', 'session', 'canStart'));
+        return view('absensi.session', ['jadwal' => $base, 'session' => $session, 'canStart' => $canStart]);
     }
 
     public function startSession(Jadwal $jadwal)
     {
+        $base = $jadwal->baseSlot();
         $now = Carbon::now();
         $currentDay = $now->locale('id')->isoFormat('dddd');
-        $startTime = $now->copy()->setTimeFromTimeString($jadwal->jam_mulai);
-        $endTime = $now->copy()->setTimeFromTimeString($jadwal->extendedEndTime());
+        $startTime = $now->copy()->setTimeFromTimeString($base->jam_mulai);
+        $endTime = $now->copy()->setTimeFromTimeString($base->extendedEndTime());
 
         if (
-            $currentDay !== $jadwal->hari ||
+            $currentDay !== $base->hari ||
             $now->lt($startTime) ||
-            $now->gt($endTime) ||
-            $this->hasPrecedingSlot($jadwal)
+            $now->gt($endTime)
         ) {
             abort(403, 'Sesi absensi hanya bisa dibuka sesuai jadwal');
         }
 
         $tanggal = $now->toDateString();
         AbsensiSession::create([
-            'jadwal_id' => $jadwal->id,
+            'jadwal_id' => $base->id,
             'tanggal' => $tanggal,
             'opened_by' => Auth::id(),
             'status_sesi' => 'open',
         ]);
 
-        $siswaIds = Siswa::where('kelas', $jadwal->kelas->nama)->pluck('id');
+        $siswaIds = Siswa::where('kelas', $base->kelas->nama)->pluck('id');
         foreach ($siswaIds as $id) {
             Absensi::updateOrCreate(
-                ['siswa_id' => $id, 'mapel_id' => $jadwal->mapel_id, 'tanggal' => $tanggal],
+                ['siswa_id' => $id, 'mapel_id' => $base->mapel_id, 'tanggal' => $tanggal],
                 ['status' => 'Alpha']
             );
         }
 
-        return redirect()->route('absensi.session', $jadwal->id)->with('success', 'Sesi absensi dibuka');
-    }
-
-    private function hasPrecedingSlot(Jadwal $jadwal): bool
-    {
-        return Jadwal::where('kelas_id', $jadwal->kelas_id)
-            ->where('mapel_id', $jadwal->mapel_id)
-            ->where('guru_id', $jadwal->guru_id)
-            ->where('hari', $jadwal->hari)
-            ->where('jam_selesai', $jadwal->jam_mulai)
-            ->exists();
+        return redirect()->route('absensi.session', $base->id)->with('success', 'Sesi absensi dibuka');
     }
 
     public function endSession(Jadwal $jadwal)
