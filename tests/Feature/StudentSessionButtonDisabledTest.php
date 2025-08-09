@@ -8,17 +8,16 @@ use App\Models\MataPelajaran;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Jadwal;
-use App\Models\AbsensiSession;
 use App\Models\TahunAjaran;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class StudentScheduleMergeTest extends TestCase
+class StudentSessionButtonDisabledTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_consecutive_slots_are_merged_in_student_schedule(): void
+    public function test_button_disabled_when_session_not_open(): void
     {
         Carbon::setTestNow('2024-07-01 07:30:00');
 
@@ -30,7 +29,7 @@ class StudentScheduleMergeTest extends TestCase
             'jenis_kelamin' => 'L',
             'tanggal_lahir' => '1980-01-01',
         ]);
-        $mapel = MataPelajaran::create(['nama' => 'Matematika']);
+        $mapel = MataPelajaran::create(['nama' => 'IPA']);
         $ta = TahunAjaran::create([
             'nama' => '2024/2025',
             'start_date' => '2024-07-01',
@@ -52,8 +51,7 @@ class StudentScheduleMergeTest extends TestCase
             'tanggal_lahir' => '2000-01-01',
             'user_id' => $user->id,
         ]);
-
-        $first = Jadwal::create([
+        $jadwal = Jadwal::create([
             'kelas_id' => $kelas->id,
             'mapel_id' => $mapel->id,
             'guru_id' => $guru->id,
@@ -61,28 +59,11 @@ class StudentScheduleMergeTest extends TestCase
             'jam_mulai' => '07:00',
             'jam_selesai' => '08:00',
         ]);
-        $second = Jadwal::create([
-            'kelas_id' => $kelas->id,
-            'mapel_id' => $mapel->id,
-            'guru_id' => $guru->id,
-            'hari' => 'Senin',
-            'jam_mulai' => '08:00',
-            'jam_selesai' => '09:00',
-        ]);
-
-        AbsensiSession::create([
-            'jadwal_id' => $first->id,
-            'tanggal' => '2024-07-01',
-            'opened_by' => $user->id,
-            'status_sesi' => 'open',
-        ]);
 
         $response = $this->actingAs($user)->get('/saya/jadwal');
 
         $response->assertOk();
-        $response->assertSee('07:00 - 09:00');
-        $response->assertSee(route('student.jadwal.absen.form', $first->id));
-        $response->assertDontSee(route('student.jadwal.absen.form', $second->id));
+        $response->assertDontSee(route('student.jadwal.absen.form', $jadwal->id));
+        $response->assertSee('<button class="btn btn-sm btn-primary" disabled>Ambil Absen</button>', false);
     }
 }
-
