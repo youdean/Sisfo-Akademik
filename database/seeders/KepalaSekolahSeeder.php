@@ -14,21 +14,21 @@ class KepalaSekolahSeeder extends Seeder
         $user = User::updateOrCreate(
             ['email' => 'kepsek@demo.com'],
             [
-                'name' => 'Kepala Sekolah',
+                'name' => 'DRS MOCH ZAENAL AL AQILI',
                 'password' => Hash::make('password'),
                 'role' => 'guru',
             ]
         );
 
         DB::table('guru')->updateOrInsert(
-            ['nuptk' => '1234567890123456'],
+            ['nuptk' => '9450743647200002'],
             [
-                'nama' => 'Kepala Sekolah',
+                'nama' => 'DRS MOCH ZAENAL AL AQILI',
                 'jabatan' => 'Kepala Sekolah',
                 'email' => 'kepsek@demo.com',
-                'tempat_lahir' => 'Jakarta',
+                'tempat_lahir' => 'Bogor',
                 'jenis_kelamin' => 'L',
-                'tanggal_lahir' => '1970-01-01',
+                'tanggal_lahir' => '1965-01-18',
                 'user_id' => $user->id,
             ]
         );
