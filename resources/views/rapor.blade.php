@@ -77,8 +77,8 @@
             <td style="text-align:center">Wali Kelas</td>
         </tr>
         <tr>
-            <td style="padding-top:60px;text-align:center">__________________</td>
-            <td style="padding-top:60px;text-align:center">__________________</td>
+            <td style="padding-top:60px;text-align:center">__________________<br>{{ $siswa->nama_ortu }}</td>
+            <td style="padding-top:60px;text-align:center">__________________<br>{{ $waliKelas }}</td>
         </tr>
     </table>
 

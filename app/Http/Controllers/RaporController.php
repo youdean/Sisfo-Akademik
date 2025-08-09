@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Penilaian;
 use App\Models\Absensi;
+use App\Models\Kelas;
 
 class RaporController extends Controller
 {
@@ -30,11 +31,17 @@ class RaporController extends Controller
             ->groupBy('status')
             ->pluck('jumlah', 'status');
 
+        $waliKelas = Kelas::with('waliKelas')
+            ->where('nama', $siswa->kelas)
+            ->first()
+            ->waliKelas->nama ?? '';
+
         $pdf = Pdf::loadView('rapor', [
             'siswa' => $siswa,
             'penilaian' => $penilaian,
             'semester' => $semester,
             'ketidakhadiran' => $ketidakhadiran,
+            'waliKelas' => $waliKelas,
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download('rapor.pdf');
