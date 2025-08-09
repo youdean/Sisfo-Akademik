@@ -61,7 +61,7 @@ class TeacherSessionAttendanceTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->post('/absensi/session/'.$jadwal->id.'/start')
+            ->post('/absensi/session/'.$jadwal->id.'/start', ['password' => 'secret123'])
             ->assertRedirect('/absensi/session/'.$jadwal->id);
 
         $this->assertDatabaseHas('absensi_sessions', [
@@ -126,7 +126,7 @@ class TeacherSessionAttendanceTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->post('/absensi/session/'.$jadwal->id.'/start')
+            ->post('/absensi/session/'.$jadwal->id.'/start', ['password' => 'secret123'])
             ->assertStatus(403);
 
         $this->assertDatabaseMissing('absensi_sessions', [
@@ -178,7 +178,7 @@ class TeacherSessionAttendanceTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->post('/absensi/session/'.$jadwal->id.'/start')
+            ->post('/absensi/session/'.$jadwal->id.'/start', ['password' => 'secret123'])
             ->assertStatus(403);
 
         $this->assertDatabaseMissing('absensi_sessions', [
@@ -230,7 +230,7 @@ class TeacherSessionAttendanceTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->post('/absensi/session/'.$jadwal->id.'/start')
+            ->post('/absensi/session/'.$jadwal->id.'/start', ['password' => 'secret123'])
             ->assertRedirect('/absensi/session/'.$jadwal->id);
 
         $this->assertDatabaseHas('absensi_sessions', [
