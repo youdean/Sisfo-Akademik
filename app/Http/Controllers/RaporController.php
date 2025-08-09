@@ -31,17 +31,18 @@ class RaporController extends Controller
             ->groupBy('status')
             ->pluck('jumlah', 'status');
 
-        $waliKelas = Kelas::with('waliKelas')
+        $kelas = Kelas::with('waliKelas')
             ->where('nama', $siswa->kelas)
-            ->first()
-            ->waliKelas->nama ?? '';
+            ->first();
+        $waliKelas = $kelas->waliKelas ?? null;
 
         $pdf = Pdf::loadView('rapor', [
             'siswa' => $siswa,
             'penilaian' => $penilaian,
             'semester' => $semester,
             'ketidakhadiran' => $ketidakhadiran,
-            'waliKelas' => $waliKelas,
+            'waliKelas' => $waliKelas->nama ?? '',
+            'waliKelasNuptk' => $waliKelas->nuptk ?? '',
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download('rapor.pdf');
