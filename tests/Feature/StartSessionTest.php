@@ -87,4 +87,18 @@ class StartSessionTest extends TestCase
             'status_sesi' => 'open',
         ]);
     }
+
+    public function test_teacher_can_restart_session_after_closing(): void
+    {
+        Carbon::setTestNow('2024-07-01 08:30:00');
+        [$guruUser, $jadwal] = $this->setupData();
+
+        $this->actingAs($guruUser)->post(route('absensi.session.start', $jadwal->id));
+        $this->actingAs($guruUser)->post(route('absensi.session.end', $jadwal->id));
+        $this->actingAs($guruUser)->post(route('absensi.session.start', $jadwal->id));
+
+        $response = $this->actingAs($guruUser)->get(route('absensi.session', $jadwal->id));
+
+        $response->assertSee('Tutup Sesi');
+    }
 }
