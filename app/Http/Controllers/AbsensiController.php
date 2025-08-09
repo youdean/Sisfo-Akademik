@@ -348,12 +348,13 @@ class AbsensiController extends Controller
         ];
 
         $currentDay = $dayMap[$now->format('l')] ?? '';
-        $currentTime = $now->format('H:i');
+        $startTime = Carbon::createFromFormat('H:i', $jadwal->jam_mulai);
+        $endTime = Carbon::createFromFormat('H:i', $jadwal->jam_selesai);
 
         if (
             $currentDay !== $jadwal->hari ||
-            $currentTime < $jadwal->jam_mulai ||
-            $currentTime > $jadwal->jam_selesai
+            $now->lt($startTime) ||
+            $now->gt($endTime)
         ) {
             abort(403, 'Sesi absensi hanya bisa dibuka sesuai jadwal');
         }

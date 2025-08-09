@@ -19,8 +19,9 @@
     ];
     $now = \Carbon\Carbon::now();
     $currentDay = $dayMap[$now->format('l')] ?? '';
-    $currentTime = $now->format('H:i');
-    $canStart = $currentDay === $jadwal->hari && $currentTime >= $jadwal->jam_mulai && $currentTime <= $jadwal->jam_selesai;
+    $start = \Carbon\Carbon::createFromFormat('H:i', $jadwal->jam_mulai);
+    $end = \Carbon\Carbon::createFromFormat('H:i', $jadwal->jam_selesai);
+    $canStart = $currentDay === $jadwal->hari && $now->between($start, $end);
 @endphp
 
 @if($session && $session->status_sesi === 'open')

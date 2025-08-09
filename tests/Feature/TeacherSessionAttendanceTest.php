@@ -186,4 +186,56 @@ class TeacherSessionAttendanceTest extends TestCase
             'tanggal' => '2024-07-01',
         ]);
     }
+
+    public function test_teacher_can_open_session_with_unpadded_schedule_times(): void
+    {
+        Carbon::setTestNow('2024-07-01 08:30:00');
+        $user = User::factory()->create(['role' => 'guru']);
+        $guru = Guru::create([
+            'nuptk' => '1',
+            'nama' => 'Guru',
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '1980-01-01',
+            'user_id' => $user->id,
+        ]);
+        $mapel = MataPelajaran::create(['nama' => 'IPA']);
+        $ta = TahunAjaran::create([
+            'nama' => '2024/2025',
+            'start_date' => '2024-07-01',
+            'end_date' => '2025-06-30',
+        ]);
+        $kelas = Kelas::create([
+            'nama' => 'X',
+            'guru_id' => $guru->id,
+            'tahun_ajaran_id' => $ta->id,
+        ]);
+        Siswa::create([
+            'nama' => 'Siswa 1',
+            'nisn' => '123',
+            'nama_ortu' => 'Orang Tua',
+            'kelas' => $kelas->nama,
+            'tahun_ajaran_id' => $ta->id,
+            'tempat_lahir' => 'Kota',
+            'jenis_kelamin' => 'L',
+            'tanggal_lahir' => '2000-01-01',
+        ]);
+        $jadwal = Jadwal::create([
+            'kelas_id' => $kelas->id,
+            'mapel_id' => $mapel->id,
+            'guru_id' => $guru->id,
+            'hari' => 'Senin',
+            'jam_mulai' => '7:00',
+            'jam_selesai' => '9:00',
+        ]);
+
+        $this->actingAs($user)
+            ->post('/absensi/session/'.$jadwal->id.'/start')
+            ->assertRedirect('/absensi/session/'.$jadwal->id);
+
+        $this->assertDatabaseHas('absensi_sessions', [
+            'jadwal_id' => $jadwal->id,
+            'status_sesi' => 'open',
+        ]);
+    }
 }
