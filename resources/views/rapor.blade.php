@@ -49,5 +49,27 @@
             @endforeach
         </tbody>
     </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">Ketidakhadiran</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Izin</td>
+                <td>{{ $ketidakhadiran['Izin'] ?? 0 }} hari</td>
+            </tr>
+            <tr>
+                <td>Sakit</td>
+                <td>{{ $ketidakhadiran['Sakit'] ?? 0 }} hari</td>
+            </tr>
+            <tr>
+                <td>Alpha</td>
+                <td>{{ $ketidakhadiran['Alpha'] ?? 0 }} hari</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
