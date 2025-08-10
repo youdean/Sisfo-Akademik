@@ -9,10 +9,20 @@
         <input type="text" name="nama" value="{{ request('nama') }}" class="form-control" placeholder="Nama Siswa">
     </div>
     <div class="col-md-3">
-        <input type="text" name="kelas" value="{{ request('kelas') }}" class="form-control" placeholder="Kelas">
+        <select name="kelas" class="form-select">
+            <option value="">Semua Kelas</option>
+            @foreach($kelasList as $k)
+                <option value="{{ $k }}" {{ request('kelas') == $k ? 'selected' : '' }}>{{ $k }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="col-md-3">
-        <input type="text" name="mapel" value="{{ request('mapel') }}" class="form-control" placeholder="Mata Pelajaran">
+        <select name="mapel" class="form-select">
+            <option value="">Semua Mata Pelajaran</option>
+            @foreach($mapelList as $m)
+                <option value="{{ $m }}" {{ request('mapel') == $m ? 'selected' : '' }}>{{ $m }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="col-md-3 d-flex">
         <button type="submit" class="btn btn-primary me-2">Cari</button>
