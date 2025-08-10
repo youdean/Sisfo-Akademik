@@ -4,6 +4,7 @@
 
 @section('content')
 <h1 class="mb-3">Siswa di Kelas {{ $selected }}</h1>
+<a href="{{ route('guru.nilai-kelas') }}" class="btn btn-primary mb-3">Lihat Rekap Nilai</a>
 <form method="GET" action="{{ route('guru.kelas') }}" class="mb-3 d-flex">
     <select name="kelas" class="form-select me-2" onchange="this.form.submit()">
         @foreach($kelasList as $k)
