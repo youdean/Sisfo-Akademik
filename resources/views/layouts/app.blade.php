@@ -90,6 +90,7 @@
                     @if(Auth::user()->role === 'guru')
                         @if($isWaliKelas)
                             <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
+                            <li><a href="{{ route('guru.nilai-kelas') }}" class="nav-link {{ request()->routeIs('guru.nilai-kelas') ? 'active' : '' }}"><i class="bi bi-bar-chart me-2"></i>Nilai Kelas</a></li>
                         @endif
                         <li><a href="{{ route('input-nilai.index') }}" class="nav-link {{ request()->routeIs('input-nilai.*') ? 'active' : '' }}"><i class="bi bi-pencil-square me-2"></i>Input Nilai</a></li>
                     @endif
@@ -153,6 +154,7 @@
                     @if(Auth::user()->role === 'guru')
                         @if($isWaliKelas)
                             <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
+                            <li><a href="{{ route('guru.nilai-kelas') }}" class="nav-link {{ request()->routeIs('guru.nilai-kelas') ? 'active' : '' }}"><i class="bi bi-bar-chart me-2"></i>Nilai Kelas</a></li>
                         @endif
                         <li><a href="{{ route('input-nilai.index') }}" class="nav-link {{ request()->routeIs('input-nilai.*') ? 'active' : '' }}"><i class="bi bi-pencil-square me-2"></i>Input Nilai</a></li>
                     @endif
