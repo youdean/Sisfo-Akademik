@@ -100,6 +100,6 @@ class PenilaianSearchTest extends TestCase
         $response = $this->get('/penilaian?mapel=Matematika');
         $response->assertOk();
         $response->assertSee('Matematika');
-        $response->assertDontSee('IPA');
+        $response->assertDontSee('<td>IPA</td>', false);
     }
 }

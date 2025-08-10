@@ -82,8 +82,17 @@ class PenilaianController extends Controller
             });
         }
 
+        $kelasList = Kelas::whereIn('nama', $this->kelasGuru())->pluck('nama');
+        if ($user && $user->role === 'guru') {
+            $guru = Guru::where('user_id', $user->id)->first();
+            $mapelIds = Pengajaran::where('guru_id', $guru?->id)->pluck('mapel_id')->unique();
+            $mapelList = MataPelajaran::whereIn('id', $mapelIds)->pluck('nama');
+        } else {
+            $mapelList = MataPelajaran::pluck('nama');
+        }
+
         $penilaian = $query->paginate(10)->withQueryString();
-        return view('penilaian.index', compact('penilaian', 'nama', 'kelas', 'mapel'));
+        return view('penilaian.index', compact('penilaian', 'nama', 'kelas', 'mapel', 'kelasList', 'mapelList'));
     }
 
     public function create()
