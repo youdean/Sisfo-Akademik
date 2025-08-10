@@ -231,6 +231,39 @@ class StudentSelfCheckInTest extends TestCase
         $this->assertEquals(1, Absensi::count());
     }
 
+    public function test_student_can_check_in_with_plain_session_password(): void
+    {
+        Carbon::setTestNow('2024-07-01 07:30:00');
+        [$guruUser, $siswaUser, $siswa, $jadwal, $mapel] = $this->setupData();
+        $password = 'secret';
+        AbsensiSession::create([
+            'jadwal_id' => $jadwal->id,
+            'tanggal' => '2024-07-01',
+            'opened_by' => $guruUser->id,
+            'status_sesi' => 'open',
+            'password' => $password,
+        ]);
+        Absensi::create([
+            'siswa_id' => $siswa->id,
+            'mapel_id' => $mapel->id,
+            'tanggal' => '2024-07-01',
+            'status' => 'Alpha',
+        ]);
+
+        $this->actingAs($siswaUser)
+            ->from('/saya/jadwal/'.$jadwal->id.'/absen')
+            ->post('/saya/absensi/check-in', ['password' => $password])
+            ->assertRedirect('/saya/jadwal/'.$jadwal->id.'/absen');
+
+        $this->assertDatabaseHas('absensi', [
+            'siswa_id' => $siswa->id,
+            'mapel_id' => $mapel->id,
+            'status' => 'Hadir',
+            'tanggal' => '2024-07-01',
+        ]);
+        $this->assertNotNull(Absensi::first()->check_in_at);
+    }
+
     public function test_student_cannot_check_in_with_wrong_password(): void
     {
         Carbon::setTestNow('2024-07-01 07:30:00');
