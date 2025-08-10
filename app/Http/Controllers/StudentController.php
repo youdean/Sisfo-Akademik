@@ -172,6 +172,7 @@ class StudentController extends Controller
                     ->where('hari', $hari)
                     ->where('jam_mulai', '<=', $time);
             })
+            ->latest('id')
             ->first();
         if (! $session) {
             abort(403);
