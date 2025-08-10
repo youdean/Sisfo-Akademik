@@ -178,7 +178,11 @@ class StudentController extends Controller
             abort(403);
         }
 
-        if (! Hash::check($validated['password'], $session->password)) {
+        $inputPassword = $validated['password'];
+        $sessionPassword = (string) ($session->password ?? '');
+        $validPassword = Hash::check($inputPassword, $sessionPassword)
+            || hash_equals($sessionPassword, $inputPassword);
+        if (! $validPassword) {
             return redirect()->back()->withErrors(['password' => 'Password tidak sesuai']);
         }
 
