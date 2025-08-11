@@ -15,6 +15,13 @@
 @else
     <form action="{{ route('absensi.session.start', $jadwal->id) }}" method="POST">
         @csrf
+        @if(! $session)
+            <div class="mb-3">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" required>
+                <x-input-error :messages="$errors->get('password')" class="mt-1" />
+            </div>
+        @endif
         <button class="btn btn-primary" {{ $canStart ? '' : 'disabled' }}>Mulai Sesi</button>
     </form>
 @endif

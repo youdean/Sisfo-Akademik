@@ -332,7 +332,7 @@ class AbsensiController extends Controller
         ]);
     }
 
-    public function startSession(Jadwal $jadwal)
+    public function startSession(Request $request, Jadwal $jadwal)
     {
         $base = $jadwal->baseSlot();
 
@@ -350,10 +350,29 @@ class AbsensiController extends Controller
             abort(403, 'Sesi absensi hanya bisa dibuka sesuai jadwal');
         }
 
-        $tanggal = $today->toDateString();
-        // ... (lanjutkan sama seperti kode kamu)
-    }
+        $validated = $request->validate([
+            'password' => 'required|min:4',
+        ]);
 
+        $tanggal = $now->toDateString();
+        AbsensiSession::create([
+            'jadwal_id' => $base->id,
+            'tanggal' => $tanggal,
+            'opened_by' => Auth::id(),
+            'status_sesi' => 'open',
+            'password' => bcrypt($validated['password']),
+        ]);
+
+        $siswaIds = Siswa::where('kelas', $base->kelas->nama)->pluck('id');
+        foreach ($siswaIds as $id) {
+            Absensi::updateOrCreate(
+                ['siswa_id' => $id, 'mapel_id' => $base->mapel_id, 'tanggal' => $tanggal],
+                ['status' => 'Alpha']
+            );
+        }
+
+        return redirect()->route('absensi.session', $base->id)->with('success', 'Sesi absensi dibuka');
+    }
 
     public function endSession(Jadwal $jadwal)
     {

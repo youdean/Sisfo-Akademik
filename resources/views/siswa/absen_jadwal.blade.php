@@ -44,6 +44,10 @@
 @else
 <form action="{{ route('student.absensi.checkin') }}" method="POST">
     @csrf
+    <div class="mb-3">
+        <label for="password" class="form-label">Password Sesi</label>
+        <input type="password" name="password" id="password" class="form-control" required>
+    </div>
     <button class="btn btn-success">Check In</button>
     <a href="{{ route('student.jadwal') }}" class="btn btn-secondary">Kembali</a>
 </form>

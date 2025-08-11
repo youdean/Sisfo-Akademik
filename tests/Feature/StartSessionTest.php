@@ -70,7 +70,7 @@ class StartSessionTest extends TestCase
         [$guruUser, $jadwal] = $this->setupData();
 
         $this->actingAs($guruUser)
-            ->post(route('absensi.session.start', $jadwal->id))
+            ->post(route('absensi.session.start', $jadwal->id), ['password' => 'secret123'])
             ->assertRedirect(route('absensi.session', $jadwal->id));
 
         $this->assertDatabaseHas('absensi_sessions', [
@@ -85,9 +85,9 @@ class StartSessionTest extends TestCase
         Carbon::setTestNow('2024-07-01 07:30:00');
         [$guruUser, $jadwal] = $this->setupData();
 
-        $this->actingAs($guruUser)->post(route('absensi.session.start', $jadwal->id));
+        $this->actingAs($guruUser)->post(route('absensi.session.start', $jadwal->id), ['password' => 'secret123']);
         $this->actingAs($guruUser)->post(route('absensi.session.end', $jadwal->id));
-        $this->actingAs($guruUser)->post(route('absensi.session.start', $jadwal->id));
+        $this->actingAs($guruUser)->post(route('absensi.session.start', $jadwal->id), ['password' => 'secret123']);
 
         $response = $this->actingAs($guruUser)->get(route('absensi.session', $jadwal->id));
 
@@ -109,7 +109,7 @@ class StartSessionTest extends TestCase
         Carbon::setTestNow('2024-07-01 08:30:00');
 
         $this->actingAs($guruUser)
-            ->post(route('absensi.session.start', $secondSchedule->id))
+            ->post(route('absensi.session.start', $secondSchedule->id), ['password' => 'secret123'])
             ->assertRedirect(route('absensi.session', $firstSchedule->id));
 
         $this->assertDatabaseHas('absensi_sessions', [
