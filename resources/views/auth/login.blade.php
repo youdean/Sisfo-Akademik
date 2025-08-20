@@ -23,6 +23,11 @@
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
+        <div class="flex justify-end mt-2">
+            <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                {{ __('Forgot your password?') }}
+            </a>
+        </div>
 
         <div class="flex justify-end mt-4">
             <x-primary-button>
