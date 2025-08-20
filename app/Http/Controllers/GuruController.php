@@ -48,7 +48,20 @@ public function store(Request $request)
     if (empty($data['email'])) {
         $data['email'] = fake()->unique()->safeEmail();
     }
-    Guru::create($data);
+    $guru = Guru::create($data);
+
+    // Otomatis buat user jika guru aktif dan belum punya user
+    if (!isset($guru->user_id) || !$guru->user_id) {
+        $user = \App\Models\User::create([
+            'name' => $guru->nuptk . ' - ' . $guru->nama,
+            'email' => $guru->email,
+            'password' => bcrypt(date('ymd', strtotime($guru->tanggal_lahir))),
+            'role' => 'guru',
+            'status' => 1,
+        ]);
+        $guru->user_id = $user->id;
+        $guru->save();
+    }
 
     return redirect()->route('guru.index')->with('success', 'Guru berhasil ditambahkan');
 }

@@ -44,16 +44,30 @@ public function create()
 
 public function store(Request $request)
 {
-        Siswa::create($request->validate([
-            'nama' => 'required',
-            'nisn' => 'required|unique:siswa,nisn',
-            'nama_ortu' => 'required',
-            'kelas' => 'required',
-            'tempat_lahir' => 'required',
-            'jenis_kelamin' => 'required',
-            'tanggal_lahir' => 'required|date',
-            'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id'
-    ]));
+    $data = $request->validate([
+        'nama' => 'required',
+        'nisn' => 'required|unique:siswa,nisn',
+        'nama_ortu' => 'required',
+        'kelas' => 'required',
+        'tempat_lahir' => 'required',
+        'jenis_kelamin' => 'required',
+        'tanggal_lahir' => 'required|date',
+        'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id'
+    ]);
+    $siswa = Siswa::create($data);
+
+    // Otomatis buat user jika siswa aktif dan belum punya user
+    if (!isset($siswa->user_id) || !$siswa->user_id) {
+        $user = \App\Models\User::create([
+            'name' => $siswa->nisn . ' - ' . $siswa->nama,
+            'email' => $siswa->nisn . '@muhammadiyah.ac.id',
+            'password' => bcrypt(date('ymd', strtotime($siswa->tanggal_lahir))),
+            'role' => 'siswa',
+            'status' => 1,
+        ]);
+        $siswa->user_id = $user->id;
+        $siswa->save();
+    }
 
     return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambahkan');
 }
