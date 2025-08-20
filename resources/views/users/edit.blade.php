@@ -25,6 +25,14 @@
         <input type="hidden" name="role" value="{{ $user->role }}">
         <x-input-error :messages="$errors->get('role')" class="mt-1" />
     </div>
+    <div class="mb-3">
+        <label>Status</label>
+        <select name="status" class="form-control" required>
+            <option value="1" @selected($user->status)>Aktif</option>
+            <option value="0" @selected(!$user->status)>Tidak Aktif</option>
+        </select>
+        <x-input-error :messages="$errors->get('status')" class="mt-1" />
+    </div>
     <div class="mb-3" id="field-name">
         <label>Nama</label>
         <input type="text" name="name" class="form-control" value="{{ $user->name }}" disabled>

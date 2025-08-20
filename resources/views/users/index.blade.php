@@ -22,6 +22,7 @@
             <th>Nama</th>
             <th>Email</th>
             <th>Role</th>
+            <th>Status</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -32,6 +33,13 @@
             <td>{{ $u->name }}</td>
             <td>{{ $u->email }}</td>
             <td>{{ $u->role }}</td>
+            <td>
+                @if($u->status)
+                    <span class="badge bg-success">Aktif</span>
+                @else
+                    <span class="badge bg-danger">Tidak Aktif</span>
+                @endif
+            </td>
             <td>
                 <a href="{{ route('users.edit', $u->id) }}" class="btn btn-sm btn-warning">Edit</a>
                 <form action="{{ route('users.destroy', $u->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">

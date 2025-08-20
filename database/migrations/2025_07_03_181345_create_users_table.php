@@ -15,6 +15,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default('siswa'); // kolom role langsung disini
+            $table->boolean('status')->default(true); // true: aktif, false: tidak aktif
             $table->rememberToken();
             $table->timestamps();
         });

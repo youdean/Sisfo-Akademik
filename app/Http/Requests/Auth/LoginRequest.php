@@ -43,9 +43,17 @@ class LoginRequest extends FormRequest
 
         if (! Auth::attempt($this->only('email', 'password'))) {
             RateLimiter::hit($this->throttleKey());
-
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
+            ]);
+        }
+
+        // Cek status user
+        $user = Auth::user();
+        if ($user && !$user->status) {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => 'Akun Anda tidak aktif. Silakan hubungi admin.'
             ]);
         }
 

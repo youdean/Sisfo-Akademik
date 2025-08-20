@@ -24,6 +24,14 @@
         </select>
         <x-input-error :messages="$errors->get('role')" class="mt-1" />
     </div>
+    <div class="mb-3">
+        <label>Status</label>
+        <select name="status" class="form-control" required>
+            <option value="1" selected>Aktif</option>
+            <option value="0">Tidak Aktif</option>
+        </select>
+        <x-input-error :messages="$errors->get('status')" class="mt-1" />
+    </div>
     <div class="mb-3" id="field-name">
         <label>Nama</label>
         <input type="text" name="name" class="form-control">

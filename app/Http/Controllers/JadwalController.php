@@ -156,13 +156,19 @@ class JadwalController extends Controller
             ['13:00', '14:00'],
             ['14:00', '15:00'],
         ]);
+
+        // Target: 2 slot (2 jam) per mapel per minggu
+        $requiredSlots = 2;
+
+        // Siapkan pasangan slot berurutan (untuk opsi 2 slot dalam 1 hari)
         $slotPairs = [];
         for ($i = 0; $i < count($slots) - 1; $i++) {
             $slotPairs[] = [$slots[$i], $slots[$i + 1]];
         }
-        $errors = [];
-        $requiredSlots = 4;
 
+        $errors = [];
+
+        // Auto-bootstrap Pengajaran jika belum ada data
         if (Pengajaran::count() === 0) {
             $guruIds = Guru::pluck('id')->values();
             $mapelList = MataPelajaran::all();
@@ -183,8 +189,11 @@ class JadwalController extends Controller
             }
         }
 
-        $teacherSchedules = [];
-        $classSchedules = [];
+        // State penjadwalan
+        $teacherSchedules = []; // [guru_id][hari] => array of [mulai, selesai]
+        $classSchedules   = []; // [kelas_id][hari] => array of [mulai, selesai]
+
+        // Kosongkan jadwal lama
         Jadwal::query()->delete();
 
         foreach (Kelas::all() as $kelas) {
@@ -194,113 +203,120 @@ class JadwalController extends Controller
             }
 
             $classSchedules[$kelas->id] = array_fill_keys($days, []);
-            $globalDayUsage = array_fill_keys($days, 0);
+            $globalDayUsage = array_fill_keys($days, 0); // untuk meratakan penggunaan hari
 
             foreach ($pengajarans as $pengajaran) {
+                // Init jadwal guru jika belum
                 $teacherSchedules[$pengajaran->guru_id] = $teacherSchedules[$pengajaran->guru_id] ?? array_fill_keys($days, []);
+
                 $success = false;
 
                 for ($attempt = 0; $attempt < 20 && !$success; $attempt++) {
-                    $created = [];
+                    $created   = [];
                     $dayCounts = array_fill_keys($days, 0);
+
+                    // Urutkan hari berdasar penggunaan global agar merata
                     $dayOrder = $days;
                     usort($dayOrder, function ($a, $b) use ($globalDayUsage) {
                         $cmp = $globalDayUsage[$a] <=> $globalDayUsage[$b];
                         return $cmp === 0 ? (random_int(0, 1) ? 1 : -1) : $cmp;
                     });
 
+                    /**
+                     * TAHAP 1: Coba ambil 1 pasangan slot berurutan (2 slot di 1 hari).
+                     * Batas per hari untuk mapel ini: maksimal 2 slot (cukup untuk target 2).
+                     */
+                    $pairPlaced = false;
                     foreach ($dayOrder as $day) {
                         $pairOrder = $slotPairs;
                         shuffle($pairOrder);
+
                         foreach ($pairOrder as $pair) {
-                            if (count($created) >= $requiredSlots) {
-                                break 2;
-                            }
-
-                            if ($dayCounts[$day] >= 2) {
-                                continue;
-                            }
-
                             [$slot1, $slot2] = $pair;
 
-                            if ($this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot1) ||
-                                $this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot2)) {
-                                continue;
-                            }
+                            $conflict =
+                                $this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot1) ||
+                                $this->hasConflict($classSchedules[$kelas->id][$day], $slot1) ||
+                                $this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot2) ||
+                                $this->hasConflict($classSchedules[$kelas->id][$day], $slot2);
 
-                            if ($this->hasConflict($classSchedules[$kelas->id][$day], $slot1) ||
-                                $this->hasConflict($classSchedules[$kelas->id][$day], $slot2)) {
-                                continue;
+                            if (!$conflict && $dayCounts[$day] + 2 <= 2) {
+                                // Tambah dua slot sekaligus
+                                $created[] = [
+                                    'kelas_id'    => $kelas->id,
+                                    'mapel_id'    => $pengajaran->mapel_id,
+                                    'guru_id'     => $pengajaran->guru_id,
+                                    'hari'        => $day,
+                                    'jam_mulai'   => $slot1[0],
+                                    'jam_selesai' => $slot1[1],
+                                ];
+                                $created[] = [
+                                    'kelas_id'    => $kelas->id,
+                                    'mapel_id'    => $pengajaran->mapel_id,
+                                    'guru_id'     => $pengajaran->guru_id,
+                                    'hari'        => $day,
+                                    'jam_mulai'   => $slot2[0],
+                                    'jam_selesai' => $slot2[1],
+                                ];
+                                $dayCounts[$day] += 2;
+                                $pairPlaced = true;
+                                break 2;
                             }
-
-                            $created[] = [
-                                'kelas_id' => $kelas->id,
-                                'mapel_id' => $pengajaran->mapel_id,
-                                'guru_id' => $pengajaran->guru_id,
-                                'hari' => $day,
-                                'jam_mulai' => $slot1[0],
-                                'jam_selesai' => $slot1[1],
-                            ];
-                            $created[] = [
-                                'kelas_id' => $kelas->id,
-                                'mapel_id' => $pengajaran->mapel_id,
-                                'guru_id' => $pengajaran->guru_id,
-                                'hari' => $day,
-                                'jam_mulai' => $slot2[0],
-                                'jam_selesai' => $slot2[1],
-                            ];
-                            $dayCounts[$day] += 2;
                         }
                     }
 
-                    if (count($created) < $requiredSlots) {
+                    /**
+                     * TAHAP 2 (fallback): Jika tidak dapat pair, ambil 2 slot tunggal
+                     * (bisa di hari yang sama atau berbeda, tetap hormati konflik).
+                     */
+                    if (!$pairPlaced) {
                         foreach ($dayOrder as $day) {
                             $slotOrder = $slots;
                             shuffle($slotOrder);
+
                             foreach ($slotOrder as $slot) {
-                                if (count($created) >= $requiredSlots) {
-                                    break 2;
-                                }
+                                if (count($created) >= $requiredSlots) break 2;
+                                if ($dayCounts[$day] >= 2) continue;
 
-                                if ($dayCounts[$day] >= 2) {
-                                    continue;
-                                }
+                                if (
+                                    !$this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot) &&
+                                    !$this->hasConflict($classSchedules[$kelas->id][$day], $slot)
+                                ) {
+                                    $created[] = [
+                                        'kelas_id'    => $kelas->id,
+                                        'mapel_id'    => $pengajaran->mapel_id,
+                                        'guru_id'     => $pengajaran->guru_id,
+                                        'hari'        => $day,
+                                        'jam_mulai'   => $slot[0],
+                                        'jam_selesai' => $slot[1],
+                                    ];
+                                    $dayCounts[$day] += 1;
 
-                                if ($this->hasConflict($teacherSchedules[$pengajaran->guru_id][$day], $slot) ||
-                                    $this->hasConflict($classSchedules[$kelas->id][$day], $slot)) {
-                                    continue;
+                                    if (count($created) >= $requiredSlots) break 2;
                                 }
-
-                                $created[] = [
-                                    'kelas_id' => $kelas->id,
-                                    'mapel_id' => $pengajaran->mapel_id,
-                                    'guru_id' => $pengajaran->guru_id,
-                                    'hari' => $day,
-                                    'jam_mulai' => $slot[0],
-                                    'jam_selesai' => $slot[1],
-                                ];
-                                $dayCounts[$day] += 1;
                             }
                         }
                     }
 
+                    // Jika berhasil buat minimal 1 slot, commit ke DB & state
                     if (count($created) > 0) {
                         foreach ($created as $data) {
                             Jadwal::create($data);
                             $this->syncPengajaran($data);
+
                             $teacherSchedules[$data['guru_id']][$data['hari']][] = [$data['jam_mulai'], $data['jam_selesai']];
-                            $classSchedules[$data['kelas_id']][$data['hari']][] = [$data['jam_mulai'], $data['jam_selesai']];
+                            $classSchedules[$data['kelas_id']][$data['hari']][]   = [$data['jam_mulai'], $data['jam_selesai']];
                         }
                         foreach ($dayCounts as $d => $count) {
                             $globalDayUsage[$d] += $count;
                         }
-                        $success = true;
+                        $success = (count($created) >= $requiredSlots);
                     }
                 }
 
                 if (!$success) {
                     $mapelName = MataPelajaran::find($pengajaran->mapel_id)->nama ?? 'Mapel';
-                    $errors[] = "Slot tidak cukup untuk {$kelas->nama} - {$mapelName}";
+                    $errors[] = "Slot tidak cukup (target 2 jam/minggu) untuk {$kelas->nama} - {$mapelName}";
                 }
             }
         }
@@ -309,7 +325,7 @@ class JadwalController extends Controller
             return redirect()->route('jadwal.index')->with('error', implode(', ', $errors));
         }
 
-        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil digenerate');
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil digenerate (2 jam per mapel/minggu)');
     }
 
     public function destroy(Jadwal $jadwal)

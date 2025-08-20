@@ -45,6 +45,7 @@ class UserController extends Controller
             'role' => 'required|in:admin,guru,siswa',
             'guru_id' => 'nullable|exists:guru,id',
             'siswa_id' => 'nullable|exists:siswa,id',
+            'status' => 'required|in:0,1',
         ]);
 
         if ($data['role'] === 'guru') {
@@ -68,6 +69,7 @@ class UserController extends Controller
             'email' => $email,
             'password' => Hash::make($password),
             'role' => $data['role'],
+            'status' => $data['status'],
         ]);
 
         if ($data['role'] === 'guru') {
@@ -100,11 +102,13 @@ class UserController extends Controller
             'role' => 'required|in:admin,guru,siswa',
             'guru_id' => 'nullable|exists:guru,id',
             'siswa_id' => 'nullable|exists:siswa,id',
+            'status' => 'required|in:0,1',
         ]);
 
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->role = $data['role'];
+        $user->status = $data['status'];
         if (!empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }
