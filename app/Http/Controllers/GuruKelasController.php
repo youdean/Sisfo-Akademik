@@ -12,6 +12,18 @@ use Illuminate\Support\Facades\Auth;
 
 class GuruKelasController extends Controller
 {
+    public function konfirmasiRapor($siswaId)
+    {
+        $guru = Guru::where('user_id', Auth::id())->firstOrFail();
+        $siswa = Siswa::findOrFail($siswaId);
+        $kelas = Kelas::where('guru_id', $guru->id)->where('nama', $siswa->kelas)->first();
+        if (!$kelas) {
+            abort(403, 'Anda bukan wali kelas siswa ini.');
+        }
+        $siswa->rapor_konfirmasi = true;
+        $siswa->save();
+        return redirect()->back()->with('success', 'Rapor siswa berhasil dikonfirmasi!');
+    }
     public function index()
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();

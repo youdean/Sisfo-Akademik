@@ -34,7 +34,16 @@
             <td>{{ $s->jenis_kelamin }}</td>
             <td>{{ $s->tanggal_lahir }}</td>
             <td>
-                <a href="{{ route('rapor.cetak', $s->id) }}" class="btn btn-sm btn-info" target="_blank" rel="noopener">Cetak Rapor</a>
+                @if(!$s->rapor_konfirmasi)
+                    <form method="POST" action="{{ route('siswa.konfirmasi-rapor', $s->id) }}" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-warning">Konfirmasi Rapor</button>
+                    </form>
+                    <button class="btn btn-sm btn-info" disabled>Cetak Rapor</button>
+                @else
+                    <span class="badge bg-success mb-1">Sudah Dikonfirmasi</span><br>
+                    <a href="{{ route('rapor.cetak', $s->id) }}" class="btn btn-sm btn-info" target="_blank" rel="noopener">Cetak Rapor</a>
+                @endif
             </td>
         </tr>
         @endforeach

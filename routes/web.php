@@ -16,6 +16,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PengajaranController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\RaporController;
+use App\Http\Controllers\CatatanWaliKelasController;
+use App\Http\Controllers\EkstraKurikulerController;
+use App\Http\Controllers\PrestasiNonAkademikController;
 
 // Landing page - redirect to login
 Route::get('/', function () {
@@ -60,6 +63,7 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/kelas-saya', [GuruKelasController::class, 'index'])->name('guru.kelas');
     Route::get('/nilai-kelas', [GuruKelasController::class, 'nilaiKelas'])->name('guru.nilai-kelas');
     Route::get('/input-nilai', [\App\Http\Controllers\InputNilaiController::class, 'index'])->name('input-nilai.index');
+    Route::post('/siswa/{siswa}/konfirmasi-rapor', [GuruKelasController::class, 'konfirmasiRapor'])->name('siswa.konfirmasi-rapor');
     Route::get('/input-nilai/kelas/{kelas}', [\App\Http\Controllers\InputNilaiController::class, 'mapel'])->name('input-nilai.mapel');
     Route::get('/input-nilai/{mapel}/{kelas}', [\App\Http\Controllers\InputNilaiController::class, 'opsi'])->name('input-nilai.opsi');
     Route::get('/input-nilai/{mapel}/{kelas}/absensi', [\App\Http\Controllers\InputNilaiController::class, 'absensi'])->name('input-nilai.nilai');
@@ -103,6 +107,16 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/saya/jadwal/{jadwal}/absen', [StudentController::class, 'jadwalAbsenForm'])->name('student.jadwal.absen.form');
     Route::post('/saya/jadwal/{jadwal}/absen', [StudentController::class, 'jadwalAbsen'])->name('student.jadwal.absen');
     Route::post('/saya/absensi/check-in', [StudentController::class, 'sessionCheckIn'])->name('student.absensi.checkin');
+});
+
+// Route khusus untuk wali kelas
+Route::middleware(['auth', 'role:guru'])->group(function () {
+    Route::get('catatan-wali-kelas/create', [CatatanWaliKelasController::class, 'create'])->name('catatan-wali-kelas.create');
+    Route::post('catatan-wali-kelas/store', [CatatanWaliKelasController::class, 'store'])->name('catatan-wali-kelas.store');
+    Route::get('ekstra-kurikuler/create', [EkstraKurikulerController::class, 'create'])->name('ekstra-kurikuler.create');
+    Route::post('ekstra-kurikuler/store', [EkstraKurikulerController::class, 'store'])->name('ekstra-kurikuler.store');
+    Route::get('prestasi-non-akademik/create', [PrestasiNonAkademikController::class, 'create'])->name('prestasi-non-akademik.create');
+    Route::post('prestasi-non-akademik/store', [PrestasiNonAkademikController::class, 'store'])->name('prestasi-non-akademik.store');
 });
 
 require __DIR__.'/auth.php';

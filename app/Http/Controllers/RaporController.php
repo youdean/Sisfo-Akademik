@@ -26,6 +26,11 @@ class RaporController extends Controller
             $siswa = Siswa::where('user_id', Auth::id())->firstOrFail();
         }
 
+        // Cek konfirmasi rapor
+        if (!$siswa->rapor_konfirmasi) {
+            return redirect()->back()->with('error', 'Rapor belum dikonfirmasi oleh wali kelas.');
+        }
+
         $semester = (int) $request->query('semester', 1);
 
         $penilaian = Penilaian::with('mapel')

@@ -19,7 +19,8 @@ class Siswa extends Model
         'jenis_kelamin',
         'tanggal_lahir',
         'user_id',
-        'tahun_ajaran_id'
+        'tahun_ajaran_id',
+        'rapor_konfirmasi'
     ];
 
     public function user()

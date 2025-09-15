@@ -89,8 +89,17 @@
                 @if(in_array(Auth::user()->role, ['admin', 'guru']))
                     @if(Auth::user()->role === 'guru')
                         @if($isWaliKelas)
-                            <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
-                            <!-- <li><a href="{{ route('guru.nilai-kelas') }}" class="nav-link {{ request()->routeIs('guru.nilai-kelas') ? 'active' : '' }}"><i class="bi bi-bar-chart me-2"></i>Nilai Kelas</a></li> -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle {{ request()->routeIs('guru.kelas') ? 'active' : '' }}" href="#" id="kelasSayaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-people-fill me-2"></i>Kelas Saya
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="kelasSayaDropdown">
+                                        <li><a class="dropdown-item" href="{{ route('guru.kelas') }}">Kelas Saya</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('catatan-wali-kelas.create') }}">Catatan Wali Kelas</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('ekstra-kurikuler.create') }}">Ekstra Kurikuler</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('prestasi-non-akademik.create') }}">Prestasi Non Akademik</a></li>
+                                    </ul>
+                                </li>
                         @endif
                         <li><a href="{{ route('input-nilai.index') }}" class="nav-link {{ request()->routeIs('input-nilai.*') ? 'active' : '' }}"><i class="bi bi-pencil-square me-2"></i>Input Nilai</a></li>
                     @endif
@@ -105,6 +114,9 @@
                 @endif
                 @if(in_array(Auth::user()->role, ['siswa','guru','admin']))
                     <li><a href="{{ route('password.edit') }}" class="nav-link {{ request()->routeIs('password.edit') ? 'active' : '' }}"><i class="bi bi-key me-2"></i>Ubah Password</a></li>
+                @endif
+                @if(Auth::user()->role === 'guru' && $isWaliKelas)
+                    <!-- Submenu sudah masuk ke dalam Kelas Saya -->
                 @endif
             </ul>
             <hr>
@@ -153,7 +165,17 @@
                 @if(in_array(Auth::user()->role, ['admin', 'guru']))
                     @if(Auth::user()->role === 'guru')
                         @if($isWaliKelas)
-                            <li><a href="{{ route('guru.kelas') }}" class="nav-link {{ request()->routeIs('guru.kelas') ? 'active' : '' }}"><i class="bi bi-people-fill me-2"></i>Kelas Saya</a></li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle {{ request()->routeIs('guru.kelas') ? 'active' : '' }}" href="#" id="kelasSayaDropdownMobile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-people-fill me-2"></i>Kelas Saya
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="kelasSayaDropdownMobile">
+                                        <li><a class="dropdown-item" href="{{ route('guru.kelas') }}">Kelas Saya</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('catatan-wali-kelas.create') }}">Catatan Wali Kelas</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('ekstra-kurikuler.create') }}">Ekstra Kurikuler</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('prestasi-non-akademik.create') }}">Prestasi Non Akademik</a></li>
+                                    </ul>
+                                </li>
                             <!-- <li><a href="{{ route('guru.nilai-kelas') }}" class="nav-link {{ request()->routeIs('guru.nilai-kelas') ? 'active' : '' }}"><i class="bi bi-bar-chart me-2"></i>Nilai Kelas</a></li> -->
                         @endif
                         <li><a href="{{ route('input-nilai.index') }}" class="nav-link {{ request()->routeIs('input-nilai.*') ? 'active' : '' }}"><i class="bi bi-pencil-square me-2"></i>Input Nilai</a></li>
@@ -169,6 +191,9 @@
                 @endif
                 @if(in_array(Auth::user()->role, ['siswa','guru','admin']))
                     <li><a href="{{ route('password.edit') }}" class="nav-link {{ request()->routeIs('password.edit') ? 'active' : '' }}"><i class="bi bi-key me-2"></i>Ubah Password</a></li>
+                @endif
+                @if(Auth::user()->role === 'guru' && $isWaliKelas)
+                    <!-- Submenu sudah masuk ke dalam Kelas Saya (Mobile) -->
                 @endif
             </ul>
             <hr>
